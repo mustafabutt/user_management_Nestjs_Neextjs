@@ -1,5 +1,14 @@
                         Instructions
 
+This is a working sign in/sign up module built using the following stack:
+ <br />
+Nestjs <br />
+MongoDB <br />
+Redis <br />
+Nextjs <br />
+
+It uses JWT tokens and built-in JwtAuthGuard. 
+
 Make sure you have installed Nodejs, Redis and MongoDB.
 Clone the source code and run the following commands in to the root directory. 
 
