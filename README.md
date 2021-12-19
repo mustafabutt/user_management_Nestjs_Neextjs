@@ -7,13 +7,13 @@ First, start the Redis server by running the following command
 
 **redis-server**
 
-npm install 
+npm install <br />
 npm run start
 
 After that run the following commands to start the cleint server 
 
-cd public/nextjs-blog
-npm install 
+cd public/nextjs-blog<br />
+npm install <br />
 npm run dev
 
 Now open app in thee browser http://localhost:3000/
