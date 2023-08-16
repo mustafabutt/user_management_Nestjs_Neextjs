@@ -11,9 +11,10 @@ export declare const globalConstants: {
     TOKEN_EXP_TIME: string;
     AUTH_GUARD_LOCAL_TYPE: string;
     AUTH_GUARD_JWT_TYPE: string;
-    USERNAME: string;
+    EMAIL: string;
     PASSWORD: string;
     USERS: string;
+    SEND_EMAIL: string;
     ID: string;
     PUT: string;
     POST: string;

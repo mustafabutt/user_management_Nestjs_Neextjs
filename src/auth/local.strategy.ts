@@ -8,14 +8,19 @@ import { globalConstants } from '../constant';
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
   constructor(private authService: AuthService) {
-    super({ passReqToCallback: true });
+    super({
+       passReqToCallback: true,
+       usernameField: 'email',
+       passwordField: 'password'
+       });
   }
   async validate(request: Request): Promise<any> {
     if (
-      request.body.hasOwnProperty(globalConstants.USERNAME) &&
+      request.body.hasOwnProperty(globalConstants.EMAIL) &&
       request.body.hasOwnProperty(globalConstants.PASSWORD)
     ) {
       const user = await this.authService.validateUser(request.body);
+  
       if (!user) {
         throw new UnauthorizedException();
       }

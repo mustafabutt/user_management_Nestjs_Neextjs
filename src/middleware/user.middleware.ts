@@ -10,14 +10,14 @@ export class UserMiddleware implements NestMiddleware {
   use(req: any, res: any, next: () => void) {
     if (req.method === globalConstants.POST) {
       if (
-        req.body.hasOwnProperty(globalConstants.USERNAME) &&
+        req.body.hasOwnProperty(globalConstants.EMAIL) &&
         req.body.hasOwnProperty(globalConstants.PASSWORD)
       )
         next();
       else this.exceptions.generateBadRequestException();
     } else if (req.method === globalConstants.PUT) {
       if (
-        req.body.hasOwnProperty(globalConstants.USERNAME) &&
+        req.body.hasOwnProperty(globalConstants.EMAIL) &&
         req.body.hasOwnProperty(globalConstants.PASSWORD) &&
         req.body.hasOwnProperty(globalConstants.ID)
       )

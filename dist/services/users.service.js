@@ -33,8 +33,8 @@ let UsersService = class UsersService {
     async readById(id) {
         return await this.userModel.findById(id).exec();
     }
-    async findbyName(name) {
-        return await this.userModel.findOne({ username: name });
+    async findbyEmail(email) {
+        return await this.userModel.findOne({ email: email });
     }
     async update(id, book) {
         return await this.userModel.findByIdAndUpdate(id, book, { new: true });

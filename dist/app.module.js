@@ -21,6 +21,10 @@ const exceptions_1 = require("./exceptions/exceptions");
 const constant_1 = require("./constant");
 const user_middleware_1 = require("./middleware/user.middleware");
 const redisCache_module_1 = require("./redis-cache/redisCache.module");
+const sendgrid_service_1 = require("./sendgrid/sendgrid.service");
+const mail_controller_1 = require("./mail/mail.controller");
+const config_1 = require("@nestjs/config");
+const jwt_1 = require("@nestjs/jwt");
 let AppModule = class AppModule {
     configure(consumer) {
         consumer.apply(user_middleware_1.UserMiddleware).forRoutes(constant_1.globalConstants.USERS);
@@ -37,9 +41,13 @@ AppModule = __decorate([
                 { name: users_schema_1.User.name, schema: users_schema_1.UserSchema },
                 { name: token_schema_1.Token.name, schema: token_schema_1.TokenSchema },
             ]),
+            jwt_1.JwtModule.register({
+                secret: "mushi",
+                signOptions: { expiresIn: "60s" },
+            }),
         ],
-        controllers: [app_controller_1.AppController, user_controller_1.UserController],
-        providers: [app_service_1.AppService, users_service_1.UsersService, exceptions_1.Exceptions],
+        controllers: [app_controller_1.AppController, user_controller_1.UserController, mail_controller_1.MailController],
+        providers: [app_service_1.AppService, users_service_1.UsersService, exceptions_1.Exceptions, sendgrid_service_1.SendgridService, config_1.ConfigService],
     })
 ], AppModule);
 exports.AppModule = AppModule;

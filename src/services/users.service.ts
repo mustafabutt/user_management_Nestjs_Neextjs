@@ -27,8 +27,8 @@ export class UsersService {
     return await this.userModel.findById(id).exec();
   }
 
-  async findbyName(name): Promise<User> {
-    return await this.userModel.findOne({ username: name });
+  async findbyEmail(email): Promise<User> {
+    return await this.userModel.findOne({email:email});
   }
   async update(id, book: User): Promise<User> {
     return await this.userModel.findByIdAndUpdate(id, book, { new: true });
@@ -38,7 +38,6 @@ export class UsersService {
     return await this.userModel.findByIdAndRemove(id);
   }
   async logout(token: Token): Promise<any> {
-
     const newToken = new this.tokenModel({"token": token});
     return await newToken.save();
   }

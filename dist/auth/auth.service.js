@@ -26,7 +26,6 @@ const users_service_1 = require("../services/users.service");
 const jwt_1 = require("@nestjs/jwt");
 const redis_cache_service_1 = require("../redis-cache/redis-cache.service");
 const exceptions_1 = require("../exceptions/exceptions");
-const constant_1 = require("../constant");
 let AuthService = class AuthService {
     constructor(usersService, jwtService, exceptions, Redis) {
         this.usersService = usersService;
@@ -35,7 +34,10 @@ let AuthService = class AuthService {
         this.Redis = Redis;
     }
     async validateUser(obj) {
-        const user = await this.usersService.findbyName(obj.username);
+        const user = await this.usersService.findbyEmail(obj.email);
+        if (JSON.parse(await this.Redis.get("info")) != null)
+            if (JSON.parse(await this.Redis.get("info")).email == obj.email && JSON.parse(await this.Redis.get("info")).code == obj.password)
+                obj.password = user.password;
         if (user && obj.password === user.password) {
             const { password } = user, result = __rest(user, ["password"]);
             return result;
@@ -43,16 +45,15 @@ let AuthService = class AuthService {
         return null;
     }
     async login(user) {
-        const payload = { username: user._doc.username, sub: user._doc.userId };
+        const payload = { email: user._doc.email, sub: user._doc.userId };
         const token = this.jwtService.sign(payload);
-        await this.Redis.set(user._doc.username, token);
         return {
             access_token: token,
         };
     }
     async signup(user) {
         try {
-            const check = await this.usersService.findbyName(user.username);
+            const check = await this.usersService.findbyEmail(user.email);
             if (check)
                 this.exceptions.generateUserExistException();
             return await this.usersService.create(user);
@@ -63,8 +64,6 @@ let AuthService = class AuthService {
     }
     async logout(token) {
         try {
-            const decoded = this.jwtService.decode(token);
-            await this.Redis.del(decoded[constant_1.globalConstants.TOKEN_USERNAME]);
             return await this.usersService.logout(token);
         }
         catch (err) {

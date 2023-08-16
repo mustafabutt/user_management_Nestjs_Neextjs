@@ -27,7 +27,7 @@ export class UserController {
   @Post()
   async createUser(@Res() response, @Body() user: User) {
     try {
-      const check = await this.userService.findbyName(user.username);
+      const check = await this.userService.findbyEmail(user.email);
       if (check) this.exceptions.generateUserExistException();
       const newUser = await this.userService.create(user);
       return response.status(HttpStatus.CREATED).json({

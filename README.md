@@ -18,6 +18,12 @@ First, start the Redis server by running the following command
 
 npm install <br />
 npm run start
+make request 
+localhost:3001/auth/login
+{
+"username":"mustafa butt",
+"password": "qwerty"
+}
 
 After that run the following commands to start the cleint server 
 

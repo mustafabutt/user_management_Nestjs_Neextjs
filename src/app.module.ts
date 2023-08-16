@@ -17,6 +17,10 @@ import { Exceptions } from './exceptions/exceptions';
 import { globalConstants } from './constant';
 import { UserMiddleware } from './middleware/user.middleware';
 import { RedisCacheModule } from './redis-cache/redisCache.module';
+import { SendgridService } from './sendgrid/sendgrid.service';
+import { MailController } from './mail/mail.controller';
+import { ConfigService } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -28,9 +32,13 @@ import { RedisCacheModule } from './redis-cache/redisCache.module';
       { name: User.name, schema: UserSchema },
       { name: Token.name, schema: TokenSchema },
     ]),
+    JwtModule.register({
+      secret: "mushi",
+      signOptions: { expiresIn: "60s" },
+    }),
   ],
-  controllers: [AppController, UserController],
-  providers: [AppService, UsersService, Exceptions],
+  controllers: [AppController, UserController, MailController],
+  providers: [AppService, UsersService, Exceptions, SendgridService,ConfigService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

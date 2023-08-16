@@ -8,7 +8,7 @@ export declare class UsersService {
     create(book: User): Promise<User>;
     readAll(): Promise<User[]>;
     readById(id: any): Promise<User>;
-    findbyName(name: any): Promise<User>;
+    findbyEmail(email: any): Promise<User>;
     update(id: any, book: User): Promise<User>;
     delete(id: any): Promise<any>;
     logout(token: Token): Promise<any>;

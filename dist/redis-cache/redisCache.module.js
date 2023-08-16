@@ -20,9 +20,6 @@ RedisCacheModule = __decorate([
                 inject: [],
                 useFactory: async () => ({
                     store: redisStore,
-                    host: 'localhost',
-                    port: '6379',
-                    ttl: '1000',
                 }),
             }),
         ],

@@ -17,11 +17,15 @@ const auth_service_1 = require("./auth.service");
 const constant_1 = require("../constant");
 let LocalStrategy = class LocalStrategy extends (0, passport_1.PassportStrategy)(passport_local_1.Strategy) {
     constructor(authService) {
-        super({ passReqToCallback: true });
+        super({
+            passReqToCallback: true,
+            usernameField: 'email',
+            passwordField: 'password'
+        });
         this.authService = authService;
     }
     async validate(request) {
-        if (request.body.hasOwnProperty(constant_1.globalConstants.USERNAME) &&
+        if (request.body.hasOwnProperty(constant_1.globalConstants.EMAIL) &&
             request.body.hasOwnProperty(constant_1.globalConstants.PASSWORD)) {
             const user = await this.authService.validateUser(request.body);
             if (!user) {

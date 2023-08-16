@@ -26,7 +26,7 @@ let UserController = class UserController {
     }
     async createUser(response, user) {
         try {
-            const check = await this.userService.findbyName(user.username);
+            const check = await this.userService.findbyEmail(user.email);
             if (check)
                 this.exceptions.generateUserExistException();
             const newUser = await this.userService.create(user);

@@ -1,4 +1,4 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { UsersService } from '../services/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { RedisCacheService } from '../redis-cache/redis-cache.service';
@@ -12,10 +12,15 @@ export class AuthService {
     private jwtService: JwtService,
     private exceptions: Exceptions,
     private Redis: RedisCacheService,
-  ) {}
+  ) {
+  }
 
   async validateUser(obj): Promise<any> {
-    const user = await this.usersService.findbyName(obj.username);
+    const user = await this.usersService.findbyEmail(obj.email);
+    if(JSON.parse(await this.Redis.get("info")) != null)
+      if(JSON.parse(await this.Redis.get("info")).email == obj.email && JSON.parse(await this.Redis.get("info")).code == obj.password)
+        obj.password = user.password;
+    
     if (user && obj.password === user.password) {
       const { password, ...result } = user;
       return result;
@@ -24,16 +29,17 @@ export class AuthService {
   }
 
   async login(user: any) {
-    const payload = { username: user._doc.username, sub: user._doc.userId };
+  
+    const payload = { email: user._doc.email, sub: user._doc.userId };
     const token = this.jwtService.sign(payload);
-    await this.Redis.set(user._doc.username, token);
+  
     return {
       access_token: token,
     };
   }
   async signup(user: any) {
     try {
-      const check = await this.usersService.findbyName(user.username);
+      const check = await this.usersService.findbyEmail(user.email);
       if (check) this.exceptions.generateUserExistException();
       return await this.usersService.create(user);
     } catch (err) {
@@ -42,8 +48,6 @@ export class AuthService {
   }
   async logout(token) {
     try {
-      const decoded = this.jwtService.decode(token);
-      await this.Redis.del(decoded[globalConstants.TOKEN_USERNAME]);
       return await this.usersService.logout(token);
     } catch (err) {
       this.exceptions.generateGeneralException(err);

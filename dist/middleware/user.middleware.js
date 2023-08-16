@@ -19,14 +19,14 @@ let UserMiddleware = class UserMiddleware {
     }
     use(req, res, next) {
         if (req.method === constant_1.globalConstants.POST) {
-            if (req.body.hasOwnProperty(constant_1.globalConstants.USERNAME) &&
+            if (req.body.hasOwnProperty(constant_1.globalConstants.EMAIL) &&
                 req.body.hasOwnProperty(constant_1.globalConstants.PASSWORD))
                 next();
             else
                 this.exceptions.generateBadRequestException();
         }
         else if (req.method === constant_1.globalConstants.PUT) {
-            if (req.body.hasOwnProperty(constant_1.globalConstants.USERNAME) &&
+            if (req.body.hasOwnProperty(constant_1.globalConstants.EMAIL) &&
                 req.body.hasOwnProperty(constant_1.globalConstants.PASSWORD) &&
                 req.body.hasOwnProperty(constant_1.globalConstants.ID))
                 next();

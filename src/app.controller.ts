@@ -22,12 +22,14 @@ export class AppController {
   }
   @Post(globalConstants.LOGOUT)
   async logout(@Request() req, @Headers() headers) {
+
     return this.authService.logout(
       headers.authorization.split(globalConstants.SPACE)[1],
     );
   }
   @Post(globalConstants.SIGN_UP)
   async signup(@Res() response, @Request() req) {
+
     try {
       const resp = await this.authService.signup(req.body);
       return response.status(HttpStatus.CREATED).json({

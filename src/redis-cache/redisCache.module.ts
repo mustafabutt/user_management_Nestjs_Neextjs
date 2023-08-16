@@ -10,9 +10,9 @@ import { RedisCacheService } from './redis-cache.service';
       inject: [],
       useFactory: async () => ({
         store: redisStore,
-        host: 'localhost',
-        port: '6379',
-        ttl: '1000',
+        // host: 'localhost',
+        // port: '6379',
+        // ttl: '1000',
       }),
     }),
   ],

@@ -9,7 +9,7 @@ export class RedisCacheService {
     return await this.cache.get(key);
   }
   async set(key, value) {
-    await this.cache.set(key, value);
+    await this.cache.set(key, value,{ttl: 60});
   }
   async del(key) {
     await this.cache.del(key);
