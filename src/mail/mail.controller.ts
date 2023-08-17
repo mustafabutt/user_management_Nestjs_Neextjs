@@ -32,7 +32,7 @@ export class MailController {
         const mail = {
           to: email.email,
           subject: 'Password reset',
-          from: 'furqanbutt6900@gmail.com',
+          from: globalConstants.SENDER_EMAIL,
           html: 'Your temporary password is <b>'+code+'</b> <br>Please change your password by navigating into settings.',
         };
   

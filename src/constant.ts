@@ -25,4 +25,5 @@ export const globalConstants = {
   SPACE: ' ',
   TOKEN_USERNAME: 'username',
   SECRET: 'mustafa',
+  SENDER_EMAIL: 'your sender email'
 };
