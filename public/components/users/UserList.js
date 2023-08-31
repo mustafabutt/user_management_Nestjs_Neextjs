@@ -11,6 +11,7 @@ export const UserList = ({data}) => {
     },[])
 
     return (
+  
         <div>
             {
                 <List data = {users} />

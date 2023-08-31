@@ -12,8 +12,15 @@ export const UserService = () => {
         else return false;
     }
 
+    const isAdmin = () => {
+        const user = JSON.parse(userSubject.value);
+        if(user.role == "admin")
+            return true;
+        else return false;
+    }
+
     const login = async (user) => {
-   
+
         const res = await fetch(constants.LOGIN, {
             method: 'POST',
             body: JSON.stringify(user),
@@ -25,12 +32,13 @@ export const UserService = () => {
             return res
         }else if( res.status == 201 ) {
       
+            // delete user._doc.password;
             let response = await res.json();
             let userObject = {
                 status:201,
-                ...response,
-                ...user
+                ...response
             }
+            debugger
             localStorage.setItem('user', JSON.stringify(userObject))
             userSubject.next(userObject);
             return userObject;
@@ -65,7 +73,7 @@ export const UserService = () => {
 
     }
 
-     const signup = async (user) => {
+    const signUp = async (user) => {
         return await fetch(constants.SIGN_UP_URL, {
             method: 'POST',
             body: JSON.stringify(user),
@@ -74,6 +82,36 @@ export const UserService = () => {
             },
         });
     }
+    
+    const createUser = async (user) => {
+        const token = JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')).access_token : null;
+        
+        return await fetch(constants.USERS, {
+            method: 'POST',
+            body: JSON.stringify(user),
+            headers: {
+                'Content-Type': constants.CONTENT_TYPE,
+                Authorization: constants.BEARER+token
+            },
+        });
+    }
+
+     const changePassword = async (user) => {
+        const token = JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')).access_token : null;
+        return await fetch(constants.USERS+"/"+user.email, {
+            method: 'PUT',
+            body: JSON.stringify(user),
+            headers: {
+                'Content-Type': constants.CONTENT_TYPE,
+                Authorization: constants.BEARER+token
+            },
+        });
+    }
+
+    // const UserType = async () => {
+    //     const token = JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')).access_token : null;
+    //     return 
+    // }
 
     const SendEmail = async (email) => {
         const data =  await fetch(constants.SEND_EMAIL, {
@@ -86,9 +124,13 @@ export const UserService = () => {
         return data;
     }
 
+    const getCurrentUser = () =>{
+    
+        return JSON.parse(localStorage.getItem('user'));
+    }
     const getUsers = async () => {
         const token = JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')).access_token : null;
-        const res = await fetch(constants.GET_USERS, {
+        const res = await fetch(constants.USERS, {
             method: 'GET',
             headers: {
                 'Content-Type': constants.CONTENT_TYPE,
@@ -116,9 +158,13 @@ export const UserService = () => {
         isUserLoggedIn,
         login,
         callLogout,
-        signup,
+        signUp,
         getUsers,
         SendEmail,
+        changePassword,
+        createUser,
+        getCurrentUser,
+        isAdmin
     }
 }
 

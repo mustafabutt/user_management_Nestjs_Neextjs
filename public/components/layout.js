@@ -15,10 +15,16 @@ const Layout = ({ children, home }) => {
       let user = JSON.parse(localStorage.getItem('user'));
       let response = await UserService().callLogout(user.access_token);
       if(response.status !== 201){
-          alert("error")
+          alert("error occured")
       }else router.push("/account/login");
   }
 
+  const userProfile  = async () => {
+    router.push("/account/profile");
+  }
+  const adminDashboard  = async () => {
+    router.push("/admin/home");
+  }
   useEffect(() => {
     if (UserService().isUserLoggedIn())
     {
@@ -34,7 +40,12 @@ const Layout = ({ children, home }) => {
         <meta name="og:title" content={siteTitle} />
       </Head>
       <header className={styles.header}>
-        {showLogout ? <button onClick={logout}>log out</button> : null}
+        {showLogout ? <span>
+          <button type="button" class="btn btn-danger" onClick={logout}>Log out</button>
+          <button type="button" class="btn btn-success" onClick={userProfile}>User profile</button>
+          {UserService().isAdmin()? <button type="button" class ="btn btn-dark" onClick={adminDashboard}>Admin Dashboard</button>:null }
+            </span>: null}
+ 
       </header>
 
       <main>{children}</main>

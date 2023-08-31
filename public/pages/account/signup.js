@@ -22,7 +22,7 @@ const Signup = () => {
   };
   async function hitSignup(e) {
     e.preventDefault();
-    const res = await UserService().signup({
+    const res = await UserService().signUp({
       email: email.current.value,
       password: password.current.value,
       gender: userGender,
@@ -46,7 +46,7 @@ const Signup = () => {
   return (
     <Layout>
       <Head>
-        <title>sign up</title>
+        <title>Sign up</title>
         <link
           href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
           rel="stylesheet"

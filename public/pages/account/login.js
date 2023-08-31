@@ -26,6 +26,11 @@ const Login = (props) => {
       userResponse.status == 401 ? setInvalidCred(true) : router.push('/');
   }
 
+  useEffect(()=>{
+    if (typeof window !== 'undefined' && JSON.parse(localStorage.getItem('user'))) 
+      router.push('/');
+  })
+
   return (
       <Layout>
 

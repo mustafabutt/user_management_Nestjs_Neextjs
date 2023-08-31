@@ -15,6 +15,7 @@ import { UsersService } from '../services/users.service';
 import { Exceptions } from '../exceptions/exceptions';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { globalConstants } from '../constant';
+import * as bcrypt from 'bcrypt';
 
 @UseGuards(JwtAuthGuard)
 @Controller(globalConstants.USERS)
@@ -30,6 +31,7 @@ export class UserController {
       const check = await this.userService.findbyEmail(user.email);
       if (check) this.exceptions.generateUserExistException();
       const newUser = await this.userService.create(user);
+      console.log(newUser)
       return response.status(HttpStatus.CREATED).json({
         newUser,
       });
@@ -38,15 +40,16 @@ export class UserController {
     }
   }
 
-
   @Get()
   async fetchAll(@Res() response) {
     try {
       const users = await this.userService.readAll();
+
       return response.status(HttpStatus.OK).json({
         users,
       });
     } catch (err) {
+      console.log(err);
       this.exceptions.generateGeneralException(err);
     }
   }
@@ -63,14 +66,22 @@ export class UserController {
     }
   }
 
-  @Put('/:' + globalConstants.ID)
-  async update(@Res() response, @Param(globalConstants.ID) id, @Body() user: User) {
+  @Put('/:email')
+  async update(@Res() response, @Param("email") email, @Body() user: User) {
     try {
-      const updatedUser = await this.userService.update(id, user);
+
+      const currentUser = await this.userService.findbyEmail(email);
+      const id = currentUser["_id"];
+      const saltOrRounds = 10;
+      const hash = await bcrypt.hash(user.password, saltOrRounds);
+      currentUser.password = hash;
+ 
+      const updatedUser = await this.userService.update(id, currentUser);
       return response.status(HttpStatus.OK).json({
         updatedUser,
       });
     } catch (err) {
+      console.log(err);
       this.exceptions.generateGeneralException(err);
     }
   }

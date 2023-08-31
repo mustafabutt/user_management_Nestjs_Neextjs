@@ -32,7 +32,8 @@ export const List = ({data}) => {
                     <tr>
                         {
                             Object.keys(user).map((keyName, keyIndex)=> {
-                                return <td key={keyIndex}>{user[keyName] }</td>
+                            
+                                return <td key={keyIndex}>{user[keyName].toString() }</td>
 
                             })
                         }

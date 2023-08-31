@@ -1,7 +1,6 @@
 import Head from 'next/head';
 import Layout, { siteTitle } from '../components/layout';
 import utilStyles from '../styles/utils.module.css';
-import {UserList} from "../components/users/UserList";
 import {useEffect,} from "react";
 
 export async function getStaticProps(context) {
@@ -12,10 +11,6 @@ export async function getStaticProps(context) {
 }
 
 const Home = ({}) => {
-
-    useEffect(()=>{
-        
-    },[])
 
   return (
     <Layout home>
@@ -34,7 +29,8 @@ const Home = ({}) => {
         ></script>
       </Head>
       <section className={utilStyles.headingMd}>
-          <UserList />
+        
+          <b>Home page</b>
       </section>
     </Layout>
   );

@@ -4,8 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User, UserDocument } from '../schemas/users.schema';
 import { Token, TokenDocument } from '../schemas/token.schema';
-// This should be a real class/interface representing a user entity
-// export type User = any;
+
 
 @Injectable()
 export class UsersService {
@@ -14,13 +13,13 @@ export class UsersService {
     @InjectModel(Token.name) private tokenModel: Model<TokenDocument>,
   ) {}
 
-  async create(book: User): Promise<User> {
-    const newUser = new this.userModel(book);
+  async create(User: User): Promise<User> {
+    const newUser = new this.userModel(User);
     return await newUser.save();
   }
 
   async readAll(): Promise<User[]> {
-    return await this.userModel.find().exec();
+    return await this.userModel.find({}, { _id: 0, email: 1, gender: 1, role:1,createdBy:1  }).exec();
   }
 
   async readById(id): Promise<User> {
@@ -30,8 +29,8 @@ export class UsersService {
   async findbyEmail(email): Promise<User> {
     return await this.userModel.findOne({email:email});
   }
-  async update(id, book: User): Promise<User> {
-    return await this.userModel.findByIdAndUpdate(id, book, { new: true });
+  async update(id, User: User): Promise<User> {
+    return await this.userModel.findByIdAndUpdate(id, User, { new: true });
   }
 
   async delete(id): Promise<any> {
