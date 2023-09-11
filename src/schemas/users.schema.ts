@@ -14,10 +14,10 @@ export class User {
   @Prop({ required: true })
   gender: string;
 
-  @Prop({ required: true })
+  @Prop({ required: true , default:"normal"})
   role: string;
   
-  @Prop({ required: true })
+  @Prop({ required: false })
   createdBy: string;
 
 }

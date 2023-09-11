@@ -28,5 +28,9 @@ exports.globalConstants = {
     SPACE: ' ',
     TOKEN_USERNAME: 'username',
     SECRET: 'mustafa',
+    SENDER_EMAIL: 'furqanbutt6900@gmail.com',
+    TEST_EMAIL: 'test@gmail.com',
+    TEST_PASSWORD: '$2b$10$NFr5O/Y4aQiJPTDuxzqh6et7fPMQjs2fJyQISxGP8KYK3A1uAIlqy',
+    TEST_GENDER: 'male'
 };
 //# sourceMappingURL=constant.js.map

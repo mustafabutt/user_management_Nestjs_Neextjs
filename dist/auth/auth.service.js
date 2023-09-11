@@ -26,6 +26,7 @@ const users_service_1 = require("../services/users.service");
 const jwt_1 = require("@nestjs/jwt");
 const redis_cache_service_1 = require("../redis-cache/redis-cache.service");
 const exceptions_1 = require("../exceptions/exceptions");
+const bcrypt = require("bcrypt");
 let AuthService = class AuthService {
     constructor(usersService, jwtService, exceptions, Redis) {
         this.usersService = usersService;
@@ -34,11 +35,16 @@ let AuthService = class AuthService {
         this.Redis = Redis;
     }
     async validateUser(obj) {
+        let isMatch;
         const user = await this.usersService.findbyEmail(obj.email);
         if (JSON.parse(await this.Redis.get("info")) != null)
             if (JSON.parse(await this.Redis.get("info")).email == obj.email && JSON.parse(await this.Redis.get("info")).code == obj.password)
                 obj.password = user.password;
-        if (user && obj.password === user.password) {
+        if (user && JSON.parse(await this.Redis.get("info")) == null)
+            isMatch = await bcrypt.compare(obj.password, user.password);
+        else
+            isMatch = true;
+        if (user && isMatch) {
             const { password } = user, result = __rest(user, ["password"]);
             return result;
         }
@@ -47,15 +53,18 @@ let AuthService = class AuthService {
     async login(user) {
         const payload = { email: user._doc.email, sub: user._doc.userId };
         const token = this.jwtService.sign(payload);
-        return {
-            access_token: token,
-        };
+        user._doc.access_token = token;
+        delete user._doc.password;
+        return user._doc;
     }
     async signup(user) {
         try {
             const check = await this.usersService.findbyEmail(user.email);
             if (check)
                 this.exceptions.generateUserExistException();
+            const saltOrRounds = 10;
+            const hash = await bcrypt.hash(user.password, saltOrRounds);
+            user.password = hash;
             return await this.usersService.create(user);
         }
         catch (err) {

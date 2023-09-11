@@ -15,6 +15,7 @@ export const CreateUser = (props) => {
       };
 
     const getGender = (e) => {
+        
         const { value } = e.target;
         setUserGender(value);
     };

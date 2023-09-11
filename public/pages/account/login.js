@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import {Layout} from "../../components/account/";
+import dynamic from 'next/dynamic'
+const Layout = dynamic(()=> import("../../components/account/Layout")) ;
 import loginStyles from '../../styles/login.module.css';
 import {UserService} from "../../services";
-import Alert from '../../components/alert';
+const Alert = dynamic(()=> import('../../components/alert'));
 import { useRouter } from 'next/router';
 import Link from "next/link";
 
@@ -32,7 +33,7 @@ const Login = (props) => {
   })
 
   return (
-      <Layout>
+      <Layout login>
 
         <div className={loginStyles.formClass}>
 

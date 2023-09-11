@@ -19,6 +19,7 @@ const users_service_1 = require("../services/users.service");
 const exceptions_1 = require("../exceptions/exceptions");
 const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
 const constant_1 = require("../constant");
+const bcrypt = require("bcrypt");
 let UserController = class UserController {
     constructor(userService, exceptions) {
         this.userService = userService;
@@ -60,19 +61,45 @@ let UserController = class UserController {
             this.exceptions.generateGeneralException(err);
         }
     }
-    async update(response, id, user) {
+    async update(response, email, user) {
         try {
-            const updatedUser = await this.userService.update(id, user);
-            return response.status(common_1.HttpStatus.OK).json({
-                updatedUser,
-            });
+            if (user["action"] == "edit user") {
+                const currentUser = await this.userService.findbyEmail(user["previousEmail"]);
+                delete user["previousEmail"];
+                const id = currentUser["_id"];
+                const updatedUser = await this.userService.update(id, user);
+                return response.status(common_1.HttpStatus.OK).json({
+                    updatedUser,
+                });
+            }
+            else if (user["action"] == "change password") {
+                const currentUser = await this.userService.findbyEmail(email);
+                const id = currentUser["_id"];
+                const saltOrRounds = 10;
+                const hash = await bcrypt.hash(user.password, saltOrRounds);
+                currentUser.password = hash;
+                const updatedUser = await this.userService.update(id, currentUser);
+                return response.status(common_1.HttpStatus.OK).json({
+                    updatedUser,
+                });
+            }
+            else if (user["action"] == "delete user") {
+                const currentUser = await this.userService.findbyEmail(email);
+                const id = currentUser["_id"];
+                const deletedUser = await this.userService.delete(id);
+                return response.status(common_1.HttpStatus.OK).json({
+                    deletedUser,
+                });
+            }
         }
         catch (err) {
             this.exceptions.generateGeneralException(err);
         }
     }
-    async delete(response, id) {
+    async delete(response, email) {
         try {
+            const currentUser = await this.userService.findbyEmail(email);
+            const id = currentUser["_id"];
             const deletedUser = await this.userService.delete(id);
             return response.status(common_1.HttpStatus.OK).json({
                 deletedUser,
@@ -107,18 +134,18 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "findById", null);
 __decorate([
-    (0, common_1.Put)('/:' + constant_1.globalConstants.ID),
+    (0, common_1.Put)('/:email'),
     __param(0, (0, common_1.Res)()),
-    __param(1, (0, common_1.Param)(constant_1.globalConstants.ID)),
+    __param(1, (0, common_1.Param)("email")),
     __param(2, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object, users_schema_1.User]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "update", null);
 __decorate([
-    (0, common_1.Delete)('/:' + constant_1.globalConstants.ID),
+    (0, common_1.Delete)('/:email'),
     __param(0, (0, common_1.Res)()),
-    __param(1, (0, common_1.Param)(constant_1.globalConstants.ID)),
+    __param(1, (0, common_1.Param)("email")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)

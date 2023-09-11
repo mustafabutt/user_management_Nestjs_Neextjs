@@ -23,12 +23,12 @@ let UsersService = class UsersService {
         this.userModel = userModel;
         this.tokenModel = tokenModel;
     }
-    async create(book) {
-        const newUser = new this.userModel(book);
+    async create(User) {
+        const newUser = new this.userModel(User);
         return await newUser.save();
     }
     async readAll() {
-        return await this.userModel.find().exec();
+        return await this.userModel.find({}, { _id: 0, email: 1, gender: 1, role: 1, createdBy: 1 }).exec();
     }
     async readById(id) {
         return await this.userModel.findById(id).exec();
@@ -36,8 +36,8 @@ let UsersService = class UsersService {
     async findbyEmail(email) {
         return await this.userModel.findOne({ email: email });
     }
-    async update(id, book) {
-        return await this.userModel.findByIdAndUpdate(id, book, { new: true });
+    async update(id, User) {
+        return await this.userModel.findByIdAndUpdate(id, User, { new: true });
     }
     async delete(id) {
         return await this.userModel.findByIdAndRemove(id);

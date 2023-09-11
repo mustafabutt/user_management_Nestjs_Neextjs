@@ -1,6 +1,6 @@
                         Instructions
 
-This is a working sign-in/sign-up module built using the following stack:
+This is a working sign in/sign up module built using the following stack:
  <br />
 Nestjs <br />
 MongoDB <br />
@@ -9,8 +9,8 @@ Nextjs <br />
 
 It uses JWT tokens and built-in JwtAuthGuard. 
 
-Make sure you have installed Nodejs, Redis, and MongoDB.
-Clone the source code and run the following commands into the root directory. 
+Make sure you have installed Nodejs, Redis and MongoDB.
+Clone the source code and run the following commands in to the root directory. 
 
 First, start the Redis server by running the following command
 
@@ -25,13 +25,13 @@ localhost:3001/auth/login
 "password": "qwerty"
 }
 
-After that run the following commands to start the client-server 
+After that run the following commands to start the cleint server 
 
-cd public<br />
+cd public/nextjs-blog<br />
 npm install <br />
 npm run dev
 
-Now open the app in the browser http://localhost:3000/
+Now open app in thee browser http://localhost:3000/
 
 
 

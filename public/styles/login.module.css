@@ -54,7 +54,11 @@
   border-radius: 50%;
   margin: auto;
 }
-
+.deleteClass{
+  width: 10%;
+  float: right;
+  cursor: pointer;
+}
 /* Add padding to containers */
 .container {
   padding: 16px;

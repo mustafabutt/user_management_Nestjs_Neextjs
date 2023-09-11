@@ -9,9 +9,7 @@ export declare class AuthService {
     private Redis;
     constructor(usersService: UsersService, jwtService: JwtService, exceptions: Exceptions, Redis: RedisCacheService);
     validateUser(obj: any): Promise<any>;
-    login(user: any): Promise<{
-        access_token: string;
-    }>;
+    login(user: any): Promise<any>;
     signup(user: any): Promise<import("../schemas/users.schema").User>;
     logout(token: any): Promise<any>;
 }

@@ -35,7 +35,7 @@ let MailController = class MailController {
         const mail = {
             to: email.email,
             subject: 'Password reset',
-            from: 'furqanbutt6900@gmail.com',
+            from: constant_1.globalConstants.SENDER_EMAIL,
             html: 'Your temporary password is <b>' + code + '</b> <br>Please change your password by navigating into settings.',
         };
         const data = await this.sendgridService.send(mail);

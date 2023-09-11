@@ -25,4 +25,8 @@ export declare const globalConstants: {
     SPACE: string;
     TOKEN_USERNAME: string;
     SECRET: string;
+    SENDER_EMAIL: string;
+    TEST_EMAIL: string;
+    TEST_PASSWORD: string;
+    TEST_GENDER: string;
 };

@@ -31,7 +31,6 @@ export class UserController {
       const check = await this.userService.findbyEmail(user.email);
       if (check) this.exceptions.generateUserExistException();
       const newUser = await this.userService.create(user);
-      console.log(newUser)
       return response.status(HttpStatus.CREATED).json({
         newUser,
       });
@@ -49,7 +48,6 @@ export class UserController {
         users,
       });
     } catch (err) {
-      console.log(err);
       this.exceptions.generateGeneralException(err);
     }
   }
@@ -69,26 +67,49 @@ export class UserController {
   @Put('/:email')
   async update(@Res() response, @Param("email") email, @Body() user: User) {
     try {
-
-      const currentUser = await this.userService.findbyEmail(email);
-      const id = currentUser["_id"];
-      const saltOrRounds = 10;
-      const hash = await bcrypt.hash(user.password, saltOrRounds);
-      currentUser.password = hash;
- 
-      const updatedUser = await this.userService.update(id, currentUser);
-      return response.status(HttpStatus.OK).json({
-        updatedUser,
-      });
+      if(user["action"] == "edit user"){
+   
+        const currentUser = await this.userService.findbyEmail(user["previousEmail"]);
+        delete user["previousEmail"];
+        const id = currentUser["_id"];
+        const updatedUser = await this.userService.update(id, user);
+        return response.status(HttpStatus.OK).json({
+          updatedUser,
+        });
+        
+      }else if(user["action"] == "change password"){
+        const currentUser = await this.userService.findbyEmail(email);
+        const id = currentUser["_id"];
+        const saltOrRounds = 10;
+        const hash = await bcrypt.hash(user.password, saltOrRounds);
+        currentUser.password = hash;
+   
+        const updatedUser = await this.userService.update(id, currentUser);
+        return response.status(HttpStatus.OK).json({
+          updatedUser,
+        });
+      }else if(user["action"] == "delete user"){
+   
+        const currentUser = await this.userService.findbyEmail(email);
+        const id = currentUser["_id"];
+        const deletedUser = await this.userService.delete(id);
+        return response.status(HttpStatus.OK).json({
+          deletedUser,
+        });
+        
+      }   
+     
     } catch (err) {
-      console.log(err);
       this.exceptions.generateGeneralException(err);
     }
   }
 
-  @Delete('/:' + globalConstants.ID)
-  async delete(@Res() response, @Param(globalConstants.ID) id) {
+  @Delete('/:email' )
+  async delete(@Res() response, @Param("email") email) {
     try {
+ 
+      const currentUser = await this.userService.findbyEmail(email);
+      const id = currentUser["_id"];
       const deletedUser = await this.userService.delete(id);
       return response.status(HttpStatus.OK).json({
         deletedUser,

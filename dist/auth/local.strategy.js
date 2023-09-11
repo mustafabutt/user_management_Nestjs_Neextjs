@@ -15,14 +15,27 @@ const passport_1 = require("@nestjs/passport");
 const common_1 = require("@nestjs/common");
 const auth_service_1 = require("./auth.service");
 const constant_1 = require("../constant");
+const users_service_1 = require("../services/users.service");
 let LocalStrategy = class LocalStrategy extends (0, passport_1.PassportStrategy)(passport_local_1.Strategy) {
-    constructor(authService) {
+    constructor(authService, userService) {
         super({
             passReqToCallback: true,
-            usernameField: 'email',
-            passwordField: 'password'
+            usernameField: constant_1.globalConstants.EMAIL,
+            passwordField: constant_1.globalConstants.PASSWORD
         });
         this.authService = authService;
+        this.userService = userService;
+        (async () => {
+            if (!await this.userService.findbyEmail(constant_1.globalConstants.TEST_EMAIL)) {
+                await this.userService.create({
+                    email: constant_1.globalConstants.TEST_EMAIL,
+                    password: constant_1.globalConstants.TEST_PASSWORD,
+                    gender: constant_1.globalConstants.TEST_GENDER,
+                    role: "admin",
+                    createdBy: constant_1.globalConstants.TEST_EMAIL
+                });
+            }
+        })();
     }
     async validate(request) {
         if (request.body.hasOwnProperty(constant_1.globalConstants.EMAIL) &&
@@ -39,7 +52,7 @@ let LocalStrategy = class LocalStrategy extends (0, passport_1.PassportStrategy)
 };
 LocalStrategy = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [auth_service_1.AuthService])
+    __metadata("design:paramtypes", [auth_service_1.AuthService, users_service_1.UsersService])
 ], LocalStrategy);
 exports.LocalStrategy = LocalStrategy;
 //# sourceMappingURL=local.strategy.js.map

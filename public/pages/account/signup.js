@@ -1,10 +1,11 @@
-import Alert from '../../components/alert';
+import dynamic from 'next/dynamic'
+const Alert = dynamic(()=> import('../../components/alert'));
 import loginStyles from '../../styles/login.module.css';
 import React, {useEffect, useRef, useState} from 'react';
 import { useRouter } from 'next/router';
 import {UserService} from "../../services";
 import Head from 'next/head';
-import {Layout} from "../../components/account";
+const Layout = dynamic(()=> import("../../components/account/Layout"));
 import utilStyles from '../../styles/utils.module.css';
 import $ from 'jquery';
 import Link from 'next/link';
@@ -44,20 +45,9 @@ const Signup = () => {
   };
 
   return (
-    <Layout>
+    <Layout signUp>
       <Head>
         <title>Sign up</title>
-        <link
-          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
-          rel="stylesheet"
-          integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
-          crossOrigin="anonymous"
-        />
-        <script
-          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
-          integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
-          crossOrigin="anonymous"
-        ></script>
       </Head>
       <section className={utilStyles.headingMd}>
         <div className="modal modal-backdrop" id="myModal" role="dialog">
@@ -120,9 +110,7 @@ const Signup = () => {
               onFocus={focusHandler}
               required
             />
-            <label htmlFor="psw">
-              <b>Gender</b>
-            </label>
+            
             <div className="radio-buttons">
               <b>Male</b>{' '}
               <input

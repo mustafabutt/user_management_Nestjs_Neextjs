@@ -8,6 +8,6 @@ export declare class UserController {
     createUser(response: any, user: User): Promise<any>;
     fetchAll(response: any): Promise<any>;
     findById(response: any, id: any): Promise<any>;
-    update(response: any, id: any, user: User): Promise<any>;
-    delete(response: any, id: any): Promise<any>;
+    update(response: any, email: any, user: User): Promise<any>;
+    delete(response: any, email: any): Promise<any>;
 }

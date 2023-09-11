@@ -1,7 +1,10 @@
-export const Layout = ({ children }) => {
+
+import styles from '../layout.module.css';
+
+export default function Layout ({ children }) {
 
   return (
-    <div>
+    <div className={styles.container}>
    
         {children}
     </div>

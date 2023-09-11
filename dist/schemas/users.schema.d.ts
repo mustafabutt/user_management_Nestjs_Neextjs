@@ -28,5 +28,7 @@ export declare class User {
     email: string;
     password: string;
     gender: string;
+    role: string;
+    createdBy: string;
 }
 export declare const UserSchema: import("mongoose").Schema<User, import("mongoose").Model<User, any, any, any, any>, {}, {}, {}, {}, import("mongoose").DefaultSchemaOptions, User>;

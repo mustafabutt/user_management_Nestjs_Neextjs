@@ -74,6 +74,7 @@ export const UserService = () => {
     }
 
     const signUp = async (user) => {
+        
         return await fetch(constants.SIGN_UP_URL, {
             method: 'POST',
             body: JSON.stringify(user),
@@ -97,6 +98,7 @@ export const UserService = () => {
     }
 
      const changePassword = async (user) => {
+        user.action = "change password"
         const token = JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')).access_token : null;
         return await fetch(constants.USERS+"/"+user.email, {
             method: 'PUT',
@@ -154,6 +156,38 @@ export const UserService = () => {
         }
     }
 
+    const getSingletUser = (email) =>{
+        console.log(JSON.parse(localStorage.getItem('users-list')).users);
+        var user = JSON.parse(localStorage.getItem('users-list')).users.find(o => o.email === email);
+        return user;
+    }
+
+    const editUser = async (user) => {
+        user.action = "edit user"
+        const token = JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')).access_token : null;
+        return await fetch(constants.USERS+"/"+user.email, {
+            method: 'PUT',
+            body: JSON.stringify(user),
+            headers: {
+                'Content-Type': constants.CONTENT_TYPE,
+                Authorization: constants.BEARER+token
+            },
+        });
+    }
+    const DeleteUser = async (user) => {
+        user.action = "delete user"
+        const token = JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')).access_token : null;
+        return await fetch(constants.USERS+"/"+user.email, {
+            method: 'Put',
+            body: JSON.stringify(user),
+            headers: {
+                'Content-Type': constants.CONTENT_TYPE,
+                Authorization: constants.BEARER+token
+            },
+        });
+    }
+    
+
     return {
         isUserLoggedIn,
         login,
@@ -164,7 +198,10 @@ export const UserService = () => {
         changePassword,
         createUser,
         getCurrentUser,
-        isAdmin
+        isAdmin,
+        getSingletUser,
+        editUser,
+        DeleteUser
     }
 }
 

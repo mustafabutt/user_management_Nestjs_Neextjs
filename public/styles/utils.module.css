@@ -66,4 +66,12 @@
 .modalHadingColor {
   color: #04AA6D;
 }
+.tab:hover {
+  background: rgb(220, 215, 215);
+}
 
+.avatarClass {
+  width: 20%;
+  border-radius: 50%;
+  margin: auto;
+}

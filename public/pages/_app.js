@@ -1,6 +1,6 @@
 import '../styles/global.css'
 import {useRouter} from "next/router";
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import {UserService} from "../services";
 
 export default function App({ Component, pageProps }) {

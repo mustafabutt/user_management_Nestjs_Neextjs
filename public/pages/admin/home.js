@@ -1,21 +1,26 @@
-import Alert from '../../components/alert';
 import loginStyles from '../../styles/login.module.css';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import Head from 'next/head';
-import Layout from "../../components/layout";
+import dynamic from 'next/dynamic'
+const Alert = dynamic(()=> import('../../components/alert'));
+const Layout = dynamic(()=> import("../../components/layout"));
 import utilStyles from '../../styles/utils.module.css';
 import $ from 'jquery';
 import {UserList} from "../../components/users/UserList";
 import {UserService} from "../../services";
 import { CreateUser } from '../../components/general/createUser';
+import { ViewUser } from '../../components/general/viewUser';
 import {useRouter} from "next/router";
 
 const Admin = () => {
 
   const [createUserView, setCreateUserView] = useState(null);
   const [userCreated, setUserCreated] = useState(null);
+  const [userView, setUserView] = useState(null);
+  const [currentEmail, setCurrentEmail] = useState(null);
+  const [showCreateUserButton, setShowCreateUserButton] = useState(true);
   const router = useRouter();
-
+debugger
   useEffect(()=>{
  
     if(!UserService().isAdmin())
@@ -23,40 +28,47 @@ const Admin = () => {
   },[])
 
   const closeModal = () => {
-    if(!createUserView)
+    if(!createUserView && !userView)
       $('#myModal').hide();
     setCreateUserView(false);
+    setUserView(false);
+    setShowCreateUserButton(true);
   };
   const showUsersModal = () => {
     $('#myModal').show()
   }
-  async function createUser(e) {
+  function createUser(e) {
     e.preventDefault();
-    createUserView ? setCreateUserView(false):setCreateUserView(true)
+    createUserView ? setCreateUserView(false):setCreateUserView(true);
+    setShowCreateUserButton(false);
   }
-  async function pullData(){
+  function pullData(){
     setCreateUserView(false);
     setUserCreated(true);
     setTimeout(()=>{
       setUserCreated(false);
-    },5000)
+    },3000);
+    setShowCreateUserButton(true);
+  }
+
+  function pullListData(user){
+
+    setCurrentEmail(user);
+    setShowCreateUserButton(false);
+    setUserView(true);
+  }
+
+  function pullDataFromView(){
+    setTimeout(()=>{
+      setUserView(false);
+    },2000)
+    setShowCreateUserButton(true);
   }
 
   return (
     <Layout admin>
       <Head>
         <title>Admin Dashboard</title>
-        <link
-          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
-          rel="stylesheet"
-          integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
-          crossOrigin="anonymous"
-        />
-        <script
-          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
-          integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
-          crossOrigin="anonymous"
-        ></script>
       </Head>
       <section className={utilStyles.headingMd}>
         <h3>Admin Dashboard</h3>
@@ -77,14 +89,15 @@ const Admin = () => {
               <div className="modal-body">
 
                   <div className={loginStyles.container}>
-                    {createUserView ?   <CreateUser invokeParent={pullData} />: <UserList />}
+                    {createUserView ? <CreateUser invokeParent={pullData} />: userView ? <ViewUser invokeParent={pullDataFromView} email={currentEmail}/> :<UserList invokeTopParent = {pullListData} />}
                   </div>
 
               </div>
               <div className="modal-footer">
                 <span>
                   <button type="button" onClick={closeModal} className="btn btn-danger">Close</button>
-                  {createUserView ?  null: <span><button type="button" onClick={createUser}  className="btn btn-success">Create user</button></span>}
+                  {showCreateUserButton ? <span><button type="button" onClick={createUser}  className="btn btn-success">Create user</button></span> : null }
+             
                 </span>
               </div>
             </div>

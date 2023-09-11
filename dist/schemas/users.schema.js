@@ -25,6 +25,14 @@ __decorate([
     (0, mongoose_1.Prop)({ required: true }),
     __metadata("design:type", String)
 ], User.prototype, "gender", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: true, default: "normal" }),
+    __metadata("design:type", String)
+], User.prototype, "role", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: false }),
+    __metadata("design:type", String)
+], User.prototype, "createdBy", void 0);
 User = __decorate([
     (0, mongoose_1.Schema)()
 ], User);

@@ -1,13 +1,14 @@
-import Alert from '../../components/alert';
+import dynamic from 'next/dynamic'
+const Alert = dynamic(()=> import('../../components/alert'));
 import loginStyles from '../../styles/login.module.css';
 import React, {useEffect, useRef, useState} from 'react';
 import { useRouter } from 'next/router';
 import {UserService} from "../../services";
 import Head from 'next/head';
-import Layout from "../../components/layout";
+const Layout = dynamic(()=> import("../../components/layout"));
 import utilStyles from '../../styles/utils.module.css';
 import $ from 'jquery';
-import Link from 'next/link';
+import Image from 'next/image'
 
 const Profile = () => {
 
@@ -44,14 +45,14 @@ const Profile = () => {
   
   async function uploadPicture(e) {
     e.preventDefault();
-    const res = await UserService().signup({
-      email: email.current.value,
-      password: password.current.value,
-    });
+    // const res = await UserService().signup({
+    //   email: email.current.value,
+    //   password: password.current.value,
+    // });
 
-    res.status == 201 ? $('#myModal').show() : null;
+    // res.status == 201 ? $('#myModal').show() : null;
     
-    res.status == 303 ? setUserExists(true) : null;
+    // res.status == 303 ? setUserExists(true) : null;
   }
   useEffect(()=>{
     // if (typeof window !== 'undefined' && localStorage.getItem('accessToken')) {
@@ -68,17 +69,6 @@ const Profile = () => {
     <Layout profile>
       <Head>
         <title>User Profile</title>
-        <link
-          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
-          rel="stylesheet"
-          integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
-          crossOrigin="anonymous"
-        />
-        <script
-          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
-          integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
-          crossOrigin="anonymous"
-        ></script>
       </Head>
       <section className={utilStyles.headingMd}>
         <div className="modal modal-backdrop" id="myModal" role="dialog">
@@ -92,7 +82,7 @@ const Profile = () => {
               <div className="modal-body">
 
                   <div className={loginStyles.container}>
-                    
+                  <form onSubmit={changePassword}  className={loginStyles.formClass}>
                     <input
                         ref={password}
                         className={loginStyles.inputClass}
@@ -124,13 +114,16 @@ const Profile = () => {
                           <span>Password is updated.</span>
                         </Alert>
                       ) : null}
+                       <span> </span><button type="submit"  className="btn btn-success">Save</button>
+                       </form>
+
                   </div>
 
               </div>
               <div className="modal-footer">
                 <span>
                   <button type="button" onClick={closeModal} className="btn btn-danger">Close</button>
-                  <span> </span><button type="button" onClick={changePassword}  className="btn btn-success">Save</button>
+                 
                 </span>
               </div>
             </div>
@@ -138,9 +131,11 @@ const Profile = () => {
         </div>
  
           <div className={loginStyles.imgcontainer}>
-            <img
-              src="/images/user.png"
+            <Image
+              src={"/images/user.png"}
               alt="Avatar"
+              width={200}
+              height={200}
               className={loginStyles.avatarClass}
             />
           </div>

@@ -1,13 +1,18 @@
 import {useEffect, useState} from "react";
+import globalStyle from '../../styles/utils.module.css';
 
-export const List = ({data}) => {
+export const List = (props) => {
     const [userData, setUserData] = useState(null);
 
     useEffect(()=>{
-        setUserData(data);
+        setUserData(props.data);
     })
     if(!userData || userData === null)
         return null
+    async function fetchData(e){
+        e.preventDefault();
+        props.invokeUpper(e.currentTarget.innerText.toString().split(".com")[0]+".com")
+    }
 
   return (
 
@@ -29,11 +34,11 @@ export const List = ({data}) => {
                     </thead>
                     <tbody>
                     {userData && userData.users.map((user) => (
-                    <tr>
+                    <tr className={globalStyle.tab} style={{cursor: 'grab'}} onClick={fetchData} >
                         {
                             Object.keys(user).map((keyName, keyIndex)=> {
                             
-                                return <td key={keyIndex}>{user[keyName].toString() }</td>
+                                return <td  key={keyIndex}>{user[keyName].toString() }</td>
 
                             })
                         }
