@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic'
-const Layout = dynamic(()=> import("../../components/account/Layout")) ;
+const Layout = dynamic(()=> import("../../components/account/Layout"));
 import loginStyles from '../../styles/login.module.css';
-import {UserService} from "../../services";
+import {UserService} from "../../services/user.service";
 const Alert = dynamic(()=> import('../../components/alert'));
 import { useRouter } from 'next/router';
 import Link from "next/link";

@@ -3,7 +3,7 @@ import styles from './layout.module.css';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import {UserService} from "../services";
+import {UserService} from "../services/user.service";
 
 export const siteTitle = 'Next.js Sample Website';
 
@@ -23,7 +23,7 @@ const Layout = ({ children, home }) => {
     router.push("/account/profile");
   }
   const adminDashboard  = async () => {
-    router.push("/admin/home");
+    router.push("/admin/dashboard");
   }
   useEffect(() => {
     if (UserService().isUserLoggedIn())
@@ -41,9 +41,9 @@ const Layout = ({ children, home }) => {
       </Head>
       <header className={styles.header}>
         {showLogout ? <span>
-          <button type="button" class="btn btn-danger" onClick={logout}>Log out</button>
-          <button type="button" class="btn btn-success" onClick={userProfile}>User profile</button>
-          {UserService().isAdmin()? <button type="button" class ="btn btn-dark" onClick={adminDashboard}>Admin Dashboard</button>:null }
+          <button type="button" className="btn btn-danger" onClick={logout}>Log out</button>
+          <button type="button" className="btn btn-success" onClick={userProfile}>User profile</button>
+          {UserService().isAdmin()? <button type="button" className ="btn btn-dark" onClick={adminDashboard}>Admin Dashboard</button>:null }
             </span>: null}
  
       </header>

@@ -157,8 +157,7 @@ export const UserService = () => {
     }
 
     const getSingletUser = (email) =>{
-        console.log(JSON.parse(localStorage.getItem('users-list')).users);
-        var user = JSON.parse(localStorage.getItem('users-list')).users.find(o => o.email === email);
+        var user = JSON.parse(localStorage.getItem('users-list')).data.find(o => o.email === email);
         return user;
     }
 

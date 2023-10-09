@@ -3,7 +3,7 @@ const Alert = dynamic(()=> import('../../components/alert'));
 import loginStyles from '../../styles/login.module.css';
 import React, {useEffect, useRef, useState} from 'react';
 import { useRouter } from 'next/router';
-import {UserService} from "../../services";
+import {UserService} from "../../services/user.service";
 import Head from 'next/head';
 const Layout = dynamic(()=> import("../../components/account/Layout"));
 import utilStyles from '../../styles/utils.module.css';

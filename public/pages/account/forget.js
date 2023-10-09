@@ -1,7 +1,7 @@
 import loginStyles from '../../styles/login.module.css';
 import React, {useEffect, useRef, useState} from 'react';
 import { useRouter } from 'next/router';
-import {UserService} from "../../services";
+import {UserService} from "../../services/user.service";
 import Head from 'next/head';
 import dynamic from 'next/dynamic'
 const Alert = dynamic(()=> import('../../components/alert'));

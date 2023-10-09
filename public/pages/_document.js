@@ -1,5 +1,5 @@
 import Document, { Head, Html, Main, NextScript } from 'next/document';
-import dynamic from 'next/dynamic'
+
 class MyDocument extends Document {
   render() {
     return (

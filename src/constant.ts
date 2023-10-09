@@ -14,6 +14,7 @@ export const globalConstants = {
   EMAIL: 'email',
   PASSWORD: 'password',
   USERS: 'users',
+  RATES: 'rates',
   SEND_EMAIL: "email",
   ID: 'id',
   PUT: 'PUST',

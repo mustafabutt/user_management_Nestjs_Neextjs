@@ -42,10 +42,10 @@ export class UserController {
   @Get()
   async fetchAll(@Res() response) {
     try {
-      const users = await this.userService.readAll();
+      const data = await this.userService.readAll();
 
       return response.status(HttpStatus.OK).json({
-        users,
+        data,
       });
     } catch (err) {
       this.exceptions.generateGeneralException(err);
