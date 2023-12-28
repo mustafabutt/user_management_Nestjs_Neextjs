@@ -1,17 +1,17 @@
-import loginStyles from '../../styles/login.module.css';
+import loginStyles from '@/styles/login.module.css';
 import React, {useCallback, useEffect, useState} from 'react';
 import Head from 'next/head';
 import dynamic from 'next/dynamic'
-const Alert = dynamic(()=> import('../../components/alert'));
-const Layout = dynamic(()=> import("../../components/layout"));
-import utilStyles from '../../styles/utils.module.css';
+const Alert = dynamic(()=> import('@/components/alert'));
+const Layout = dynamic(()=> import("@/components/layout"));
+import utilStyles from '@/styles/utils.module.css';
 import $ from 'jquery';
-import {UserList} from "../../components/users/userList";
-import {UserService} from "../../services/user.service";
-import { CreateUser } from '../../components/users/createUser';
-import { ViewUser } from '../../components/users/viewUser';
+import {UserList} from "@/components/users/userList";
+import { CreateUser } from '@/components/users/createUser';
+import { ViewUser } from '@/components/users/viewUser';
 import {useRouter} from "next/router";
 import Link from 'next/link';
+import authMiddleware from './middleware';
 
 const Admin = () => {
 
@@ -30,9 +30,7 @@ const Admin = () => {
   const router = useRouter();
 
   useEffect(()=>{
-
-    if(!UserService().isAdmin())
-      router.push("/");
+    authMiddleware(router)
   },[])
 
   const closeModal = (value) => {
@@ -147,8 +145,8 @@ const Admin = () => {
               </div>
               <div className="modal-footer">
                 <span>
-                  <button type="button" onClick={(value) => closeModal(value="users")}  className="btn btn-danger">Close</button>
-                  {showCreateUserButton ? <span><button type="button" onClick={createUser}  className="btn btn-success">Create User</button></span> : null }
+                  <button type="button" onClick={(value) => closeModal(value="users")}  className="w-49 bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded">Close</button>
+                  {showCreateUserButton ? <span><button type="button" onClick={createUser}  className="w-49 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">Create User</button></span> : null }
              
                 </span>
               </div>
@@ -180,8 +178,8 @@ const Admin = () => {
               </div>
               <div className="modal-footer">
                 <span>
-                  <button type="button" onClick={(value) => closeModal(value="invoice")}   className="btn btn-danger">Close</button>
-                  {showCreateInvoiceButton ? <span><button type="button" onClick={createInvoice}  className="btn btn-success">Generate Invoice</button></span> : null }
+                  <button type="button" onClick={(value) => closeModal(value="invoice")} className="w-49 bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded">Close</button>
+                  {showCreateInvoiceButton ? <span><button type="button" onClick={createInvoice}  className="w-49 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">Generate Invoice</button></span> : null }
              
                 </span>
               </div>
@@ -189,9 +187,9 @@ const Admin = () => {
           </div>
         </div>
 
-        <button onClick={(value) => showUsersModal(value="users")} className={loginStyles.buttonClass}>Users</button>
-        <Link href="/admin/rates"><button className={loginStyles.buttonClass}>Rates</button></Link>
-        <button onClick={(value) => showUsersModal(value="invoice")}  className={loginStyles.buttonClass}>Invoice Generator</button>
+        <button onClick={(value) => showUsersModal(value="users")} className="w-50 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">Users</button>
+        <Link href="/rates"><button className="w-50 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">Rates</button></Link>
+        <button onClick={(value) => showUsersModal(value="invoice")}  className="w-100 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">Invoice Generator</button>
         
       </section>
 

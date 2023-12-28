@@ -9,7 +9,7 @@ export const MakeryList = (props) => {
     useEffect(()=>{
         
         RatesService().getLocalMakeryList().then((data)=>{
-            debugger
+            
             if(!data){
                 RatesService().getMakeryList().then((innerData)=>{
                     setMakery(innerData)

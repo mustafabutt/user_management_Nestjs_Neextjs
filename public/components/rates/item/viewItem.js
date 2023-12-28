@@ -32,11 +32,7 @@ export const ViewItem = (props) => {
       setItemUpdated(false);
       setItem(e.target.value);
     };
-    const chnageHandlerForRate = (e) => {
 
-      setItemUpdated(false);
-      setItemFabricAverage(e.target.value);
-    };
 
     async function updateMakery(e) {
         e.preventDefault();

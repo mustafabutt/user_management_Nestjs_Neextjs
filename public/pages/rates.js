@@ -1,26 +1,27 @@
-import loginStyles from '../../styles/login.module.css';
+import loginStyles from '@/styles/login.module.css';
 import React, {useCallback, useEffect, useState} from 'react';
 import Head from 'next/head';
 import dynamic from 'next/dynamic'
-const Alert = dynamic(()=> import('../../components/alert'));
-const Layout = dynamic(()=> import("../../components/layout"));
-import utilStyles from '../../styles/utils.module.css';
+const Alert = dynamic(()=> import('@/components/alert'));
+const Layout = dynamic(()=> import("@/components/layout"));
+import utilStyles from '@/styles/utils.module.css';
+import authMiddleware from './middleware';
 import $ from 'jquery';
-import {FabricList} from "../../components/rates/fabric/fabricList";
-import {UserService} from "../../services/user.service";
-import { CreateFabric } from '../../components/rates/fabric/createFabric';
-import { ViewFabric } from '../../components/rates/fabric/viewFabric';
+import {FabricList} from "@/components/rates/fabric/fabricList";
+import {UserService} from "@/services/user.service";
+import { CreateFabric } from '@/components/rates/fabric/createFabric';
+import { ViewFabric } from '@/components/rates/fabric/viewFabric';
 import {useRouter} from "next/router";
-import { MakeryList } from '../../components/rates/makery/makeryList';
-import { CreateMakery } from '../../components/rates/makery/createMakery';
-import { ViewMakery } from '../../components/rates/makery/viewMakery';
-import { CreateItem } from '../../components/rates/item/createItem'; 
-import { ViewItem } from '../../components/rates/item/viewItem'; 
-import { ItemList } from '../../components/rates/item/itemList'; 
+import { MakeryList } from '@/components/rates/makery/makeryList';
+import { CreateMakery } from '@/components/rates/makery/createMakery';
+import { ViewMakery } from '@/components/rates/makery/viewMakery';
+import { CreateItem } from '@/components/rates/item/createItem'; 
+import { ViewItem } from '@/components/rates/item/viewItem'; 
+import { ItemList } from '@/components/rates/item/itemList'; 
 
-import { CreateShipping } from '../../components/rates/shipping/createShipping'; 
-import { ViewShipping } from '../../components/rates/shipping/viewShipping'; 
-import { ShippingList } from '../../components/rates/shipping/shippingList'; 
+import { CreateShipping } from '@/components/rates/shipping/createShipping'; 
+import { ViewShipping } from '@/components/rates/shipping/viewShipping'; 
+import { ShippingList } from '@/components/rates/shipping/shippingList'; 
 
 const Rates = () => {
 
@@ -52,9 +53,7 @@ const Rates = () => {
   const router = useRouter();
 
   useEffect(()=>{
-
-    if(!UserService().isAdmin())
-      router.push("/");
+    authMiddleware(router)
   },[])
 
   const closeModal = (value) => {
@@ -154,7 +153,7 @@ const Rates = () => {
   }
 
   function pullMakeryListData(makery){
-    debugger
+    
     setCurrentMakery(makery);
     setShowCreateMakeryButton(false);
     setMakeryView(true);
@@ -253,8 +252,8 @@ const Rates = () => {
               </div>
               <div className="modal-footer">
                 <span>
-                  <button type="button" onClick={(value) => closeModal(value="fabric")}  className="btn btn-danger">Close</button>
-                  {showCreateFabricButton ? <span><button type="button" onClick={createFabric}  className="btn btn-success">Create Fabric</button></span> : null }
+                  <button type="button" onClick={(value) => closeModal(value="fabric")}  className="w-49 bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded">Close</button>
+                  {showCreateFabricButton ? <span><button type="button" onClick={createFabric}  className="w-49 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">Create Fabric</button></span> : null }
              
                 </span>
               </div>
@@ -284,8 +283,8 @@ const Rates = () => {
               </div>
               <div className="modal-footer">
                 <span>
-                  <button type="button" onClick={(value) => closeModal(value="makery")}  className="btn btn-danger">Close</button>
-                  {showCreateMakeryButton ? <span><button type="button" onClick={createMakery}  className="btn btn-success">Insert Makery</button></span> : null }
+                  <button type="button" onClick={(value) => closeModal(value="makery")}  className="w-49 bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded">Close</button>
+                  {showCreateMakeryButton ? <span><button type="button" onClick={createMakery}  className="w-49 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">Insert Makery</button></span> : null }
              
                 </span>
               </div>
@@ -316,8 +315,8 @@ const Rates = () => {
               </div>
               <div className="modal-footer">
                 <span>
-                  <button type="button" onClick={(value) => closeModal(value="item")}   className="btn btn-danger">Close</button>
-                  {showCreateItemButton ? <span><button type="button" onClick={createItem}  className="btn btn-success">Create Item</button></span> : null }
+                  <button type="button" onClick={(value) => closeModal(value="item")}   className="w-49 bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded">Close</button>
+                  {showCreateItemButton ? <span><button type="button" onClick={createItem}  className="w-49 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">Create Item</button></span> : null }
              
                 </span>
               </div>
@@ -347,8 +346,8 @@ const Rates = () => {
               </div>
               <div className="modal-footer">
                 <span>
-                  <button type="button" onClick={(value) => closeModal(value="shipping")}   className="btn btn-danger">Close</button>
-                  {showCreateShippingButton ? <span><button type="button" onClick={createShipping}  className="btn btn-success">Create Shipping</button></span> : null }
+                  <button type="button" onClick={(value) => closeModal(value="shipping")}   className="w-49 bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded">Close</button>
+                  {showCreateShippingButton ? <span><button type="button" onClick={createShipping}  className="w-49 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">Create Shipping</button></span> : null }
              
                 </span>
               </div>
@@ -356,10 +355,10 @@ const Rates = () => {
           </div>
         </div>
 
-        <button onClick={(value) => showModal(value="fabric")} className={loginStyles.buttonClass}>Fabric</button>
-        <button onClick={(value) => showModal(value="makery")} className={loginStyles.buttonClass}>Makery</button>
-        <button onClick={(value) => showModal(value="item")}  className={loginStyles.buttonClass}>Items</button>
-        <button onClick={(value) => showModal(value="shipping")}  className={loginStyles.buttonClass}>Shipping</button>
+        <button onClick={(value) => showModal(value="fabric")} className="w-25 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">Fabric</button>
+        <button onClick={(value) => showModal(value="makery")} className="w-25 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">Makery</button>
+        <button onClick={(value) => showModal(value="item")}  className="w-25 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">Items</button>
+        <button onClick={(value) => showModal(value="shipping")}  className="w-25 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">Shipping</button>
         
       </section>
 

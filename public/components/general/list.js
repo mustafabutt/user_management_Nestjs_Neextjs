@@ -20,7 +20,6 @@ export const List = (props) => {
     if(userData.data.length == 0)
         return "No data"
 
-
   return (
 
     <div >

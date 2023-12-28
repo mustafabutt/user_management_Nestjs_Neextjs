@@ -1,10 +1,10 @@
-import {BehaviorSubject} from "rxjs";
 import {constants} from "../constants";
+import {  getCookie } from 'cookies-next';
 
 export const RatesService = () => {
-    
+   
     const createFabric = async (fabric) => {
-        const token = JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')).access_token : null;
+        const token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token') : null;
 
         return await fetch(constants.FABRIC, {
             method: 'POST',
@@ -16,7 +16,7 @@ export const RatesService = () => {
         });
     }
     const createMakery = async (makery) => {
-        const token = JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')).access_token : null;
+        const token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token') : null;
 
         return await fetch(constants.MAKERY, {
             method: 'POST',
@@ -28,7 +28,7 @@ export const RatesService = () => {
         });
     }
     const createShipping = async (shipping) => {
-        const token = JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')).access_token : null;
+        const token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token') : null;
 
         return await fetch(constants.SHIPPING, {
             method: 'POST',
@@ -40,7 +40,7 @@ export const RatesService = () => {
         });
     }
     const createItem = async (item) => {
-        const token = JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')).access_token : null;
+        const token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token') : null;
 
         return await fetch(constants.ITEM, {
             method: 'POST',
@@ -67,7 +67,7 @@ export const RatesService = () => {
     }
     const getFabricList = async () => {
 
-        const token = JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')).access_token : null;
+        const token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token') : null;
         const res = await fetch(constants.FABRIC, {
             method: 'GET',
             headers: {
@@ -93,7 +93,7 @@ export const RatesService = () => {
         }
     }
     const getMakeryList = async () => {
-        const token = JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')).access_token : null;
+        const token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token') : null;
         const res = await fetch(constants.MAKERY, {
             method: 'GET',
             headers: {
@@ -120,7 +120,7 @@ export const RatesService = () => {
         }
     }
     const getShippingList = async () => {
-        const token = JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')).access_token : null;
+        const token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token') : null;
         const res = await fetch(constants.SHIPPING, {
             method: 'GET',
             headers: {
@@ -148,7 +148,7 @@ export const RatesService = () => {
     }
 
     const getItemList = async () => {
-        const token = JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')).access_token : null;
+        const token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token'): null;
         const res = await fetch(constants.ITEM, {
             method: 'GET',
             headers: {
@@ -185,7 +185,6 @@ export const RatesService = () => {
         return data;
     }
     const getCurrentShipping =  (shipping) =>{
-        debugger
         let data = JSON.parse(localStorage.getItem('shipping-list')).data.find(o => o.service === shipping);
         return data;
     }
@@ -198,7 +197,7 @@ export const RatesService = () => {
 
     const editFabric = async (fabric) => {
         fabric.action = "edit fabric"
-        const token = JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')).access_token : null;
+        const token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token') : null;
         return await fetch(constants.FABRIC+"/"+fabric.material, {
             method: 'PUT',
             body: JSON.stringify(fabric),
@@ -211,7 +210,7 @@ export const RatesService = () => {
     }
     const editMakery = async (makery) => {
         makery.action = "edit makery"
-        const token = JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')).access_token : null;
+        const token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token') : null;
         return await fetch(constants.MAKERY+"/"+makery.item, {
             method: 'PUT',
             body: JSON.stringify(makery),
@@ -223,7 +222,7 @@ export const RatesService = () => {
     }
     const editShipping = async (shipping) => {
         shipping.action = "edit shipping"
-        const token = JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')).access_token : null;
+        const token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token') : null;
         return await fetch(constants.SHIPPING+"/"+shipping.service, {
             method: 'PUT',
             body: JSON.stringify(shipping),
@@ -237,7 +236,7 @@ export const RatesService = () => {
     const editItem = async (item) => {
         
         item.action = "edit item"
-        const token = JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')).access_token : null;
+        const token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token'): null;
         return await fetch(constants.ITEM+"/"+item.fabric, {
             method: 'PUT',
             body: JSON.stringify(item),
@@ -250,7 +249,7 @@ export const RatesService = () => {
 
     const DeleteFabric = async (fabric) => {
         fabric.action = "delete fabric"
-        const token = JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')).access_token : null;
+        const token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token') : null;
         return await fetch(constants.FABRIC+"/"+fabric, {
             method: 'Put',
             body: JSON.stringify(fabric),
@@ -263,7 +262,7 @@ export const RatesService = () => {
     const DeleteMakery = async (item) => {
         
         item.action = "delete makery"
-        const token = JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')).access_token : null;
+        const token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token') : null;
         return await fetch(constants.MAKERY+"/"+item, {
             method: 'Put',
             body: JSON.stringify(item),
@@ -276,7 +275,7 @@ export const RatesService = () => {
     const DeleteShipping = async (shipping) => {
         
         shipping.action = "delete shipping"
-        const token = JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')).access_token : null;
+        const token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token') : null;
         return await fetch(constants.SHIPPING+"/"+shipping.service, {
             method: 'Put',
             body: JSON.stringify(shipping),
@@ -289,7 +288,7 @@ export const RatesService = () => {
 
     const DeleteItem = async (item) => {
         item.action = "delete item"
-        const token = JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')).access_token : null;
+        const token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token'): null;
         return await fetch(constants.ITEM+"/"+item, {
             method: 'Put',
             body: JSON.stringify(item),

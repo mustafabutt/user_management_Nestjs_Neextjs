@@ -21,7 +21,7 @@ export class MailController {
 
       @Post()
       async sendEmail(@Res() response, @Body() email: any) {
-   
+        console.log(email)
         const check = await this.userService.findbyEmail(email.email);
         if (!check) this.exceptions.generateUserExistException();
         

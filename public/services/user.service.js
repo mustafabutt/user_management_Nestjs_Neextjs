@@ -1,5 +1,6 @@
 import {BehaviorSubject} from "rxjs";
 import {constants} from "../constants";
+import { setCookie, getCookie, deleteCookie } from 'cookies-next';
 
 export const UserService = () => {
 
@@ -38,10 +39,12 @@ export const UserService = () => {
                 status:201,
                 ...response
             }
-            debugger
+            setCookie('access_token', userObject.access_token,{ maxAge: 60 * 60 * 24 });
+            delete userObject.access_token
             localStorage.setItem('user', JSON.stringify(userObject))
             userSubject.next(userObject);
             return userObject;
+            
         }
     }
 
@@ -64,6 +67,7 @@ export const UserService = () => {
              ...response
          }
          localStorage.clear();
+         deleteCookie('access_token');
          return userObject;
         } else {
             return {
@@ -85,7 +89,7 @@ export const UserService = () => {
     }
     
     const createUser = async (user) => {
-        const token = JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')).access_token : null;
+        const token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token') : null;
         
         return await fetch(constants.USERS, {
             method: 'POST',
@@ -99,7 +103,7 @@ export const UserService = () => {
 
      const changePassword = async (user) => {
         user.action = "change password"
-        const token = JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')).access_token : null;
+        const token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token'): null;
         return await fetch(constants.USERS+"/"+user.email, {
             method: 'PUT',
             body: JSON.stringify(user),
@@ -110,10 +114,21 @@ export const UserService = () => {
         });
     }
 
-    // const UserType = async () => {
-    //     const token = JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')).access_token : null;
-    //     return 
-    // }
+    const postImage = async (image) => {
+
+        let formData = new FormData();
+        formData.set("testFile", image.file)
+        
+        try{
+            return await fetch("https://azwxvlbjk7.execute-api.us-east-1.amazonaws.com/dev/file/upload", {
+            method: 'POST',
+            body: formData
+        });
+        }catch(e){
+           
+        }
+        
+    }
 
     const SendEmail = async (email) => {
         const data =  await fetch(constants.SEND_EMAIL, {
@@ -127,11 +142,15 @@ export const UserService = () => {
     }
 
     const getCurrentUser = () =>{
-    
         return JSON.parse(localStorage.getItem('user'));
     }
+    const getAccessToken = () => {
+        
+        return getCookie("access_token")
+    }
     const getUsers = async () => {
-        const token = JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')).access_token : null;
+        const token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token') : null;
+    
         const res = await fetch(constants.USERS, {
             method: 'GET',
             headers: {
@@ -163,7 +182,7 @@ export const UserService = () => {
 
     const editUser = async (user) => {
         user.action = "edit user"
-        const token = JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')).access_token : null;
+        const token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token') : null;
         return await fetch(constants.USERS+"/"+user.email, {
             method: 'PUT',
             body: JSON.stringify(user),
@@ -175,7 +194,7 @@ export const UserService = () => {
     }
     const DeleteUser = async (user) => {
         user.action = "delete user"
-        const token = JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')).access_token : null;
+        const token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token') : null;
         return await fetch(constants.USERS+"/"+user.email, {
             method: 'Put',
             body: JSON.stringify(user),
@@ -200,7 +219,9 @@ export const UserService = () => {
         isAdmin,
         getSingletUser,
         editUser,
-        DeleteUser
+        DeleteUser,
+        postImage,
+        getAccessToken
     }
 }
 
