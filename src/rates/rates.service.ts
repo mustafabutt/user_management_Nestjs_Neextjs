@@ -31,7 +31,7 @@ export class RatesService {
   async findSingleItem(name): Promise<Item> {
     return await this.itemModel.findOne({name:name});
   }
-  async findSingleShippinng(name): Promise<Shipping> {
+  async findSingleShipping(name): Promise<Shipping> {
     return await this.shippingModel.findOne({service:name});
   }
   async updateFabric(id,fabric: Fabric): Promise<Fabric> {
@@ -54,8 +54,8 @@ export class RatesService {
   async readAllItems(): Promise<Item[]> {
     return await this.itemModel.find({}, { _id: 0, name: 1, fabricAverage: 1  }).exec();
   }
-  async findSingleMakery(makery): Promise<Makery> {
-    return await this.makeryModel.findOne({makery:makery});
+  async findSingleMakery(item): Promise<Makery> {
+    return await this.makeryModel.findOne({item:item});
   }
   async updateMakery(id,makery: Makery): Promise<Makery> {
     return await this.makeryModel.findByIdAndUpdate(id,makery);

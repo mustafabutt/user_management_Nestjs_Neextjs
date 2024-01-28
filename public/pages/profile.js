@@ -5,7 +5,6 @@ import React, {useEffect, useRef, useState} from 'react';
 import {UserService} from "@/services/user.service";
 import Head from 'next/head';
 const Layout = dynamic(()=> import("@/components/layout"));
-import utilStyles from '@/styles/utils.module.css';
 import $ from 'jquery';
 import Image from 'next/image'
 import {FileUploader} from "@/components/FileUploader"
@@ -59,7 +58,7 @@ const Profile = () => {
       <Head>
         <title>User Profile</title>
       </Head>
-      <section className={utilStyles.headingMd}>
+      <section className="bg-gray-50 dark:bg-gray-900">
         <div className="modal modal-backdrop" id="myModal" role="dialog">
           <div className="modal-dialog">
             <div className="modal-content">
@@ -132,7 +131,10 @@ const Profile = () => {
           </div>
         </div>
  
-          <div className={loginStyles.imgcontainer}>
+        <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+    
+          <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+            <div className={loginStyles.imgcontainer}>
             <Image
               src={"/images/user.png"}
               alt="Avatar"
@@ -143,12 +145,15 @@ const Profile = () => {
           </div>
     
 
-          <div className="flex flex-row justify-between">
+            <div className="flex flex-row justify-between">
+              
+              <button className="w-49 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded" onClick={showPassChange} type='button'>Change Password</button>
+              <button className="w-49 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded" onClick={showProfilePicture} type='button'>Update Profile Picture </button>
             
-            <button className="w-49 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded" onClick={showPassChange} type='button'>Change Password</button>
-            <button className="w-49 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded" onClick={showProfilePicture} type='button'>Update Profile Picture </button>
-           
+            </div>
           </div>
+        </div>
+          
 
       </section>
 

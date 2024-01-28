@@ -354,12 +354,16 @@ const Rates = () => {
             </div>
           </div>
         </div>
-
-        <button onClick={(value) => showModal(value="fabric")} className="w-25 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">Fabric</button>
-        <button onClick={(value) => showModal(value="makery")} className="w-25 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">Makery</button>
-        <button onClick={(value) => showModal(value="item")}  className="w-25 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">Items</button>
-        <button onClick={(value) => showModal(value="shipping")}  className="w-25 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">Shipping</button>
-        
+        <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+    
+            <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+              <button onClick={(value) => showModal(value="fabric")} className="w-25 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">Fabric</button>
+              <button onClick={(value) => showModal(value="makery")} className="w-25 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">Makery</button>
+              <button onClick={(value) => showModal(value="item")}  className="w-25 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">Items</button>
+              <button onClick={(value) => showModal(value="shipping")}  className="w-25 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">Shipping</button>
+            </div>
+        </div>
+ 
       </section>
 
     </Layout>

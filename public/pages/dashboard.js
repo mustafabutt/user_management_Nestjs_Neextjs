@@ -12,6 +12,7 @@ import { ViewUser } from '@/components/users/viewUser';
 import {useRouter} from "next/router";
 import Link from 'next/link';
 import authMiddleware from './middleware';
+import { InvoiceGenerator } from '@/components/InvoiceGen';
 
 const Admin = () => {
 
@@ -155,41 +156,45 @@ const Admin = () => {
         </div>
              
 
-
         <div className="modal modal-backdrop" id="invoiceModal" role="dialog" style={{overflow:"auto"}}>
-        <div className="modal-dialog">
-            <div className="modal-content" style={{  width: "fit-content" }} >
-              <div className="modal-header">
-                <h4 className="modal-title">
-                  <span >Invoice</span>
-                </h4>
-                {invoiceCreated ? (
-              <Alert type="success">
-                <span>New user created.</span>
-              </Alert>
-            ) : null}
-              </div>
-              <div className="modal-body">
+          <div className="modal-dialog">
+              <div className="modal-content" style={{  width: "fit-content" }} >
+                <div className="modal-header">
+                  <h4 className="modal-title">
+                    <span >Invoice</span>
+                  </h4>
+                  {invoiceCreated ? (
+                <Alert type="success">
+                  <span>New user created.</span>
+                </Alert>
+              ) : null}
+                </div>
+                <div className="modal-body">
 
                   <div className={loginStyles.container}>
-                    {createInvoiceView ? <CreateUser invokeParent={pullDataFromInvoice} />: invoiceView ? <ViewUser invokeParent={pullDataFromInvoiceView} email={currentEmail}/> :<UserList  invokeTopParent = {pullInvoiceListData} />}
+                    <InvoiceGenerator />
                   </div>
 
-              </div>
-              <div className="modal-footer">
-                <span>
-                  <button type="button" onClick={(value) => closeModal(value="invoice")} className="w-49 bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded">Close</button>
-                  {showCreateInvoiceButton ? <span><button type="button" onClick={createInvoice}  className="w-49 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">Generate Invoice</button></span> : null }
-             
-                </span>
+                </div>
+                <div className="modal-footer">
+                  <span>
+                    <button type="button" onClick={(value) => closeModal(value="invoice")} className="w-49 bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded">Close</button>
+                    {showCreateInvoiceButton ? <span><button type="button" onClick={createInvoice}  className="w-49 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">Generate Invoice</button></span> : null }
+              
+                  </span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-
-        <button onClick={(value) => showUsersModal(value="users")} className="w-50 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">Users</button>
-        <Link href="/rates"><button className="w-50 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">Rates</button></Link>
-        <button onClick={(value) => showUsersModal(value="invoice")}  className="w-100 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">Invoice Generator</button>
+            <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+        
+              <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+              <button onClick={(value) => showUsersModal(value="users")} className="w-50 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">Users</button>
+              <Link href="/rates"><button className="w-50 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">Rates</button></Link>
+              {/* <button onClick={(value) => showUsersModal(value="invoice")}  className="w-100 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">Invoice Generator</button> */}
+            
+            </div>
+          </div>
         
       </section>
 

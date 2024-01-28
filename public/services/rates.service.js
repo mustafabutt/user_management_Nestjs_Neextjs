@@ -119,8 +119,12 @@ export const RatesService = () => {
             }
         }
     }
-    const getShippingList = async () => {
-        const token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token') : null;
+    const getShippingList = async (access_token) => {
+        
+        let token;
+        if(!access_token)
+            token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token') : null;
+        else token = access_token
         const res = await fetch(constants.SHIPPING, {
             method: 'GET',
             headers: {
@@ -137,8 +141,8 @@ export const RatesService = () => {
                 ...res,
                 ...response
             }
-            
-            localStorage.setItem('shipping-list', JSON.stringify(shippingbject))
+        
+            // localStorage.setItem('shipping-list', JSON.stringify(shippingbject))
             return shippingbject;
         } else {
             return {
@@ -298,7 +302,17 @@ export const RatesService = () => {
             },
         });
     }
-
+    const CalculateItemPrice = async (item) => {
+        const token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token'): null;
+        return await fetch(constants.CALCULATE, {
+            method: 'POST',
+            body: JSON.stringify(item),
+            headers: {
+                'Content-Type': constants.CONTENT_TYPE,
+                Authorization: constants.BEARER+token
+            },
+        });
+    }
     return {
         createFabric,
         getFabricList,
@@ -323,7 +337,8 @@ export const RatesService = () => {
         getLocalShippingList,
         getCurrentShipping,
         editShipping,
-        DeleteShipping
+        DeleteShipping,
+        CalculateItemPrice
     }
 }
 

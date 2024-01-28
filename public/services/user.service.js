@@ -77,8 +77,7 @@ export const UserService = () => {
 
     }
 
-    const signUp = async (user) => {
-        
+    const signUp = async (user) => { 
         return await fetch(constants.SIGN_UP_URL, {
             method: 'POST',
             body: JSON.stringify(user),

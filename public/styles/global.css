@@ -1,3 +1,4 @@
+
 html,
 body {
   padding: 0;
@@ -20,6 +21,9 @@ a {
 a:hover {
   text-decoration: underline;
 }
+.no-style {
+  text-decoration: none !important;
+}
 
 img {
   max-width: 100%;
@@ -34,4 +38,7 @@ img {
   border: none;
   cursor: pointer;
   width: 100%;
+}
+.hell {
+  text-decoration: underline !important;
 }

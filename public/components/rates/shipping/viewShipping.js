@@ -1,10 +1,11 @@
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useState} from "react";
 import loginStyles from '../../../styles/login.module.css';
 import {RatesService} from "../../../services/rates.service";
 import Alert from '../../../components/alert';
 
 
 export const ViewShipping = (props) => {
+
     const [currentShipping, setCurrentShipping] = useState(null);
     const [shippingUpdated, setShippingUpdated] = useState(null);
     const [shippingDeleted, setShippingDeleted] = useState(null);
@@ -15,7 +16,7 @@ export const ViewShipping = (props) => {
     const [shippingDRate, setShippingDRate] = useState(null);
 
     useEffect(()=>{
-      
+    
       setCurrentShipping(RatesService().getCurrentShipping(props.item));
       setService(RatesService().getCurrentShipping(props.item).service);
       setShippingIRate(RatesService().getCurrentShipping(props.item).rate[0].indirectRate);
@@ -130,14 +131,12 @@ export const ViewShipping = (props) => {
             />
             
             
-            
             <button className={loginStyles.buttonClass} type='submit'>
               Save changes
             </button>
             
           </div>
         </form>
-
     </div>
   );
 };

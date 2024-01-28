@@ -18,6 +18,7 @@ import { globalConstants } from '../constant';
 import { Makery } from 'src/schemas/makery';
 import { Item } from 'src/schemas/items';
 import { Shipping } from 'src/schemas/shipping';
+import { PriceCalculation } from 'src/types/price';
 
 @UseGuards(JwtAuthGuard)
 @Controller(globalConstants.RATES)
@@ -85,9 +86,7 @@ export class RatesController {
         const deletedFabric = await this.ratesService.deleteFabric(id);
         return response.status(HttpStatus.OK).json({
           deletedFabric,
-        });
-        
-        
+        });   
       }
      
     } catch (err) {
@@ -138,15 +137,13 @@ export class RatesController {
         });
         
       } else if(makery["action"] == "delete makery"){
-   
  
         const singleMaterial = await this.ratesService.findSingleMakery(makery.item);
         const id = singleMaterial["_id"];
         const deletedMakery = await this.ratesService.deleteMakery(id);
         return response.status(HttpStatus.OK).json({
           deletedMakery,
-        });
-        
+        });   
         
       }
      
@@ -183,6 +180,44 @@ export class RatesController {
       this.exceptions.generateGeneralException(err);
     }
   }
+  @Post('/item/calculate')
+  async calculateItemPrice(@Res() response, @Body() item: PriceCalculation) {
+    try {
+        console.log(item)
+      
+        let shippingMode = item.shippingValue.split("(")[1].split(")")[0]+"Rate";
+        let shippingCompany = item.shippingValue.split("(")[0];
+
+        console.log(shippingCompany + shippingMode);
+        let avg, fabricPrice, fabricPriceInGrams, shippinginPerItem, totalPrice;
+
+        const singleMaterial = await this.ratesService.findSingleMaterial(item.fabricValue);
+        const singleAvg = await this.ratesService.findSingleItem(item.itemValue);
+        const shipping:any = await this.ratesService.findSingleShipping(shippingCompany);
+        const makery:any = await this.ratesService.findSingleMakery(item.itemValue);
+
+        console.log("shipping per KG "+shipping.rate[0][shippingMode])
+
+        singleAvg.fabricAverage.filter((obj:any) =>{
+          if(obj.fabric == item.fabricValue)
+            avg = obj.quantity    
+        })
+        
+        fabricPriceInGrams = 1000/avg
+        fabricPrice = Number(singleMaterial.rate)/fabricPriceInGrams;
+        console.log("fabric price is "+fabricPrice);
+        
+        shippinginPerItem = Number(shipping.rate[0][shippingMode])/fabricPriceInGrams;
+        console.log("shipping per item "+shippinginPerItem);
+        totalPrice = shippinginPerItem+fabricPrice+makery.rate
+        console.log("total price is "+totalPrice);
+        return response.status(HttpStatus.OK).json({
+          "totalPrice":totalPrice
+        });  
+    } catch (err) {
+      this.exceptions.generateGeneralException(err);
+    }
+  }
 
   @Put('/item/:entity')
   async updateItem(@Res() response, @Param("entity") entity, @Body() item: Item) {
@@ -215,6 +250,8 @@ export class RatesController {
     }
   }
 
+
+
   @Get("/shipping")
   async fetchAllShipping(@Res() response) {
     try {
@@ -229,7 +266,7 @@ export class RatesController {
   @Post("/shipping")
   async createShipping(@Res() response, @Body() shipping: Shipping) {
     try {
-      const check = await this.ratesService.findSingleShippinng(shipping.service);
+      const check = await this.ratesService.findSingleShipping(shipping.service);
       if (check) this.exceptions.generateUserExistException();
  
       const newShipping = await this.ratesService.createShipping(shipping);
@@ -246,7 +283,7 @@ export class RatesController {
      
       if(shipping["action"] == "edit shipping"){
   
-        const singleShipping = await this.ratesService.findSingleShippinng(shipping["previousService"]);
+        const singleShipping = await this.ratesService.findSingleShipping(shipping["previousService"]);
         delete shipping["previousService"];
         delete shipping["action"];
         const id = singleShipping["_id"];
@@ -260,7 +297,7 @@ export class RatesController {
         
       } else if(shipping["action"] == "delete shipping"){
    
-        const singleShipping = await this.ratesService.findSingleShippinng(shipping.service);
+        const singleShipping = await this.ratesService.findSingleShipping(shipping.service);
         const id = singleShipping["_id"];
         const deletedShipping = await this.ratesService.deleteShipping(id);
         return response.status(HttpStatus.OK).json({

@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import {RatesService} from "../../../services/rates.service";
 import {List} from "../../general/index";
+import { FabricListData } from "@/utils/fabricUtils";
 
 export const FabricList = (props) => {
 
@@ -8,24 +9,17 @@ export const FabricList = (props) => {
 
     useEffect(()=>{
         
-        RatesService().getLocalFabricList().then((data)=>{
-            
-            if(!data){
-                RatesService().getFabricList().then((innerData)=>{
-                    setFabric(innerData)
-                })
-            }else  setFabric(data);
-           
-        });
+        (async function(){
+            setFabric(await FabricListData());
+          }
+        )()
     },[])
 
     async function ListData(fabric){
-      
-        props.invokeTopParent(fabric.trim().split("\t")[0]);
-      }
+      props.invokeTopParent(fabric.trim().split("\t")[0]);
+    }
     
     return (
-  
         <div>
             
             {
