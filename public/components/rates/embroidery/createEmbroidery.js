@@ -2,51 +2,53 @@ import {useEffect, useRef, useState} from "react";
 import loginStyles from '../../../styles/login.module.css';
 import {RatesService} from "../../../services/rates.service";
 import Alert from '../../../components/alert';
-import { constants } from "../../../constants";
 
-export const CreateMakery = (props) => {
-    const [makeryExists, setMakeryExists] = useState(null);
-    const item = useRef(null);
+export const CreateEmbroidery = (props) => {
+    const [embroideryExists, setEmbroideryExists] = useState(null);
+    const name = useRef(null);
     const rate = useRef(null);
 
-    useEffect(()=>{props.view; debugger},[])
-    const focusHandler = () => {
-      setMakeryExists(false);
-      };
+    useEffect(()=>{props.view; },[])
 
-    async function createMakeryCall(e) {
+    const focusHandler = () => {
+      setEmbroideryExists(false);
+    };
+
+    async function createEmbroideryCall(e) {
         e.preventDefault();
       
-        const res = await RatesService().createMakery({
-          item: item.current.value,
-          rate:   rate.current.value
+        const res = await RatesService().createEmbroidery({
+          name: name.current.value,
+          base_rate: rate.current.value,
         });
+        
         if(res.status == 201){
-          RatesService().getMakeryList().then(()=>{
+          RatesService().getEmbroideryList().then(()=>{
             res.status == 201 ? props.invokeParent() : null;
           })
-        }else res.status == 409 ? setMakeryExists(true) : null;
+        }else res.status == 409 ? setEmbroideryExists(true) : null;
+
       }
 
   return (
 
     <div >
 
-        <form onSubmit={createMakeryCall} className={loginStyles.formClass}>
+        <form onSubmit={createEmbroideryCall} className={loginStyles.formClass}>
           
           <div className={loginStyles.container}>
             
             <input
-              ref={item}
-              minLength="5"
+              ref={name}
+              minLength="2"
               className={loginStyles.inputClass}
               type="text"
-              placeholder="Enter item name"
-              name="item"
+              placeholder="Enter embroidery type ED, Normal"
+              name="print"
               onFocus={focusHandler}
               required
             />
-            {makeryExists ? (
+            {embroideryExists ? (
               <Alert type="error">
                 <span>Already exists</span>
               </Alert>
@@ -56,13 +58,12 @@ export const CreateMakery = (props) => {
               ref={rate}
               className={loginStyles.inputClass}
               type="number"
-              placeholder="Enter rate"
+              placeholder="Enter base rate"
               name="rate"
               onFocus={focusHandler}
               required
             />
-            
-            
+                      
             <button className={loginStyles.buttonClass} type='submit'>
               Save
             </button>

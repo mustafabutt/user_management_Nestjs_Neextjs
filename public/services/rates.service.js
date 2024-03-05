@@ -15,24 +15,35 @@ export const RatesService = () => {
             },
         });
     }
-    const createMakery = async (makery) => {
+   
+    const createShipping = async (shipping) => {
         const token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token') : null;
-
-        return await fetch(constants.MAKERY, {
+        return await fetch(constants.SHIPPING, {
             method: 'POST',
-            body: JSON.stringify(makery),
+            body: JSON.stringify(shipping),
             headers: {
                 'Content-Type': constants.CONTENT_TYPE,
                 Authorization: constants.BEARER+token
             },
         });
     }
-    const createShipping = async (shipping) => {
+    const createPrinting = async (printing) => {
         const token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token') : null;
-
-        return await fetch(constants.SHIPPING, {
+        debugger
+        return await fetch(constants.PRINTING, {
             method: 'POST',
-            body: JSON.stringify(shipping),
+            body: JSON.stringify(printing),
+            headers: {
+                'Content-Type': constants.CONTENT_TYPE,
+                Authorization: constants.BEARER+token
+            },
+        });
+    }
+    const createEmbroidery = async (embroidery) => {
+        const token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token') : null;
+        return await fetch(constants.EMBROIDERY, {
+            method: 'POST',
+            body: JSON.stringify(embroidery),
             headers: {
                 'Content-Type': constants.CONTENT_TYPE,
                 Authorization: constants.BEARER+token
@@ -57,10 +68,7 @@ export const RatesService = () => {
     const getLocalFabricList = async ()=> {
         return JSON.parse(localStorage.getItem('fabric-list')); 
     }
-    const getLocalMakeryList = async ()=> {
-        
-        return JSON.parse(localStorage.getItem('makery-list')); 
-    }
+
     const getLocalShippingList = async ()=> {
         
         return JSON.parse(localStorage.getItem('shipping-list')); 
@@ -92,33 +100,7 @@ export const RatesService = () => {
             }
         }
     }
-    const getMakeryList = async () => {
-        const token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token') : null;
-        const res = await fetch(constants.MAKERY, {
-            method: 'GET',
-            headers: {
-                'Content-Type': constants.CONTENT_TYPE,
-                Authorization: constants.BEARER+token
-            },
-        });
-        
-        if( res.status == 200 ) {
-            
-            let response = await res.json();
-            let makeryObject = {
-                status:200,
-                ...res,
-                ...response
-            }
-            
-            localStorage.setItem('makery-list', JSON.stringify(makeryObject))
-            return makeryObject;
-        } else {
-            return {
-                status:409,
-            }
-        }
-    }
+    
     const getShippingList = async (access_token) => {
         
         let token;
@@ -142,7 +124,7 @@ export const RatesService = () => {
                 ...response
             }
         
-            // localStorage.setItem('shipping-list', JSON.stringify(shippingbject))
+            localStorage.setItem('shipping-list', JSON.stringify(shippingbject))
             return shippingbject;
         } else {
             return {
@@ -151,8 +133,73 @@ export const RatesService = () => {
         }
     }
 
+    const getPrintingList = async (access_token) => {
+        
+        let token;
+        if(!access_token)
+            token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token') : null;
+        else token = access_token
+        const res = await fetch(constants.PRINTING, {
+            method: 'GET',
+            headers: {
+                'Content-Type': constants.CONTENT_TYPE,
+                Authorization: constants.BEARER+token
+            },
+        });
+        
+        if( res.status == 200 ) {
+            
+            let response = await res.json();
+            let printingbject = {
+                status:200,
+                ...res,
+                ...response
+            }
+        
+            localStorage.setItem('printing-list', JSON.stringify(printingbject))
+            return printingbject;
+        } else {
+            return {
+                status:409,
+            }
+        }
+    }
+
+    const getEmbroideryList = async (access_token) => {
+        
+        let token;
+        if(!access_token)
+            token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token') : null;
+        else token = access_token
+        const res = await fetch(constants.EMBROIDERY, {
+            method: 'GET',
+            headers: {
+                'Content-Type': constants.CONTENT_TYPE,
+                Authorization: constants.BEARER+token
+            },
+        });
+        
+        if( res.status == 200 ) {
+            
+            let response = await res.json();
+            let embroiderybject = {
+                status:200,
+                ...res,
+                ...response
+            }
+        
+            localStorage.setItem('embroidery-list', JSON.stringify(embroiderybject))
+            return embroiderybject;
+        } else {
+            return {
+                status:409,
+            }
+        }
+    }
+
     const getItemList = async () => {
-        const token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token'): null;
+        debugger
+        const token = await JSON.parse(localStorage.getItem('user')) ? getCookie('access_token'): null;
         const res = await fetch(constants.ITEM, {
             method: 'GET',
             headers: {
@@ -184,12 +231,16 @@ export const RatesService = () => {
         return data;
     }
 
-    const getCurrentMakeryItem =  (item) =>{
-        let data = JSON.parse(localStorage.getItem('makery-list')).data.find(o => o.item === item);
-        return data;
-    }
     const getCurrentShipping =  (shipping) =>{
         let data = JSON.parse(localStorage.getItem('shipping-list')).data.find(o => o.service === shipping);
+        return data;
+    }
+    const getCurrentPrinting =  (name) =>{
+        let data = JSON.parse(localStorage.getItem('printing-list')).data.find(o => o.name === name);
+        return data;
+    }
+    const getCurrentEmbroidery =  (name) =>{
+        let data = JSON.parse(localStorage.getItem('embroidery-list')).data.find(o => o.name === name);
         return data;
     }
 
@@ -212,24 +263,39 @@ export const RatesService = () => {
         });
         
     }
-    const editMakery = async (makery) => {
-        makery.action = "edit makery"
-        const token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token') : null;
-        return await fetch(constants.MAKERY+"/"+makery.item, {
-            method: 'PUT',
-            body: JSON.stringify(makery),
-            headers: {
-                'Content-Type': constants.CONTENT_TYPE,
-                Authorization: constants.BEARER+token
-            },
-        });
-    }
+
     const editShipping = async (shipping) => {
         shipping.action = "edit shipping"
         const token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token') : null;
         return await fetch(constants.SHIPPING+"/"+shipping.service, {
             method: 'PUT',
             body: JSON.stringify(shipping),
+            headers: {
+                'Content-Type': constants.CONTENT_TYPE,
+                Authorization: constants.BEARER+token
+            },
+        });
+    }
+    const editPrinting = async (printing) => {
+        printing.action = "edit printing"
+        debugger
+        const token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token') : null;
+        return await fetch(constants.PRINTING+"/"+printing.name, {
+            method: 'PUT',
+            body: JSON.stringify(printing),
+            headers: {
+                'Content-Type': constants.CONTENT_TYPE,
+                Authorization: constants.BEARER+token
+            },
+        });
+    }
+    const editEmbroidery = async (embroidery) => {
+        embroidery.action = "edit embroidery"
+        debugger
+        const token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token') : null;
+        return await fetch(constants.EMBROIDERY+"/"+embroidery.name, {
+            method: 'PUT',
+            body: JSON.stringify(embroidery),
             headers: {
                 'Content-Type': constants.CONTENT_TYPE,
                 Authorization: constants.BEARER+token
@@ -263,19 +329,7 @@ export const RatesService = () => {
             },
         });
     }
-    const DeleteMakery = async (item) => {
-        
-        item.action = "delete makery"
-        const token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token') : null;
-        return await fetch(constants.MAKERY+"/"+item, {
-            method: 'Put',
-            body: JSON.stringify(item),
-            headers: {
-                'Content-Type': constants.CONTENT_TYPE,
-                Authorization: constants.BEARER+token
-            },
-        });
-    }
+
     const DeleteShipping = async (shipping) => {
         
         shipping.action = "delete shipping"
@@ -283,6 +337,33 @@ export const RatesService = () => {
         return await fetch(constants.SHIPPING+"/"+shipping.service, {
             method: 'Put',
             body: JSON.stringify(shipping),
+            headers: {
+                'Content-Type': constants.CONTENT_TYPE,
+                Authorization: constants.BEARER+token
+            },
+        });
+    }
+
+    const DeletePrinting = async (printing) => {
+        
+        printing.action = "delete printing"
+        const token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token') : null;
+        return await fetch(constants.PRINTING+"/"+printing.name, {
+            method: 'Put',
+            body: JSON.stringify(printing),
+            headers: {
+                'Content-Type': constants.CONTENT_TYPE,
+                Authorization: constants.BEARER+token
+            },
+        });
+    }
+    const DeleteEmbroidery = async (embroidery) => {
+        
+        embroidery.action = "delete embroidery"
+        const token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token') : null;
+        return await fetch(constants.EMBROIDERY+"/"+embroidery.name, {
+            method: 'Put',
+            body: JSON.stringify(embroidery),
             headers: {
                 'Content-Type': constants.CONTENT_TYPE,
                 Authorization: constants.BEARER+token
@@ -319,15 +400,9 @@ export const RatesService = () => {
         getCurrentFabricMaterial,
         editFabric,
         DeleteFabric,
-        getMakeryList,
-        createMakery,
-        getCurrentMakeryItem,
-        editMakery,
-        DeleteMakery,
         getItemList,
         createItem,
         getLocalFabricList,
-        getLocalMakeryList,
         getLocalItemList,
         getCurrentItem,
         editItem,
@@ -338,7 +413,17 @@ export const RatesService = () => {
         getCurrentShipping,
         editShipping,
         DeleteShipping,
-        CalculateItemPrice
+        CalculateItemPrice,
+        getPrintingList,
+        createPrinting,
+        getCurrentPrinting,
+        editPrinting,
+        DeletePrinting,
+        getEmbroideryList,
+        createEmbroidery,
+        getCurrentEmbroidery,
+        editEmbroidery,
+        DeleteEmbroidery
     }
 }
 

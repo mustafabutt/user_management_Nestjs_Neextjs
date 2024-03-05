@@ -24,11 +24,9 @@ const Header = () => {
     router.push("/");
   }
   const logout  = async () => {
-    let user = JSON.parse(localStorage.getItem('user'));
-    let response = await UserService().callLogout(UserService().getAccessToken());
+    await UserService().callLogout(UserService().getAccessToken());
     setLogout(false);
-    if(response.status !== 201){
-    }else router.push("/login");
+    router.push("/login");
   }
 
   useEffect(()=>{

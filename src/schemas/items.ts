@@ -7,9 +7,12 @@ export type ItemDocument = Item & Document;
 export class Item {
   @Prop({ required: true, unique: true})
   name: string;
-
+  @Prop({ required: true})
+  profit_margin: string;
+  @Prop({ required: true})
+  production_time: string;
   @Prop({ required: true })
-  fabricAverage: Array<object>;
+  fabricAverageAndMakery: Array<object>;
 
 }
 

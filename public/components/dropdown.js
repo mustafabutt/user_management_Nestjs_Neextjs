@@ -14,9 +14,9 @@ import {useEffect, useState} from "react";
   return (
     <div>
       <select onChange={changeValue} class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-4 px-6 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
-      <option></option>
+      <option>Choose {props.data}</option>
         {userData && userData.map((keyName,keyIndex) => {
-          return <option key={keyIndex}>{keyName.service || keyName.item || keyName.material}</option>
+          return <option key={keyIndex}>{keyName.service || keyName.item || keyName.material || keyName.name || keyName}</option>
             }
           )
         } 

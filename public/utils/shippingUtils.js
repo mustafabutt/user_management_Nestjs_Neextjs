@@ -2,10 +2,15 @@
 import {RatesService} from "@/services/rates.service";
 
 export async function ShippingListData(token) {
-  console.log(token)
+
   var result = await RatesService().getShippingList(token);
   let obj = {"service":""};
+  
+  if(result.status == 409 || !result.data ||result.data.length == 0)
+    return result
+    debugger
   Object.keys(result.data[0].rate[0]).map((element) => {
+    
       obj[`${element}`] = "";
       });
       var finalArray=[]
@@ -22,7 +27,7 @@ export async function ShippingListData(token) {
           finalArray.push(new_obj);
           obj = tempObj        
       })
-  result.data=finalArray
-  return result;
+    result.data=finalArray
+    return result;
 }
 

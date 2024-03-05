@@ -56,7 +56,7 @@ const Profile = () => {
   return (
     <Layout profile>
       <Head>
-        <title>User Profile</title>
+        <title>Candlik - User Profile</title>
       </Head>
       <section className="bg-gray-50 dark:bg-gray-900">
         <div className="modal modal-backdrop" id="myModal" role="dialog">

@@ -1,15 +1,15 @@
 import {useEffect, useState} from "react";
 import {List} from "../../general/index";
-import { ShippingListData } from "@/utils/shippingUtils";
+import { EmbroideryListData } from "@/utils/embroideryUtils";
 import { UserService } from "@/services/user.service";
 
-export const ShippingList = (props) => {
+export const EmbroideryList = (props) => {
 
-    const [shipping, setShipping] = useState(null);
+    const [embroidery, setEmbroidery] = useState(null);
 
     useEffect( ()=>{
         (async function(){
-            setShipping(await ShippingListData(UserService().getAccessToken()));
+          setEmbroidery(await EmbroideryListData(UserService().getAccessToken()));
           }
         )()
       },[])
@@ -23,7 +23,7 @@ export const ShippingList = (props) => {
         <div>
             
             {
-                <List view = {"shipping"} invokeUpper={ListData} data = {shipping} />
+                <List view = {"embroidery"} invokeUpper={ListData} data = {embroidery} />
             }
 
         </div>

@@ -4,7 +4,7 @@ const Layout = dynamic(()=> import("@/components/account/Layout"));
 import {UserService} from "@/services/user.service";
 const Alert = dynamic(()=> import('@/components/alert'));
 import { useRouter } from 'next/router';
-
+import Head from 'next/head';
 
 const Login = () => {
   const router = useRouter();
@@ -34,7 +34,9 @@ const Login = () => {
   return (
       <Layout login>
 
-
+      <Head>
+        <title>Candlik - Login</title>
+      </Head>
         <section className="bg-gray-50 dark:bg-gray-900">
           <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
               

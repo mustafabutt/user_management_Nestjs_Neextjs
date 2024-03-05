@@ -1,5 +1,4 @@
 import {useEffect, useState} from "react";
-import {RatesService} from "../../../services/rates.service";
 import {List} from "../../general/index";
 import { FabricListData } from "@/utils/fabricUtils";
 

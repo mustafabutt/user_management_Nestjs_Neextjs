@@ -8,20 +8,21 @@ import utilStyles from '@/styles/utils.module.css';
 import authMiddleware from './middleware';
 import $ from 'jquery';
 import {FabricList} from "@/components/rates/fabric/fabricList";
-import {UserService} from "@/services/user.service";
 import { CreateFabric } from '@/components/rates/fabric/createFabric';
 import { ViewFabric } from '@/components/rates/fabric/viewFabric';
 import {useRouter} from "next/router";
-import { MakeryList } from '@/components/rates/makery/makeryList';
-import { CreateMakery } from '@/components/rates/makery/createMakery';
-import { ViewMakery } from '@/components/rates/makery/viewMakery';
-import { CreateItem } from '@/components/rates/item/createItem'; 
 import { ViewItem } from '@/components/rates/item/viewItem'; 
 import { ItemList } from '@/components/rates/item/itemList'; 
-
+import {CreateItem} from "@/components/rates/item/createItem"
 import { CreateShipping } from '@/components/rates/shipping/createShipping'; 
 import { ViewShipping } from '@/components/rates/shipping/viewShipping'; 
 import { ShippingList } from '@/components/rates/shipping/shippingList'; 
+import { PrintingList } from '@/components/rates/printing/printingList'; 
+import { CreatePrinting } from '@/components/rates/printing/createPrinting'; 
+import { ViewPrinting } from '@/components/rates/printing/viewPrinting'; 
+import {EmbroideryList} from "@/components/rates/embroidery/embroideryList"
+import {ViewEmbroidery} from "@/components/rates/embroidery/viewEmbroidery"
+import {CreateEmbroidery} from "@/components/rates/embroidery/createEmbroidery"
 
 const Rates = () => {
 
@@ -30,12 +31,6 @@ const Rates = () => {
   const [fabricView, setFabricView] = useState(null);
   const [showCreateFabricButton, setShowCreateFabricButton] = useState(true);
   const [currentMaterial, setCurrentMaterial] = useState(null);
-
-  const [createMakeryView, setCreateMakeryView] = useState(null);
-  const [makeryCreated, setMakeryCreated] = useState(null);
-  const [makeryView, setMakeryView] = useState(null);
-  const [showCreateMakeryButton, setShowCreateMakeryButton] = useState(true);
-  const [currentMakery, setCurrentMakery] = useState(null);
 
   const [createItemView, setCreateItemView] = useState(null);
   const [itemCreated, setItemCreated] = useState(null);
@@ -49,6 +44,17 @@ const Rates = () => {
   const [showCreateShippingButton, setShowCreateShippingButton] = useState(true);
   const [currentShipping, setCurrentShipping] = useState(null);
 
+  const [createPrintingView, setCreatePrintingView] = useState(null);
+  const [printingCreated, setPrintingCreated] = useState(null);
+  const [printingView, setPrintingView] = useState(null);
+  const [showCreatePrintingButton, setShowCreatePrintingButton] = useState(true);
+  const [currentPrinting, setCurrentPrinting] = useState(null);
+
+  const [createEmbroideryView, setCreateEmbroideryView] = useState(null);
+  const [embroideryCreated, setEmbroideryCreated] = useState(null);
+  const [embroideryView, setEmbroideryView] = useState(null);
+  const [showCreateEmbroideryButton, setShowCreateEmbroideryButton] = useState(true);
+  const [currentEmbroidery, setCurrentEmbroidery] = useState(null);
 
   const router = useRouter();
 
@@ -61,52 +67,64 @@ const Rates = () => {
     if(value == "fabric"){
       if(!createFabricView && !fabricView)
         $('#fabricModal').hide();
-        else {
-          setShowCreateFabricButton(true);
-          setCreateFabricView(false);
-          setFabricView(false);
-        }
-    }
-    if(value == "makery"){
-      
-      if(!createMakeryView && !makeryView)
-        $('#makeryModal').hide();
-        else {
-          setShowCreateMakeryButton(true);
-          setCreateMakeryView(false);
-          setMakeryView(false);
-        }
+      else {
+        setShowCreateFabricButton(true);
+        setCreateFabricView(false);
+        setFabricView(false);
+      }
     }
     if(value == "item"){
       
       if(!createItemView && !itemView)
         $('#itemModal').hide();
-        else {
-          setShowCreateItemButton(true);
-          setCreateItemView(false);
-          setItemView(false);
-        }
+      else {
+        setShowCreateItemButton(true);
+        setCreateItemView(false);
+        setItemView(false);
+      }
     }
     if(value == "shipping"){
       
       if(!createShippingView && !shippingView)
         $('#shippingModal').hide();
-        else {
-          setShowCreateShippingButton(true);
-          setCreateShippingView(false);
-          setShippingView(false);
-        }
+      else {
+        setShowCreateShippingButton(true);
+        setCreateShippingView(false);
+        setShippingView(false);
+      }
+    }
+    if(value == "printing"){
+      
+      if(!createPrintingView && !printingView)
+        $('#printingModal').hide();
+      else {
+        setShowCreatePrintingButton(true);
+        setCreatePrintingView(false);
+        setPrintingView(false);
+      }
+    }
+    if(value == "embroidery"){
+      
+      if(!createEmbroideryView && !embroideryView)
+        $('#embroideryModal').hide();
+      else {
+        setShowCreateEmbroideryButton(true);
+        setCreateEmbroideryView(false);
+        setEmbroideryView(false);
+      }
     }
   };
   const showModal = (value) => {
     if(value == "fabric")
       $('#fabricModal').show();
-    if(value == "makery")
-      $('#makeryModal').show();
     if(value == "item")
       $('#itemModal').show();
     if(value == "shipping")
       $('#shippingModal').show();
+    if(value == "printing")
+      $('#printingModal').show();
+    if(value == "embroidery")
+      $('#embroideryModal').show();
   }
 
   function createFabric(e) {
@@ -137,35 +155,11 @@ const Rates = () => {
     setShowCreateFabricButton(true);
   }
   
-
-  function createMakery(e) {
+  function createPrinting(e) {
     e.preventDefault();
-    createMakeryView ? setCreateMakeryView(false) : setCreateMakeryView(true);
-    setShowCreateMakeryButton(false);
+    createPrintingView ? setCreatePrintingView(false) : setCreatePrintingView(true);
+    setShowCreatePrintingButton(false);
   }
-  function pullDataFromMakery(){
-    setCreateMakeryView(false);
-    setMakeryCreated(true);
-    setTimeout(()=>{
-      setMakeryCreated(false);
-    },3000);
-    setShowCreateMakeryButton(true);
-  }
-
-  function pullMakeryListData(makery){
-    
-    setCurrentMakery(makery);
-    setShowCreateMakeryButton(false);
-    setMakeryView(true);
-  }
-
-  function pullDataFromMakeryView(){
-    setTimeout(()=>{
-      setMakeryView(false);
-    },2000)
-    setShowCreateMakeryButton(true);
-  }
-
   function createItem(e) {
     e.preventDefault();
     createItemView ? setCreateItemView(false) : setCreateItemView(true);
@@ -180,11 +174,68 @@ const Rates = () => {
     setShowCreateItemButton(true);
   }
 
-  function pullItemListData(makery){
-    
-    setCurrentItem(makery);
+  function createEmbroidery(e) {
+    e.preventDefault();
+    createEmbroideryView ? setCreateEmbroideryView(false) : setCreateEmbroideryView(true);
+    setShowCreateEmbroideryButton(false);
+  }
+  function createItem(e) {
+    e.preventDefault();
+    createItemView ? setCreateItemView(false) : setCreateItemView(true);
+    setShowCreateItemButton(false);
+  }
+  function pullDataFromItem(){
+    setCreateItemView(false);
+    setItemCreated(true);
+    setTimeout(()=>{
+      setItemCreated(false);
+    },3000);
+    setShowCreateItemButton(true);
+  }
+
+  function pullDataFromPrinting(){
+    debugger
+    setCreatePrintingView(false);
+    setPrintingCreated(true);
+    setTimeout(()=>{
+      setPrintingCreated(false);
+    },3000);
+    setShowCreatePrintingButton(true);
+  }
+  
+  function pullDataFromEmbroidery(){
+    setCreateEmbroideryView(false);
+    setEmbroideryCreated(true);
+    setTimeout(()=>{
+      setEmbroideryCreated(false);
+    },3000);
+    setShowCreateEmbroideryButton(true);
+  }
+
+  function pullPrintingListData(item){
+    setCurrentPrinting(item);
+    setShowCreatePrintingButton(false);
+    setPrintingView(true);
+  }
+  
+  function pullEmbroideryListData(item){
+    setCurrentEmbroidery(item);
+    setShowCreateEmbroideryButton(false);
+    setEmbroideryView(true);
+  }
+
+  function pullItemListData(item){
+    setCurrentItem(item);
     setShowCreateItemButton(false);
     setItemView(true);
+  }
+
+  function pullDataFromPrintingView(){
+    setTimeout(()=>{
+      setPrintingView(false);
+    },2000)
+    debugger
+    setShowCreatePrintingButton(true);
   }
 
   function pullDataFromItemView(){
@@ -192,6 +243,13 @@ const Rates = () => {
       setItemView(false);
     },2000)
     setShowCreateItemButton(true);
+  }
+
+  function pullDataFromEmbroideryView(){
+    setTimeout(()=>{
+      setEmbroideryView(false);
+    },2000)
+    setShowCreateEmbroideryButton(true);
   }
 
   function createShipping(e) {
@@ -208,9 +266,9 @@ const Rates = () => {
     setShowCreateShippingButton(true);
   }
 
-  function pullShippingListData(makery){
+  function pullShippingListData(shipping){
     
-    setCurrentShipping(makery);
+    setCurrentShipping(shipping);
     setShowCreateShippingButton(false);
     setShippingView(true);
   }
@@ -225,145 +283,189 @@ const Rates = () => {
   return (
     <Layout admin>
       <Head>
-        <title>Rates</title>
+        <title>Candlik - Rates</title>
       </Head>
       <section className={utilStyles.headingMd}>
         <h3>Rates</h3>
-        
-        <div className="modal modal-backdrop" id="fabricModal" role="dialog" style={{overflow:"auto"}}>
-          <div className="modal-dialog">
-            <div className="modal-content" style={{  width: "fit-content" }} >
-              <div className="modal-header">
-                <h4 className="modal-title">
-                  <span >Fabric</span>
-                </h4>
-                {fabricCreated ? (
-              <Alert type="success">
-                <span>New fabric created.</span>
-              </Alert>
-            ) : null}
-              </div>
-              <div className="modal-body">
 
-                  <div className={loginStyles.container}>
-                    {createFabricView ? <CreateFabric  invokeParent={pullDataFromFabric} />: fabricView ? <ViewFabric invokeParent={pullDataFromFabricView} material={currentMaterial}/> :<FabricList invokeTopParent = {pullFabricListData} />}
+        <div id="fabricModal"  aria-hidden="true" className="flex items-center justify-center h-screen modal-backdrop" style={{display:"none"}}   >
+          <div class="relative p-6 min-h-full max-h-full overflow-auto" >
+              {/* <!-- Modal content --> */}
+              <div class="relative bg-white rounded-lg shadow dark:bg-gray-700 " style={{  width: "fit-content"}} >
+                  {/* <!-- Modal header --> */}
+                  <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 overflow-inherit">
+                      <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                      Fabric
+                      </h3>
+                      {fabricCreated ? (
+                        <Alert type="success">
+                          <span>New fabric created.</span>
+                        </Alert>
+                      ) : null}
+                      <button onClick={(value) => closeModal(value="fabric")}  type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="default-modal">
+                          <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                          </svg>
+                          <span class="sr-only">Close modal</span>
+                      </button>
                   </div>
-
-              </div>
-              <div className="modal-footer">
-                <span>
-                  <button type="button" onClick={(value) => closeModal(value="fabric")}  className="w-49 bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded">Close</button>
-                  {showCreateFabricButton ? <span><button type="button" onClick={createFabric}  className="w-49 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">Create Fabric</button></span> : null }
-             
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="modal modal-backdrop" id="makeryModal" role="dialog" style={{overflow:"auto"}}>
-        <div className="modal-dialog">
-            <div className="modal-content" style={{  width: "fit-content" }} >
-              <div className="modal-header">
-                <h4 className="modal-title">
-                  <span >Makery</span>
-                </h4>
-                {makeryCreated ? (
-              <Alert type="success">
-                <span>New makery added.</span>
-              </Alert>
-            ) : null}
-              </div>
-              <div className="modal-body">
-
-                  <div className={loginStyles.container}>
-                    {createMakeryView ? <CreateMakery invokeParent={pullDataFromMakery} />: makeryView ? <ViewMakery invokeParent={pullDataFromMakeryView} item={currentMakery}/> :<MakeryList  invokeTopParent = {pullMakeryListData} />}
+                  {/* <!-- Modal body --> */}
+                  <div className={loginStyles.container} >
+                  {createFabricView ? <CreateFabric  invokeParent={pullDataFromFabric} />: fabricView ? <ViewFabric invokeParent={pullDataFromFabricView} material={currentMaterial}/> :<FabricList invokeTopParent = {pullFabricListData} />}
                   </div>
-
+                  {/* <!-- Modal footer --> */}
+                  <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600 ">
+                  {showCreateFabricButton ? <span><button type="button" onClick={createFabric}   className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add New Fabric</button></span> : null }
+                  </div>
               </div>
-              <div className="modal-footer">
-                <span>
-                  <button type="button" onClick={(value) => closeModal(value="makery")}  className="w-49 bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded">Close</button>
-                  {showCreateMakeryButton ? <span><button type="button" onClick={createMakery}  className="w-49 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">Insert Makery</button></span> : null }
-             
-                </span>
-              </div>
-            </div>
           </div>
         </div>
 
 
-        <div className="modal modal-backdrop" id="itemModal" role="dialog" style={{overflow:"auto"}}>
-        <div className="modal-dialog">
-            <div className="modal-content" style={{  width: "fit-content" }} >
-              <div className="modal-header">
-                <h4 className="modal-title">
-                  <span >Items</span>
-                </h4>
-                {itemCreated ? (
-              <Alert type="success">
-                <span>New items created.</span>
-              </Alert>
-            ) : null}
-              </div>
-              <div className="modal-body">
 
-                  <div className={loginStyles.container}>
+        <div id="itemModal"  aria-hidden="true" className="flex items-center justify-center h-screen modal-backdrop" style={{display:"none"}}   >
+          <div class="relative p-6 min-h-full max-h-full overflow-auto" >
+              {/* <!-- Modal content --> */}
+              <div class="relative bg-white rounded-lg shadow dark:bg-gray-700 " style={{  width: "fit-content"}} >
+                  {/* <!-- Modal header --> */}
+                  <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 overflow-inherit">
+                      <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                          Items
+                      </h3>
+                      {itemCreated ? (
+                        <Alert type="success">
+                          <span>New item created.</span>
+                        </Alert>
+                      ) : null}
+                      <button onClick={(value) => closeModal(value="item")}  type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="default-modal">
+                          <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                          </svg>
+                          <span class="sr-only">Close modal</span>
+                      </button>
+                  </div>
+                  {/* <!-- Modal body --> */}
+                  <div className={loginStyles.container} >
                     {createItemView ? <CreateItem invokeParent={pullDataFromItem} />: itemView ? <ViewItem invokeParent={pullDataFromItemView} item={currentItem}/> :<ItemList  invokeTopParent = {pullItemListData} />}
                   </div>
-
-              </div>
-              <div className="modal-footer">
-                <span>
-                  <button type="button" onClick={(value) => closeModal(value="item")}   className="w-49 bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded">Close</button>
-                  {showCreateItemButton ? <span><button type="button" onClick={createItem}  className="w-49 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">Create Item</button></span> : null }
-             
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="modal modal-backdrop" id="shippingModal" role="dialog" style={{overflow:"auto"}}>
-        <div className="modal-dialog">
-            <div className="modal-content" style={{  width: "fit-content" }} >
-              <div className="modal-header">
-                <h4 className="modal-title">
-                  <span >Shipping</span>
-                </h4>
-                {itemCreated ? (
-              <Alert type="success">
-                <span>New shipping created.</span>
-              </Alert>
-            ) : null}
-              </div>
-              <div className="modal-body">
-
-                  <div className={loginStyles.container}>
-                    {createShippingView ? <CreateShipping invokeParent={pullDataFromShipping} />: shippingView ? <ViewShipping invokeParent={pullDataFromShippingView} item={currentShipping}/> :<ShippingList  invokeTopParent = {pullShippingListData} />}
+                  {/* <!-- Modal footer --> */}
+                  <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600 ">
+                  {showCreateItemButton ? <span><button type="button" onClick={createItem}  className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Create Item</button></span> : null }
                   </div>
-
               </div>
-              <div className="modal-footer">
-                <span>
-                  <button type="button" onClick={(value) => closeModal(value="shipping")}   className="w-49 bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded">Close</button>
-                  {showCreateShippingButton ? <span><button type="button" onClick={createShipping}  className="w-49 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">Create Shipping</button></span> : null }
-             
-                </span>
-              </div>
-            </div>
           </div>
         </div>
-        <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+
+        <div id="printingModal"  aria-hidden="true" className="flex items-center justify-center h-screen modal-backdrop" style={{display:"none"}}   >
+          <div class="relative p-6 min-h-full max-h-full overflow-auto" >
+              {/* <!-- Modal content --> */}
+              <div class="relative bg-white rounded-lg shadow dark:bg-gray-700 " style={{  width: "fit-content"}} >
+                  {/* <!-- Modal header --> */}
+                  <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 overflow-inherit">
+                      <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                          Printing
+                      </h3>
+                      {printingCreated ? (
+                        <Alert type="success">
+                          <span>New printing created.</span>
+                        </Alert>
+                      ) : null}
+                      <button onClick={(value) => closeModal(value="printing")}  type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="default-modal">
+                          <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                          </svg>
+                          <span class="sr-only">Close modal</span>
+                      </button>
+                  </div>
+                  {/* <!-- Modal body --> */}
+                  <div className={loginStyles.container} >
+                    {createPrintingView ? <CreatePrinting invokeParent={pullDataFromPrinting} />: printingView ? <ViewPrinting invokeParent={pullDataFromPrintingView} item={currentPrinting}/> :<PrintingList  invokeTopParent = {pullPrintingListData} />}
+                  </div>
+                  {/* <!-- Modal footer --> */}
+                  <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600 ">
+                  {showCreatePrintingButton ? <span><button type="button" onClick={createPrinting}  className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Create Printing</button></span> : null }
+                  </div>
+              </div>
+          </div>
+        </div>
+
+        <div id="embroideryModal"  aria-hidden="true" className="flex items-center justify-center h-screen modal-backdrop" style={{display:"none"}}   >
+          <div class="relative p-6 min-h-full max-h-full overflow-auto" >
+              {/* <!-- Modal content --> */}
+              <div class="relative bg-white rounded-lg shadow dark:bg-gray-700 " style={{  width: "fit-content"}} >
+                  {/* <!-- Modal header --> */}
+                  <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 overflow-inherit">
+                      <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                          Embroidery
+                      </h3>
+                      {embroideryCreated ? (
+                        <Alert type="success">
+                          <span>New embroidery created.</span>
+                        </Alert>
+                      ) : null}
+                      <button onClick={(value) => closeModal(value="embroidery")}  type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="default-modal">
+                          <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                          </svg>
+                          <span class="sr-only">Close modal</span>
+                      </button>
+                  </div>
+                  {/* <!-- Modal body --> */}
+                  <div className={loginStyles.container} >
+                    {createEmbroideryView ? <CreateEmbroidery invokeParent={pullDataFromEmbroidery} />: embroideryView ? <ViewEmbroidery invokeParent={pullDataFromEmbroideryView} item={currentEmbroidery}/> :<EmbroideryList  invokeTopParent = {pullEmbroideryListData} />}
+                  </div>
+                  {/* <!-- Modal footer --> */}
+                  <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600 ">
+                  {showCreateEmbroideryButton ? <span><button type="button" onClick={createEmbroidery}  className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Create Embroidery</button></span> : null }
+                  </div>
+              </div>
+          </div>
+        </div>
+
+
+        <div id="shippingModal"  aria-hidden="true" className="flex items-center justify-center h-screen modal-backdrop" style={{display:"none"}}   >
+          <div class="relative p-6 min-h-full max-h-full overflow-auto" >
+              {/* <!-- Modal content --> */}
+              <div class="relative bg-white rounded-lg shadow dark:bg-gray-700 " style={{  width: "fit-content"}} >
+                  {/* <!-- Modal header --> */}
+                  <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 overflow-inherit">
+                      <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                      Shipping
+                      </h3>
+                      {shippingCreated ? (
+                        <Alert type="success">
+                          <span>New shipping created.</span>
+                        </Alert>
+                      ) : null}
+                      <button onClick={(value) => closeModal(value="shipping")}  type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="default-modal">
+                          <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                          </svg>
+                          <span class="sr-only">Close modal</span>
+                      </button>
+                  </div>
+                  {/* <!-- Modal body --> */}
+                  <div className={loginStyles.container} >
+                  {createShippingView ? <CreateShipping invokeParent={pullDataFromShipping} />: shippingView ? <ViewShipping invokeParent={pullDataFromShippingView} item={currentShipping}/> :<ShippingList  invokeTopParent = {pullShippingListData} />}
+                  </div>
+                  {/* <!-- Modal footer --> */}
+                  <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600 ">
+                  {showCreateShippingButton ? <span><button type="button" onClick={createShipping}  className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Create Shipping</button></span> : null }
+                  </div>
+              </div>
+          </div>
+        </div>
+
+        <div className="flex flex-col items-center justify-center px-6 py-18 mx-auto md:h-screen lg:py-0">
     
-            <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-              <button onClick={(value) => showModal(value="fabric")} className="w-25 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">Fabric</button>
-              <button onClick={(value) => showModal(value="makery")} className="w-25 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">Makery</button>
-              <button onClick={(value) => showModal(value="item")}  className="w-25 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">Items</button>
-              <button onClick={(value) => showModal(value="shipping")}  className="w-25 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">Shipping</button>
+            <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+              <button onClick={(value) => showModal(value="fabric")} className="bg-indigo-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">Fabric</button>
+              <button onClick={(value) => showModal(value="item")}  className=" bg-blue-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">Items</button>
+              <button onClick={(value) => showModal(value="printing")}  className="bg-blue-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">Printing</button>
+              <button onClick={(value) => showModal(value="embroidery")}  className="bg-blue-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">Embroidery</button>
+              <button onClick={(value) => showModal(value="shipping")}  className="bg-purple-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">Shipping</button>
             </div>
         </div>
- 
       </section>
 
     </Layout>

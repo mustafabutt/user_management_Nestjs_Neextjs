@@ -33,11 +33,6 @@ const Signup = () => {
     
     res.status == 303 ? setUserExists(true) : null;
   }
-  useEffect(()=>{
-    // if (typeof window !== 'undefined' && localStorage.getItem('accessToken')) {
-    //   router.push('/');
-    // }
-  })
 
   const handleChange = (e) => {
     const { value } = e.target;
@@ -47,7 +42,7 @@ const Signup = () => {
   return (
     <Layout signUp>
       <Head>
-        <title>Sign up</title>
+        <title>Candlik - Signup</title>
       </Head>
       <div className="modal modal-backdrop" id="myModal" role="dialog">
           <div className="modal-dialog">

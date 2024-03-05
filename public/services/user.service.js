@@ -39,6 +39,7 @@ export const UserService = () => {
                 status:201,
                 ...response
             }
+            console.log(userObject.access_token)
             setCookie('access_token', userObject.access_token,{ maxAge: 60 * 60 * 24 });
             delete userObject.access_token
             localStorage.setItem('user', JSON.stringify(userObject))
@@ -59,6 +60,7 @@ export const UserService = () => {
                 Authorization: constants.BEARER+token,
             },
         });
+        debugger
         if( res.status == 201 ) {
          let response = await res.json();
          let userObject = {
@@ -69,11 +71,9 @@ export const UserService = () => {
          localStorage.clear();
          deleteCookie('access_token');
          return userObject;
-        } else {
-            return {
-                status:409,
-            }
-        }
+        } 
+        localStorage.clear();
+        deleteCookie('access_token');
 
     }
 

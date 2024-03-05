@@ -4,27 +4,24 @@ import {RatesService} from "../../../services/rates.service";
 import Alert from '../../../components/alert';
 import $ from 'jquery';
 
-export const ViewShipping = (props) => {
+export const ViewEmbroidery = (props) => {
 
-    const [currentShipping, setCurrentShipping] = useState(null);
-    const [shippingUpdated, setShippingUpdated] = useState(null);
-    const [shippingDeleted, setShippingDeleted] = useState(null);
+    const [currentEmbroidery, setCurrentEmbroidery] = useState(null);
+    const [embroideryUpdated, setEmbroideryUpdated] = useState(null);
+    const [embroideryDeleted, setEmbroideryDeleted] = useState(null);
     
     const [error, setError] = useState(null);
-    const [service,setService] = useState(null);
-    const [shippingIRate, setShippingIRate] = useState(null);
-    const [shippingDRate, setShippingDRate] = useState(null);
+    const [embroidery,setEmbroidery] = useState(null);
+    const [rate, setRate] = useState(null);
 
     useEffect(()=>{
-    
-      setCurrentShipping(RatesService().getCurrentShipping(props.item));
-      setService(RatesService().getCurrentShipping(props.item).service);
-      setShippingIRate(RatesService().getCurrentShipping(props.item).rate[0].indirectRate);
-      setShippingDRate(RatesService().getCurrentShipping(props.item).rate[0].directRate);
+      setCurrentEmbroidery(RatesService().getCurrentEmbroidery(props.item));
+      setEmbroidery(RatesService().getCurrentEmbroidery(props.item).name);
+      setRate(RatesService().getCurrentEmbroidery(props.item).base_rate);
      
     },[])
 
-    if(!currentShipping)
+    if(!currentEmbroidery)
       return null;
 
     const focusHandler = () => {
@@ -32,17 +29,17 @@ export const ViewShipping = (props) => {
     };
     const chnageHandlerForService = (e)=>{
 
-      setShippingUpdated(false);
-      setService(e.target.value);
+      setEmbroideryUpdated(false);
+      setEmbroidery(e.target.value);
     }
     const focusHandlerForIRate = (e)=>{
-      setShippingUpdated(false);
-      setShippingIRate(e.target.value);
+      setEmbroideryUpdated(false);
+      setRate(e.target.value);
     }
     const focusHandlerForDRate = (e)=>{
 
-      setShippingUpdated(false);
-      setShippingDRate(e.target.value);
+      setEmbroideryUpdated(false);
+      setRate(e.target.value);
     }
     const showModel=()=>{
       $("#deleteModal").show();
@@ -50,31 +47,30 @@ export const ViewShipping = (props) => {
     const hideModel=()=>{
       $("#deleteModal").hide();
     }
-    async function updateShipping(e) {
+    async function updateEmbroidery(e) {
         e.preventDefault();
 
-        const res = await RatesService().editShipping({
-          service: service,
-          rate: [{directRate:shippingDRate, indirectRate: shippingIRate}],
-          previousService: props.item
+        const res = await RatesService().editEmbroidery({
+          name: embroidery,
+          base_rate: rate,
+          previousEmbroidery: props.item
         });
-        res.status == 200 ? setShippingUpdated(true) : setError(true);
+        res.status == 200 ? setEmbroideryUpdated(true) : setError(true);
       }
 
-      async function deleteShipping(e) {
+      async function deleteEmbroidery(e) {
         e.preventDefault();
-
-        const res = await RatesService().DeleteShipping({
-          service: service
+        const res = await RatesService().DeleteEmbroidery({
+          name: embroidery
         });
-        res.status == 200 ? setShippingDeleted(true) : setError(true);
+        res.status == 200 ? setEmbroideryDeleted(true) : setError(true);
         
         if(res.status == 200)
           props.invokeParent();
         
       }
-      if(shippingUpdated | shippingDeleted)
-        RatesService().getShippingList().then();
+      if(embroideryUpdated | embroideryDeleted)
+        RatesService().getEmbroideryList().then();
 
   return (
   
@@ -92,15 +88,9 @@ export const ViewShipping = (props) => {
                         <span class="sr-only">Close modal</span>
                     </button>
                     <div class="p-4 md:p-5 text-center">
-                    
-                    {shippingUpdated ? (
+                    {embroideryDeleted ? (
                           <Alert type="success">
-                            <span>Shipping updated successfully.</span>
-                          </Alert>
-                    ) : null}
-                    {shippingDeleted ? (
-                          <Alert type="success">
-                            <span>Shipping deleted successfully.</span>
+                            <span>Embroidery deleted successfully.</span>
                           </Alert>
                     ) : null}
                     {error ? (
@@ -108,11 +98,12 @@ export const ViewShipping = (props) => {
                             <span>Error occurred! </span>
                           </Alert>
                         ) : null}
+                   
                         <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                         </svg>
-                        <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Are you sure you want to delete this shipping?</h3>
-                        <button onClick={deleteShipping} data-modal-hide="popup-modal" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center me-2">
+                        <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Are you sure you want to delete this embroidery?</h3>
+                        <button onClick={deleteEmbroidery} data-modal-hide="popup-modal" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center me-2">
                             Yes, I'm sure
                         </button>
                         <button onClick={hideModel} data-modal-hide="popup-modal" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">No, cancel</button>
@@ -121,48 +112,45 @@ export const ViewShipping = (props) => {
             </div>
         </div>
 
-        <img onClick={showModel} style={{cursor: 'grab'}}  title="Delete this shipping" src="/images/delete.png" className={loginStyles.deleteClass} />
-        <form onSubmit={updateShipping} className={loginStyles.formClass}>
+        <img onClick={showModel} style={{cursor: 'grab'}}  title="Delete this printing" src="/images/delete.png" className={loginStyles.deleteClass} />
+        <form onSubmit={updateEmbroidery} className={loginStyles.formClass}>
 
+        {embroideryUpdated ? (
+                          <Alert type="success">
+                            <span>Embroidery updated successfully.</span>
+                          </Alert>
+                    ) : null}
+                    
+                    {error ? (
+                          <Alert type="error">
+                            <span>Error occurred! </span>
+                          </Alert>
+                        ) : null}
           <div className={loginStyles.container}>
             <label htmlFor="uname">
-              <b>Service</b>
+              <b>Printing type</b>
             </label>
             <input
-              value={service}
+              value={embroidery}
               onChange={chnageHandlerForService}
-              minLength="3"
               className={loginStyles.inputClass}
               type="text"
-              name="shipping"
+              name="printing"
               onFocus={focusHandler}
               required
             />
             <label htmlFor="uname">
-              <b>Direct Rate</b>
+              <b>Base Rate</b>
             </label>
             <input
-              value={shippingDRate}
+              value={rate}
               className={loginStyles.inputClass}
               type="number"
-              name="DRate"
+              name="rate"
               onChange={focusHandlerForDRate}
               onFocus={focusHandler}
               required
             />
-            <label htmlFor="uname">
-              <b>In-Direct Rate</b>
-            </label>
-            <input
-              value={shippingIRate}
-              className={loginStyles.inputClass}
-              type="number"
-              name="IDrate"
-              onChange={focusHandlerForIRate}
-              onFocus={focusHandler}
-              required
-            />
-            
             
             <button className={loginStyles.buttonClass} type='submit'>
               Save changes

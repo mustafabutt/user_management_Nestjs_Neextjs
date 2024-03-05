@@ -1,7 +1,6 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
   HttpStatus,
   Param,
@@ -15,10 +14,13 @@ import { RatesService } from '../rates/rates.service';
 import { Exceptions } from '../exceptions/exceptions';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { globalConstants } from '../constant';
-import { Makery } from 'src/schemas/makery';
 import { Item } from 'src/schemas/items';
 import { Shipping } from 'src/schemas/shipping';
+import { Print } from 'src/schemas/printing';
 import { PriceCalculation } from 'src/types/price';
+import { PrintingEnum } from 'src/types/printing';
+import { EmbroideryEnum } from 'src/types/embroidery';
+import { Embroidery } from 'src/schemas/embroidery';
 
 @UseGuards(JwtAuthGuard)
 @Controller(globalConstants.RATES)
@@ -79,8 +81,7 @@ export class RatesController {
         });
         
       } else if(fabric["action"] == "delete fabric"){
-   
-        console.log(fabric)
+  
         const singleMaterial = await this.ratesService.findSingleMaterial(fabric.material);
         const id = singleMaterial["_id"];
         const deletedFabric = await this.ratesService.deleteFabric(id);
@@ -94,69 +95,10 @@ export class RatesController {
     }
   }
 
-  @Post("/makery")
-  async createMakery(@Res() response, @Body() makery: Makery) {
-    try {
-      const check = await this.ratesService.findSingleMaterial(makery.item);
-      if (check) this.exceptions.generateUserExistException();
-      const newMakery = await this.ratesService.createMakery(makery);
-      return response.status(HttpStatus.CREATED).json({
-        newMakery,
-      });
-    } catch (err) {
-      this.exceptions.generateGeneralException(err);
-    }
-  }
-  @Get("/makery")
-  async fetchAllMakery(@Res() response) {
-    try {
-      const data = await this.ratesService.readAllMakery();
-
-      return response.status(HttpStatus.OK).json({
-        data,
-      });
-    } catch (err) {
-      this.exceptions.generateGeneralException(err);
-    }
-  }
-
-  @Put('/makery/:entity')
-  async updateMakery(@Res() response, @Param("entity") entity, @Body() makery: Makery) {
-    try {
-      if(makery["action"] == "edit makery"){
-   
-        const singleMakery = await this.ratesService.findSingleMakery(makery["previousItem"]);
-        delete makery["previousItem"];
-        delete makery["action"];
-        const id = singleMakery["_id"];
-
-        const updatedMakery = await this.ratesService.updateMakery(id,makery);
-   
-        return response.status(HttpStatus.OK).json({
-          updatedMakery,
-        });
-        
-      } else if(makery["action"] == "delete makery"){
- 
-        const singleMaterial = await this.ratesService.findSingleMakery(makery.item);
-        const id = singleMaterial["_id"];
-        const deletedMakery = await this.ratesService.deleteMakery(id);
-        return response.status(HttpStatus.OK).json({
-          deletedMakery,
-        });   
-        
-      }
-     
-    } catch (err) {
-      this.exceptions.generateGeneralException(err);
-    }
-  }
-
   @Get("/item")
   async fetchAllItems(@Res() response) {
     try {
       const data = await this.ratesService.readAllItems();
-
       return response.status(HttpStatus.OK).json({
         data,
       });
@@ -167,7 +109,7 @@ export class RatesController {
   @Post("/item")
   async createItem(@Res() response, @Body() item: Item) {
     try {
-    
+      console.log(item);
       const check = await this.ratesService.findSingleItem(item.name);
       if (check) this.exceptions.generateUserExistException();
   
@@ -184,35 +126,60 @@ export class RatesController {
   async calculateItemPrice(@Res() response, @Body() item: PriceCalculation) {
     try {
         console.log(item)
-      
+         
         let shippingMode = item.shippingValue.split("(")[1].split(")")[0]+"Rate";
         let shippingCompany = item.shippingValue.split("(")[0];
-
+        let profitMargin = item.profit_margin.split("%")[0]
         console.log(shippingCompany + shippingMode);
-        let avg, fabricPrice, fabricPriceInGrams, shippinginPerItem, totalPrice;
+        let avg, fabricPrice, fabricPriceInGrams, shippinginPerItem, totalPrice, makery, dollarPrice, printingBaseRate, embBaseRate, printRate, embRate;
 
         const singleMaterial = await this.ratesService.findSingleMaterial(item.fabricValue);
-        const singleAvg = await this.ratesService.findSingleItem(item.itemValue);
+        const singleItem = await this.ratesService.findSingleItem(item.itemValue);
+
         const shipping:any = await this.ratesService.findSingleShipping(shippingCompany);
-        const makery:any = await this.ratesService.findSingleMakery(item.itemValue);
 
         console.log("shipping per KG "+shipping.rate[0][shippingMode])
 
-        singleAvg.fabricAverage.filter((obj:any) =>{
-          if(obj.fabric == item.fabricValue)
-            avg = obj.quantity    
+        singleItem.fabricAverageAndMakery.filter((obj:any) =>{
+          if(obj.fabric == item.fabricValue){
+            avg = obj.quantity;
+            makery =  obj.makery
+          }
         })
-        
+      
         fabricPriceInGrams = 1000/avg
         fabricPrice = Number(singleMaterial.rate)/fabricPriceInGrams;
         console.log("fabric price is "+fabricPrice);
         
         shippinginPerItem = Number(shipping.rate[0][shippingMode])/fabricPriceInGrams;
         console.log("shipping per item "+shippinginPerItem);
-        totalPrice = shippinginPerItem+fabricPrice+makery.rate
+
+        if(item.decoration.value == "Printing"){
+          const singlePrinting = await this.ratesService.findSinglePrinting(item.decoration.type);
+          printingBaseRate = singlePrinting.base_rate;
+          let size = Number(item.decoration.size.width)*Number(item.decoration.size.height);
+          if(size >= 1)
+            printRate = size*5+printingBaseRate
+            totalPrice = Number(shippinginPerItem)+Number(fabricPrice)+Number(makery)+printRate;
+        }
+        if(item.decoration.value == "Embroidery"){
+          const singleEmb = await this.ratesService.findSingleEmbroidery(item.decoration.type);
+          embBaseRate = singleEmb.base_rate;
+          let size = Number(item.decoration.size.width)*Number(item.decoration.size.height);
+          if(size >= 1)
+            embRate = size*5+embBaseRate
+          totalPrice = Number(shippinginPerItem)+Number(fabricPrice)+Number(makery)+embRate;
+        }
+
+
+
+        dollarPrice = Number(profitMargin)/Number(100)*Number(totalPrice)+totalPrice;
+        dollarPrice = Math.round(dollarPrice/item.usdRate*100)/100;
         console.log("total price is "+totalPrice);
+        console.log("dollar price is "+ dollarPrice);
         return response.status(HttpStatus.OK).json({
-          "totalPrice":totalPrice
+          "totalPrice":totalPrice,
+          "dollarPrice": "$"+dollarPrice
         });  
     } catch (err) {
       this.exceptions.generateGeneralException(err);
@@ -223,20 +190,19 @@ export class RatesController {
   async updateItem(@Res() response, @Param("entity") entity, @Body() item: Item) {
     try {
       if(item["action"] == "edit item"){
-   
+
         const singleItem = await this.ratesService.findSingleItem(item["previousItem"]);
         delete item["previousItem"];
         delete item["action"];
         const id = singleItem["_id"];
         const updatedItem = await this.ratesService.updateItem(id,item);
-   
+
         return response.status(HttpStatus.OK).json({
           updatedItem,
         });
         
       } else if(item["action"] == "delete item"){
-   
-        const singleItem = await this.ratesService.findSingleItem(item.name);
+        const singleItem = await this.ratesService.findSingleItem(item.name["item"]);
         const id = singleItem["_id"];
         const deletedItem = await this.ratesService.deleteItem(id);
         return response.status(HttpStatus.OK).json({
@@ -302,6 +268,139 @@ export class RatesController {
         const deletedShipping = await this.ratesService.deleteShipping(id);
         return response.status(HttpStatus.OK).json({
           deletedShipping,
+        });     
+        
+      }
+     
+    } catch (err) {
+      this.exceptions.generateGeneralException(err);
+    }
+  }
+
+
+  @Get("/printing")
+  async fetchAllPrinting(@Res() response) {
+    try {
+      const data = await this.ratesService.readAllPrinting();
+      return response.status(HttpStatus.OK).json({
+        data,
+      });
+    } catch (err) {
+      this.exceptions.generateGeneralException(err);
+    }
+  }
+
+  @Post("/printing")
+  async createPrinting(@Res() response, @Body() printing: Print) {
+    try {
+      if(!(printing.name in PrintingEnum))
+        return response.status(HttpStatus.BAD_GATEWAY).json({
+          msg:"please send a valid printing type",
+        });
+      const check = await this.ratesService.findSinglePrinting(printing.name);
+      if (check) this.exceptions.generateUserExistException();
+ 
+      const newPrinting = await this.ratesService.createPrinting(printing);
+      return response.status(HttpStatus.CREATED).json({
+        newPrinting,
+      });
+    } catch (err) {
+      this.exceptions.generateGeneralException(err);
+    }
+  }
+
+  @Put('/printing/:entity')
+  async updatePrinting(@Res() response, @Param("entity") entity, @Body() printing: Print) {
+    try {
+
+      if(printing["action"] == "edit printing"){
+        if(!(printing.name in PrintingEnum))
+          return response.status(HttpStatus.BAD_GATEWAY).json({
+            msg:"please send a valid printing type",
+          });
+        const singlePrinting = await this.ratesService.findSinglePrinting(printing["previousPrinting"]);
+        delete printing["previousPrinting"];
+        delete printing["action"];
+        const id = singlePrinting["_id"];
+        const updatedPrinting = await this.ratesService.updatePrinting(id,printing);
+   
+        return response.status(HttpStatus.OK).json({
+          updatedPrinting,
+        });
+        
+      } else if(printing["action"] == "delete printing"){
+   
+        const singlePrinting = await this.ratesService.findSinglePrinting(printing.name);
+        const id = singlePrinting["_id"];
+        const deletedPrinting = await this.ratesService.deletePrinting(id);
+        return response.status(HttpStatus.OK).json({
+          deletedPrinting,
+        });     
+        
+      }
+     
+    } catch (err) {
+      this.exceptions.generateGeneralException(err);
+    }
+  }
+
+  @Get("/embroidery")
+  async fetchAllEmbroidery(@Res() response) {
+    try {
+      const data = await this.ratesService.readAllEmbroidery();
+      return response.status(HttpStatus.OK).json({
+        data,
+      });
+    } catch (err) {
+      this.exceptions.generateGeneralException(err);
+    }
+  }
+
+  @Post("/embroidery")
+  async createEmbroidery(@Res() response, @Body() embroidery: Embroidery) {
+    try {
+      if(!(embroidery.name in EmbroideryEnum))
+        return response.status(HttpStatus.BAD_GATEWAY).json({
+          msg:"please send a valid embroidery type",
+        });
+      const check = await this.ratesService.findSingleEmbroidery(embroidery.name);
+      if (check) this.exceptions.generateUserExistException();
+ 
+      const newEmbroidery = await this.ratesService.createEmbroidery(embroidery);
+      return response.status(HttpStatus.CREATED).json({
+        newEmbroidery,
+      });
+    } catch (err) {
+      this.exceptions.generateGeneralException(err);
+    }
+  }
+
+  @Put('/embroidery/:entity')
+  async updateEmbroidery(@Res() response, @Param("entity") entity, @Body() embroidery: Embroidery) {
+    try {
+
+      if(embroidery["action"] == "edit embroidery"){
+        if(!(embroidery.name in EmbroideryEnum))
+          return response.status(HttpStatus.BAD_GATEWAY).json({
+            msg:"please send a valid embroidery type",
+          });
+        const singleEmbroidery = await this.ratesService.findSingleEmbroidery(embroidery["previousEmbroidery"]);
+        delete embroidery["previousEmbroidery"];
+        delete embroidery["action"];
+        const id = singleEmbroidery["_id"];
+        const updatedEmbroidery = await this.ratesService.updateEmbroidery(id,embroidery);
+  
+        return response.status(HttpStatus.OK).json({
+          updatedEmbroidery,
+        });
+        
+      } else if(embroidery["action"] == "delete embroidery"){
+        console.log("hell ya")
+        const singleEmbroidery= await this.ratesService.findSingleEmbroidery(embroidery.name);
+        const id = singleEmbroidery["_id"];
+        const deletedPEmbroidery = await this.ratesService.deleteEmbroidery(id);
+        return response.status(HttpStatus.OK).json({
+          deletedPEmbroidery,
         });     
         
       }

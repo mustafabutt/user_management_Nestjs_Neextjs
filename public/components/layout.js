@@ -7,7 +7,7 @@ import {UserService} from "../services/user.service";
 import Breadcrumb from './BreadCrumbs';
 import BreadcrumbItem from "./BreadcrumbItem"
 
-export const siteTitle = 'Next.js Sample Website';
+export const siteTitle = 'Candlik - Home';
 
 const Layout = ({ children, home }) => {
 

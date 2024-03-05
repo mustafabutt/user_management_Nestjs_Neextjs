@@ -12,9 +12,10 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './services/users.module';
 import { User, UserSchema } from './schemas/users.schema';
 import { Fabric, FabricSchema } from './schemas/fabric';
+import { Print, PrintSchema } from './schemas/printing';
+import { Embroidery, EmbroiderySchema } from './schemas/embroidery';
 import { Item, ItemSchema } from './schemas/items';
 import { Shipping, ShippingSchema } from './schemas/shipping';
-import { Makery, MakerySchema } from './schemas/makery';
 import { Token, TokenSchema } from './schemas/token.schema';
 import { UsersService } from './services/users.service';
 import { Exceptions } from './exceptions/exceptions';
@@ -27,19 +28,25 @@ import { ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { RatesService } from './rates/rates.service';
 import { RatesController } from './rates/rates.controller';
+import { ConfigModule } from '@nestjs/config';
+import { configuration } from '../config/configuration';
+
 
 @Module({
   imports: [
     forwardRef(() => AuthModule),
     UsersModule,
+    ConfigModule.forRoot({ envFilePath: `${process.cwd()}/config/env/${process.env.NODE_ENV}.env`,
+    load: [configuration] }), 
     RedisCacheModule,
-    MongooseModule.forRoot(globalConstants.DB_URL),
+    MongooseModule.forRoot(process.env.DB_URL),
     MongooseModule.forFeature([
       { name: User.name, schema: UserSchema },
       { name: Fabric.name, schema: FabricSchema },
       { name: Shipping.name, schema: ShippingSchema },
       { name: Item.name, schema: ItemSchema },
-      { name: Makery.name, schema: MakerySchema },
+      { name: Print.name, schema: PrintSchema },
+      { name: Embroidery.name, schema: EmbroiderySchema },
       { name: Token.name, schema: TokenSchema },
     ]),
     JwtModule.register({
