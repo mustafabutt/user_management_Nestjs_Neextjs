@@ -127,26 +127,26 @@ export class RatesController {
     try {
         console.log(item)
          
-        let shippingMode = item.shippingValue.split("(")[1].split(")")[0]+"Rate";
-        let shippingCompany = item.shippingValue.split("(")[0];
+        let shippingMode = item.shipping.split("(")[1].split(")")[0]+"Rate";
+        let shippingCompany = item.shipping.split("(")[0];
         let profitMargin = item.profit_margin.split("%")[0]
         console.log(shippingCompany + shippingMode);
         let avg, fabricPrice, fabricPriceInGrams, shippinginPerItem, totalPrice, makery, dollarPrice, printingBaseRate, embBaseRate, printRate, embRate;
 
-        const singleMaterial = await this.ratesService.findSingleMaterial(item.fabricValue);
-        const singleItem = await this.ratesService.findSingleItem(item.itemValue);
+        const singleMaterial = await this.ratesService.findSingleMaterial(item.fabric);
+        const singleItem = await this.ratesService.findSingleItem(item.item);
 
         const shipping:any = await this.ratesService.findSingleShipping(shippingCompany);
 
         console.log("shipping per KG "+shipping.rate[0][shippingMode])
 
         singleItem.fabricAverageAndMakery.filter((obj:any) =>{
-          if(obj.fabric == item.fabricValue){
+          if(obj.fabric == item.fabric){
             avg = obj.quantity;
             makery =  obj.makery
           }
         })
-      
+
         fabricPriceInGrams = 1000/avg
         fabricPrice = Number(singleMaterial.rate)/fabricPriceInGrams;
         console.log("fabric price is "+fabricPrice);

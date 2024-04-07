@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from "next/link";
 
 import { FaBars, FaTimes } from "react-icons/fa";
+import SideBar from "./SideBar";
 const Header = () => {
 
   const [nav, setNav] = useState(false);
@@ -45,8 +46,7 @@ const Header = () => {
 
 
   return (
-
-  <div className="flex justify-between items-center w-full h-20 px-4 text-white bg-black fixed nav">
+<>  <div className="flex justify-between items-center w-full h-20 px-4 text-white bg-black fixed nav">
   <div>
     <h1 className="text-5xl font-signature ml-2">
       <a
@@ -106,6 +106,9 @@ const Header = () => {
     </ul>
   )}
 </div>
+{showLogout ? <SideBar /> : null}
+</>
+
 
   );
 };

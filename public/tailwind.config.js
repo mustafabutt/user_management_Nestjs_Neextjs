@@ -2,7 +2,7 @@
 module.exports = {
   content: ['./pages/**/*.{js,jsx,ts,tsx}', './components/**/*.{js,jsx,ts,tsx}'],
   theme: {
-    extend: {},
+    extend: {  display: ["group-hover"],},
     container: {
       center: true,
       // padding: {
@@ -20,5 +20,6 @@ module.exports = {
     },
   },
   plugins: [],
+
 }
 

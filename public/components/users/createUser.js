@@ -37,13 +37,13 @@ export const CreateUser = (props) => {
         res.status == 201 ? props.invokeParent() : null;
         
         res.status == 409 ? setUserExists(true) : null;
-      }
+    }
 
   return (
 
-    <div >
+    <div>
 
-        <form onSubmit={createUserCall} className={loginStyles.formClass}>
+        <form onSubmit={createUserCall} >
           
           <div className={loginStyles.container}>
             <label htmlFor="uname">

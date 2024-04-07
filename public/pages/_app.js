@@ -17,6 +17,7 @@ export default function App({ Component, pageProps }) {
 
      <div className="min-h-screen flex flex-col">
       <Header />
+
       <div className="flex-grow">
         <Component {...pageProps} />
       </div>

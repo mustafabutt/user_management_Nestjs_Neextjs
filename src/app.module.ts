@@ -14,7 +14,9 @@ import { User, UserSchema } from './schemas/users.schema';
 import { Fabric, FabricSchema } from './schemas/fabric';
 import { Print, PrintSchema } from './schemas/printing';
 import { Embroidery, EmbroiderySchema } from './schemas/embroidery';
+import { Client, ClientDocument, ClientSchema } from './schemas/clients';
 import { Item, ItemSchema } from './schemas/items';
+import { Order, OrderSchema } from './schemas/orders';
 import { Shipping, ShippingSchema } from './schemas/shipping';
 import { Token, TokenSchema } from './schemas/token.schema';
 import { UsersService } from './services/users.service';
@@ -30,6 +32,10 @@ import { RatesService } from './rates/rates.service';
 import { RatesController } from './rates/rates.controller';
 import { ConfigModule } from '@nestjs/config';
 import { configuration } from '../config/configuration';
+import { ClientController } from './client/client.controller';
+import { ClientService } from './client/client.service';
+import { OrdersController } from './orders/orders.controller';
+import { OrdersService } from './orders/orders.service';
 
 
 @Module({
@@ -47,6 +53,8 @@ import { configuration } from '../config/configuration';
       { name: Item.name, schema: ItemSchema },
       { name: Print.name, schema: PrintSchema },
       { name: Embroidery.name, schema: EmbroiderySchema },
+      { name: Client.name, schema: ClientSchema },
+      { name: Order.name, schema: OrderSchema },
       { name: Token.name, schema: TokenSchema },
     ]),
     JwtModule.register({
@@ -54,8 +62,8 @@ import { configuration } from '../config/configuration';
       signOptions: { expiresIn: "60s" },
     }),
   ],
-  controllers: [AppController, UserController, MailController, RatesController],
-  providers: [AppService, UsersService, Exceptions, SendgridService,ConfigService, RatesService],
+  controllers: [AppController, UserController, MailController, RatesController, ClientController, OrdersController],
+  providers: [AppService, UsersService, Exceptions, SendgridService,ConfigService, RatesService, ClientService, OrdersService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

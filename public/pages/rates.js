@@ -456,16 +456,39 @@ const Rates = () => {
           </div>
         </div>
 
-        <div className="flex flex-col items-center justify-center px-6 py-18 mx-auto md:h-screen lg:py-0">
-    
-            <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-              <button onClick={(value) => showModal(value="fabric")} className="bg-indigo-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">Fabric</button>
-              <button onClick={(value) => showModal(value="item")}  className=" bg-blue-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">Items</button>
-              <button onClick={(value) => showModal(value="printing")}  className="bg-blue-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">Printing</button>
-              <button onClick={(value) => showModal(value="embroidery")}  className="bg-blue-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">Embroidery</button>
-              <button onClick={(value) => showModal(value="shipping")}  className="bg-purple-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">Shipping</button>
-            </div>
+
+        <div class="items-center justify-center p-10 sm:ml-64 top-10 ">
+          <div class="p-4">  
+              <div class="grid grid-cols-2 gap-4">
+                <button onClick={(value) => showModal(value="fabric")} className="bg-indigo-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">
+                  <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
+                      <p class="text-2xl text-gray-400 dark:text-gray-500">Fabric</p>
+                  </div>
+                </button>
+                <button onClick={(value) => showModal(value="item")}  className=" bg-blue-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">
+                  <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
+                      <p class="text-2xl text-gray-400 dark:text-gray-500">Items</p>
+                  </div>
+                </button>
+                <button onClick={(value) => showModal(value="printing")}  className="bg-pink-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">
+                  <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
+                      <p class="text-2xl text-gray-400 dark:text-gray-500">Printing</p>
+                  </div>
+                </button>
+                <button onClick={(value) => showModal(value="embroidery")}  className="bg-yellow-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">
+                  <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
+                      <p class="text-2xl text-gray-400 dark:text-gray-500">Embroidery</p>
+                  </div>
+                </button>
+                <button onClick={(value) => showModal(value="shipping")}  className="bg-purple-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">
+                  <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
+                      <p class="text-2xl text-gray-400 dark:text-gray-500">Shipping</p>
+                  </div>
+                </button>
+              </div>
+          </div>
         </div>
+
       </section>
 
     </Layout>

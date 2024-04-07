@@ -8,30 +8,42 @@ import { ItemsListData } from "@/utils/itemsUtils";
 import { FabricListData } from "@/utils/fabricUtils";
 import { EmbroideryListData } from "@/utils/embroideryUtils";
 import { PrintingListData } from "@/utils/printingUtils";
+import {ClientListData} from "@/utils/clientUtils";
 import { RatesService } from "@/services/rates.service";
-import $, { valHooks } from 'jquery';
-export const InvoiceGenerator = () => {
+import {useRouter} from "next/router";
+import $ from 'jquery';
+import DatePicker from "react-datepicker"; 
+import "react-datepicker/dist/react-datepicker.css";
+
+export const PriceGenerator = (props) => {
+
+  const [deliveryDate, setDeliveryDate] = useState(new Date()); 
+  const [view, setView] = useState();
   const [shippinglist, setShippinglist] = useState(null);
   const [printinglist, setPrintinglist] = useState(null);
   const [embroiderylist, setembroiderylist] = useState(null);
   const [itemlist, setItemlist] = useState(null);
+  const [clientlist, setClientlist] = useState(null);
   const [fabriclist, setFabriclist] = useState(null);
-  const [shippingValue, setShippingValue] = useState(null);
-  const [itemValue, setItemValue] = useState(null);
-  const [fabricValue, setFabricValue] = useState(null);
+  const [shipping, setShipping] = useState(null);
+  const [item, setItem] = useState(null);
+  const [client, setClient] = useState(null);
+  const [fabric, setFabric] = useState(null);
   const [embType, setEmbType] = useState(null);
   const [printType, setPrintType] = useState(null);
   const [totalPrice, setTotalPrice] = useState(null);
   const [decorationValue, setDecorationValue] = useState(null);
   const [dimenssions, setDimenssions] = useState(false);
   const [cost, setCost] = useState(null);
-  const qty = useRef(null);
+  const quantity = useRef(null);
   const rate = useRef(null);
   const width = useRef(null)
   const height = useRef(null);
   const decoration = ["Printing", "Embroidery"]
   const greenClass = "w-100 h-15 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800 "
   const redClass = " w-100 h-15 border border-red-300 rounded bg-red-50 focus:ring-3 focus:ring-primary-300 dark:bg-red-700 dark:border-red-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800 " 
+  let orderArray =  useRef(new Array());
+  
   useEffect( ()=>{
     (async function(){
       setShippinglist(await ShippingListData(UserService().getAccessToken()));
@@ -39,8 +51,10 @@ export const InvoiceGenerator = () => {
       setFabriclist(await FabricListData());
       setembroiderylist(await EmbroideryListData());
       setPrintinglist(await PrintingListData());
+      setClientlist(await ClientListData());
       }
     )()
+    setView(props.parent);
   },[])
 
   if(shippinglist){
@@ -54,20 +68,20 @@ export const InvoiceGenerator = () => {
       )
       shippinglist.data = obj;
     }
+
   }
-  
   const closeModal = () => {
     $("#priceModal").hide();
   };
   function dropDownDataForEmb(value){
-    debugger
+    
     setEmbType(value);
     setPrintType(null);
     $("#height").show()
     $("#width").show()
   }
   function dropDownDataForPrint(value){
-    debugger
+    
     setPrintType(value);
     setEmbType(null);
     $("#height").show()
@@ -76,13 +90,16 @@ export const InvoiceGenerator = () => {
   }
   async function dropDownData(value, data){
     if(data == "shipping")
-      setShippingValue(value)
+      setShipping(value)
     if(data == "item")
-      setItemValue(value)
+      setItem(value)
     if(data == "fabric")
-      setFabricValue(value)
+      setFabric(value)
     if(data == "decoration"){
       setDecorationValue(value);
+    }
+    if(data == "cleints"){
+      setClient(value);
     }
     
     if(value == "Choose decoration"){  
@@ -104,20 +121,20 @@ export const InvoiceGenerator = () => {
     $("#printDrop").hide();
   }
   if(printType == "Choose print type" ){
-    debugger
+    
     $("#height").hide()
     $("#width").hide()
   }
   if(embType == "Choose embroidery type" ){
-    debugger
+    
     $("#height").hide()
     $("#width").hide()
   }
 
-  async function getData(itemValue){
+  async function getData(item){
     let tempObj={};
     await itemlist.data.forEach(element => {
-      if(element.item == itemValue){
+      if(element.item == item){
         tempObj.profit_margin=element.profit_margin
         tempObj.production_time = element.production_time
       }
@@ -129,14 +146,14 @@ export const InvoiceGenerator = () => {
   }
   async function generateInvoice(e) {
     e.preventDefault();
-    let results, decHeight, decWidth, obj;
+    let results, decHeight, decWidth, obj, usdRate;
 
-    if(!shippingValue || !itemValue || !fabricValue)
+    if(!shipping || !item || !fabric || !client)
       return null;
-    results = await getData(itemValue)
-    printType, embType
-    let usdRate = rate.current.value;;
-    let quantity = qty.current.value;
+    results = await getData(item)
+    if(view == "index")
+      usdRate = rate.current.value;;
+    let qty = quantity.current.value;
     let profit_margin = results.profit_margin;
     let production_time = results.production_time
 
@@ -145,30 +162,39 @@ export const InvoiceGenerator = () => {
       decWidth = width.current.value;
     }else if(decorationValue && (height.current.value == "" || width.current.value == "")){setDimenssions(true); return }
     obj = {
-      shippingValue, itemValue, fabricValue, quantity, profit_margin, production_time, usdRate, "decoration":{value: "", type:"", size:{"width":"", "height":""}} 
+      item, fabric, qty, profit_margin, production_time, usdRate, "decoration":{value: "", type:"", size:{"width":"", "height":""}} 
     }
     if(decorationValue == "Printing"){
       obj = {
-        shippingValue, itemValue, fabricValue, quantity, profit_margin, production_time, usdRate, "decoration":{value: decorationValue, type:printType, size:{"width":decWidth, "height":decHeight}} 
+        item, fabric, qty, profit_margin, production_time, usdRate, "decoration":{value: decorationValue, type:printType, size:{"width":decWidth, "height":decHeight}} 
       }
     }
     if(decorationValue == "Embroidery"){
       obj = {
-        shippingValue, itemValue, fabricValue, quantity, profit_margin, production_time, usdRate, "decoration":{value: decorationValue, type:embType, size:{"width":decWidth, "height":decHeight}} 
+        item, fabric, qty, profit_margin, production_time, usdRate, "decoration":{value: decorationValue, type:embType, size:{"width":decWidth, "height":decHeight}} 
       }
     }
-   
-    const result = await RatesService().CalculateItemPrice(obj)
-    let data = await result.json();
-    if(result.status == 200)
-    {
-      setTotalPrice(data.dollarPrice);
-      setCost(data.totalPrice);
-      $("#priceModal").show();
+    if(view == "createOrder" ){
+      
+      let date = deliveryDate.toISOString();
+      orderArray.current.push(obj)
+      props.invokeParent(orderArray.current, {client, date, shipping});
+
     }
+    else {
+      const result = await RatesService().CalculateItemPrice(obj)
+      let data = await result.json();
+      if(result.status == 200)
+      {
+        setTotalPrice(data.dollarPrice);
+        setCost(data.totalPrice);
+        $("#priceModal").show();
+      }
+    }
+
   }
 
-  if(!shippinglist || !itemlist || !fabriclist || !printinglist || !embroiderylist)
+  if(!shippinglist || !itemlist || !fabriclist || !printinglist || !embroiderylist || !clientlist)
     return null;
 
   return (
@@ -191,8 +217,8 @@ export const InvoiceGenerator = () => {
                   <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                       <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                   </svg>
-                  <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Cost per {itemValue} is {cost}. </h3>
-                  <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Export Price per {itemValue} is {totalPrice}. </h3>
+                  <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Cost per {item} is {cost}. </h3>
+                  <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Export Price per {item} is {totalPrice}. </h3>
                   <button onClick={(value) => closeModal(value="users")} data-modal-hide="popup-modal" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center me-2">
                       Generate another price
                   </button>
@@ -205,7 +231,34 @@ export const InvoiceGenerator = () => {
       <form class="w-full max-w-lg" onSubmit={generateInvoice}>
 
         <div class="grid grid-cols-20">
-          
+        {view == "createOrder" ? <div class="col-span-1 p-2.5">
+          <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
+                Set delivery date
+          </label>
+            <div class="relative ">
+            <DatePicker selected={deliveryDate} onChange= {(date) => setDeliveryDate(date)} /> 
+            </div>
+        </div>:null }
+
+        {view == "createOrder" ?   <div class="col-span-1">
+          <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
+               Select customer
+          </label>
+            <div class="relative ">
+            <Dropdown required data = {"cleints"} getData = {dropDownData} list= {clientlist.data} />
+            </div>
+          </div>:null }
+        
+          <div class="col-span-4 ">
+            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
+              
+            </label>
+            <div class="relative">
+              
+               <Dropdown required data = {"shipping"} getData = {dropDownData} list = {shippinglist.data} />
+            </div>
+          </div>
+
           <div class="col-span-4">
             <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
               
@@ -225,22 +278,14 @@ export const InvoiceGenerator = () => {
                <Dropdown required data = {"fabric"} getData = {dropDownData} list ={fabriclist.data} />
             </div>
           </div>
+          
           <div class="col-span-4 ">
             <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
               
             </label>
             <div class="relative">
               
-               <Dropdown required data = {"shipping"} getData = {dropDownData} list = {shippinglist.data} />
-            </div>
-          </div>
-          <div class="col-span-4 ">
-            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
-              
-            </label>
-            <div class="relative">
-              
-               <Dropdown required data = {"decoration"} getData = {dropDownData} />
+               <Dropdown required data = {"decoration"} list = {decoration} getData = {dropDownData} />
                {/* <DropdownMultiOptions list = {decoration} /> */}
             </div>
           </div>
@@ -285,25 +330,28 @@ export const InvoiceGenerator = () => {
               
             </label>
             <div class="relative ">
-            <input placeholder="Enter quantity" min = "0" required ref={qty} id="qty" aria-describedby="qty" type="number" className="w-100 h-15 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800 " />            </div>
+            <input placeholder="Enter quantity" min = "0" required ref={quantity} id="qty" aria-describedby="qty" type="number" className="w-100 h-15 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800 " />            </div>
           </div>
           
-          <div class="col-span-3">
+          {view == "index" ? <div class="col-span-3">
             <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
               
             </label>
             <div class="relative ">
             <input placeholder="USD rate" min = "0" required ref={rate} id="qty" aria-describedby="rate" type="number" className="w-100 h-15 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800 " />
             </div>
-          </div>
+          </div> :null }
           </div>
           
         </div>
-        <button type="submit" className="w-full bg-black rounded-lg p-2 mt-3 text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Calculate Price</button>
+        {view == "createOrder" ? <button type="submit" className="w-full bg-black rounded-lg p-2 mt-3 text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Add to cart</button> : <button type="submit" className="w-full bg-black rounded-lg p-2 mt-3 text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Calculate Price</button>}
 
       </form>
 
       </>
   );
 };
+
+
+{/* <DatePicker selected={startDate} onChange= {(date) => setStartDate(date)} />  */}
 

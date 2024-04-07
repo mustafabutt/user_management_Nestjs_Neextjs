@@ -17,14 +17,11 @@ export const ItemList = (props) => {
 
     async function fetchData(e){
         e.preventDefault();
-        debugger
         item.data.map((user) => {
             if(e.currentTarget.id == user.item)
                 props.invokeTopParent(user);
         })
-     
     }
-    debugger
     if(!item || item === null)
         return "No data"
     if(item.data.length == 0)

@@ -11,6 +11,8 @@ export const constants =  {
   PRINTING: 'http://localhost:3001/rates/printing',
   EMBROIDERY: 'http://localhost:3001/rates/embroidery',
   ITEM: 'http://localhost:3001/rates/item',
+  CLIENT: 'http://localhost:3001/clients',
+  ORDER: 'http://localhost:3001/orders',
   CALCULATE :"http://localhost:3001/rates/item/calculate",
   SEND_EMAIL: 'http://localhost:3001/email',
   DEFAULT_PASSWORD: "$2b$10$NFr5O/Y4aQiJPTDuxzqh6et7fPMQjs2fJyQISxGP8KYK3A1uAIlqy",

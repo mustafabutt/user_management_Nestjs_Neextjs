@@ -1,8 +1,8 @@
 export interface PriceCalculation {
-  shippingValue: string,
-  itemValue: string,
-  fabricValue: string,
-  quantity: string,
+  shipping: string,
+  item: string,
+  fabric: string,
+  qty: string,
   profit_margin:string,
   production_time:string
   usdRate: number,
