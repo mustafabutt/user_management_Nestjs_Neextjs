@@ -1,0 +1,30 @@
+import { Fabric } from '../schemas/fabric';
+import { RatesService } from '../rates/rates.service';
+import { Exceptions } from '../exceptions/exceptions';
+import { Item } from 'src/schemas/items';
+import { Shipping } from 'src/schemas/shipping';
+import { Print } from 'src/schemas/printing';
+import { PriceCalculation } from 'src/types/price';
+import { Embroidery } from 'src/schemas/embroidery';
+export declare class RatesController {
+    private readonly ratesService;
+    private exceptions;
+    constructor(ratesService: RatesService, exceptions: Exceptions);
+    createFabric(response: any, fabric: Fabric): Promise<any>;
+    fetchAllFabric(response: any): Promise<any>;
+    findById(response: any, id: any): Promise<void>;
+    updateFabric(response: any, entity: any, fabric: Fabric): Promise<any>;
+    fetchAllItems(response: any): Promise<any>;
+    createItem(response: any, item: Item): Promise<any>;
+    calculateItemPrice(response: any, item: PriceCalculation): Promise<any>;
+    updateItem(response: any, entity: any, item: Item): Promise<any>;
+    fetchAllShipping(response: any): Promise<any>;
+    createShipping(response: any, shipping: Shipping): Promise<any>;
+    updateShipping(response: any, entity: any, shipping: Shipping): Promise<any>;
+    fetchAllPrinting(response: any): Promise<any>;
+    createPrinting(response: any, printing: Print): Promise<any>;
+    updatePrinting(response: any, entity: any, printing: Print): Promise<any>;
+    fetchAllEmbroidery(response: any): Promise<any>;
+    createEmbroidery(response: any, embroidery: Embroidery): Promise<any>;
+    updateEmbroidery(response: any, entity: any, embroidery: Embroidery): Promise<any>;
+}

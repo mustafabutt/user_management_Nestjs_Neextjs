@@ -15,9 +15,10 @@ export const List = (props) => {
             props.invokeUpper(e.currentTarget.innerText);
         else  props.invokeUpper(e.currentTarget.innerText);
     }
+    
     if(!userData || userData === null)
         return "No data"
-    if(userData.data.length == 0)
+    if((userData && userData.status != 409) && userData.data.length == 0)
         return "No data"
 
   return (
@@ -38,8 +39,8 @@ export const List = (props) => {
 
                 </thead>
                 <tbody>
-                {userData && userData.data.map((user) => (
-                <tr className={globalStyle.tab} style={{cursor: 'grab'}} onClick={fetchData} >
+                {userData && userData.data.map((user, i) => (
+                <tr key={i} className={globalStyle.tab} style={{cursor: 'grab'}} onClick={fetchData} >
                     {
                         Object.keys(user).map((keyName, keyIndex)=> {
                         

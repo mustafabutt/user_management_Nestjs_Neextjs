@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-3" style="float: left" >
+        <p>Candlik Clothing<br />
+          Chawinda house  Aimanabad road Sialkot  <br />
+          clothing@candlik.com</p>
+      </div>
+     
+      <div class="col-sm-4" style="float: right" >     
+       
+       <p> {{name}} <br />
+        {{adress}} {{state}} {{country}} <br />
+        {{contact_no}} <br />
+        {{email}}</p>
+      </div>
+    </div>
+  </div>
+
+<div class="text-center">
+  <h3>Commercial Invoice</h3>
+</div>
+<br />
+<table class="table table-bordered text-center">
+  <tbody>
+    <tr>
+      <th class="text-center">Items</th>
+      <th class="text-center">Quantity</th>
+      <th class="text-center">Description</th>
+      <th class="text-center">Unit Price Including Shipping</th>
+      <th class="text-center">Net Price Including Shipping</th>
+    </tr>
+
+      {{#each items}}
+      <tr>
+        <td>{{this.item}}</td>
+        <td>{{this.qty}}</td>
+        <td>{{this.fabric}}</td>
+        <td>USD: {{this.prices}}</td>
+        <td>USD: {{this.netPrice}}</td>
+      </tr>
+      {{/each}}
+    
+    <tr>
+      <td style="border:none;"></td>
+      <td style="border:none;"></td>
+      <td style="border:none;"></td>
+      <th class="text-center">Grand Total</th>
+      <td>USD: {{total}}</td>
+    </tr>
+  
+  </tbody>
+</table>
+</body>
+</html>

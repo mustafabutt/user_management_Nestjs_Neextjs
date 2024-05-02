@@ -2,7 +2,6 @@ import { UserService } from "@/services/user.service";
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image'
-import Link from "next/link";
 
 import { FaBars, FaTimes } from "react-icons/fa";
 import SideBar from "./SideBar";
@@ -34,7 +33,7 @@ const Header = () => {
     if (UserService().isUserLoggedIn())
     {
       setLogout(true);
-    }
+    }else  setLogout(false);
     const pathWithoutQuery = router.asPath.split("?")[0];
     let pathArray = pathWithoutQuery.split("/");
     pathArray.shift();

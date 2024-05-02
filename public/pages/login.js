@@ -15,15 +15,15 @@ const Login = () => {
   const focusHandler = () => {
     setInvalidCred(false);
   };
-    const hitLogin = async (event) => {
-      event.preventDefault();
-      const user = {
-        email: email.current.value,
-        password: password.current.value
-      };
-    
-      const userResponse = await UserService().login(user);
-      userResponse.status == 401 ? setInvalidCred(true) : router.push('/');
+
+  const hitLogin = async (event) => {
+    event.preventDefault();
+    const user = {
+      email: email.current.value,
+      password: password.current.value
+    };    
+    const userResponse = await UserService().login(user);
+    userResponse.status == 401 ? setInvalidCred(true) : router.push('/');
   }
 
   useEffect(()=>{

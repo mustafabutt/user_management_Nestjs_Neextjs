@@ -3,9 +3,8 @@ import {constants} from "../constants";
 import { setCookie, getCookie, deleteCookie } from 'cookies-next';
 
 export const UserService = () => {
-
     const userSubject = new BehaviorSubject(localStorage.getItem('user'))
-
+    
     const isUserLoggedIn = () => {
         const user = JSON.parse(userSubject.value);
         if(user != null && user.status == 201)
@@ -15,7 +14,8 @@ export const UserService = () => {
 
     const isAdmin = () => {
         const user = JSON.parse(userSubject.value);
-        if(user.role == "admin")
+        
+        if(user && user.role == "admin")
             return true;
         else return false;
     }
@@ -39,7 +39,7 @@ export const UserService = () => {
                 status:201,
                 ...response
             }
-            console.log(userObject.access_token)
+     
             setCookie('access_token', userObject.access_token,{ maxAge: 60 * 60 * 24 });
             delete userObject.access_token
             localStorage.setItem('user', JSON.stringify(userObject))
@@ -60,7 +60,7 @@ export const UserService = () => {
                 Authorization: constants.BEARER+token,
             },
         });
-        debugger
+        
         if( res.status == 201 ) {
          let response = await res.json();
          let userObject = {
@@ -117,7 +117,6 @@ export const UserService = () => {
 
         let formData = new FormData();
         formData.set("testFile", image.file)
-        
         try{
             return await fetch("https://azwxvlbjk7.execute-api.us-east-1.amazonaws.com/dev/file/upload", {
             method: 'POST',
@@ -144,7 +143,6 @@ export const UserService = () => {
         return JSON.parse(localStorage.getItem('user'));
     }
     const getAccessToken = () => {
-        
         return getCookie("access_token")
     }
     const getUsers = async () => {

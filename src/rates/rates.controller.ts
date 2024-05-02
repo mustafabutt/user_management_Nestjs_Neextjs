@@ -126,60 +126,10 @@ export class RatesController {
   async calculateItemPrice(@Res() response, @Body() item: PriceCalculation) {
     try {
         console.log(item)
-         
-        let shippingMode = item.shipping.split("(")[1].split(")")[0]+"Rate";
-        let shippingCompany = item.shipping.split("(")[0];
-        let profitMargin = item.profit_margin.split("%")[0]
-        console.log(shippingCompany + shippingMode);
-        let avg, fabricPrice, fabricPriceInGrams, shippinginPerItem, totalPrice, makery, dollarPrice, printingBaseRate, embBaseRate, printRate, embRate;
-
-        const singleMaterial = await this.ratesService.findSingleMaterial(item.fabric);
-        const singleItem = await this.ratesService.findSingleItem(item.item);
-
-        const shipping:any = await this.ratesService.findSingleShipping(shippingCompany);
-
-        console.log("shipping per KG "+shipping.rate[0][shippingMode])
-
-        singleItem.fabricAverageAndMakery.filter((obj:any) =>{
-          if(obj.fabric == item.fabric){
-            avg = obj.quantity;
-            makery =  obj.makery
-          }
-        })
-
-        fabricPriceInGrams = 1000/avg
-        fabricPrice = Number(singleMaterial.rate)/fabricPriceInGrams;
-        console.log("fabric price is "+fabricPrice);
-        
-        shippinginPerItem = Number(shipping.rate[0][shippingMode])/fabricPriceInGrams;
-        console.log("shipping per item "+shippinginPerItem);
-
-        if(item.decoration.value == "Printing"){
-          const singlePrinting = await this.ratesService.findSinglePrinting(item.decoration.type);
-          printingBaseRate = singlePrinting.base_rate;
-          let size = Number(item.decoration.size.width)*Number(item.decoration.size.height);
-          if(size >= 1)
-            printRate = size*5+printingBaseRate
-            totalPrice = Number(shippinginPerItem)+Number(fabricPrice)+Number(makery)+printRate;
-        }
-        if(item.decoration.value == "Embroidery"){
-          const singleEmb = await this.ratesService.findSingleEmbroidery(item.decoration.type);
-          embBaseRate = singleEmb.base_rate;
-          let size = Number(item.decoration.size.width)*Number(item.decoration.size.height);
-          if(size >= 1)
-            embRate = size*5+embBaseRate
-          totalPrice = Number(shippinginPerItem)+Number(fabricPrice)+Number(makery)+embRate;
-        }
-
-
-
-        dollarPrice = Number(profitMargin)/Number(100)*Number(totalPrice)+totalPrice;
-        dollarPrice = Math.round(dollarPrice/item.usdRate*100)/100;
-        console.log("total price is "+totalPrice);
-        console.log("dollar price is "+ dollarPrice);
+        let resp:any = await this.ratesService.calculatePrice(item);
         return response.status(HttpStatus.OK).json({
-          "totalPrice":totalPrice,
-          "dollarPrice": "$"+dollarPrice
+          "totalPrice":resp.totalPrice,
+          "dollarPrice": "$"+resp.dollarPrice
         });  
     } catch (err) {
       this.exceptions.generateGeneralException(err);

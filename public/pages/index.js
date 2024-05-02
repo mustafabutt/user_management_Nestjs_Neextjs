@@ -2,6 +2,8 @@ import Head from 'next/head';
 import Layout, { siteTitle } from '@/components/layout';
 import utilStyles from '@/styles/utils.module.css';
 import { PriceGenerator } from '@/components/PriceGenerator';
+import { UserService } from "@/services/user.service";
+import { useRouter } from 'next/router';
 
 export async function getStaticProps(context) {
 
@@ -11,6 +13,10 @@ export async function getStaticProps(context) {
 }
 
 const Home = ({}) => {
+  const router = useRouter();
+
+  if (typeof window !== 'undefined' && !UserService().isUserLoggedIn())
+  router.push('/login');
 
   return (
     <Layout home>

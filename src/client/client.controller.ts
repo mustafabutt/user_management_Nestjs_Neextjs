@@ -2,6 +2,7 @@ import { ClientService } from './client.service';
 import { Exceptions } from 'src/exceptions/exceptions';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Client } from '../schemas/clients';
+var fs = require("fs");
 import {
     Body,
     Controller,
@@ -24,8 +25,13 @@ export class ClientController {
       @Post("/")
       async createClient(@Res() response, @Body() client: Client) {
         try {
-     
+          
           const newClient = await this.clientService.createClient(client);
+          var dir = './invoices/'+client.email;
+
+          if (!fs.existsSync(dir)){
+              fs.mkdirSync(dir);
+          }
           return response.status(HttpStatus.CREATED).json({
             newClient,
           });

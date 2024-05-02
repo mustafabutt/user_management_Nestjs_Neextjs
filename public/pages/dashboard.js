@@ -10,7 +10,6 @@ import {UserList} from "@/components/users/userList";
 import { CreateUser } from '@/components/users/createUser';
 import { ViewUser } from '@/components/users/viewUser';
 import {useRouter} from "next/router";
-import Link from 'next/link';
 import authMiddleware from './middleware';
 import { PriceGenerator } from '@/components/PriceGenerator';
 
@@ -91,29 +90,6 @@ const Admin = () => {
     createRateView ? setCreateInvoiceView(false) : setCreateInvoiceView(true);
     setShowCreateInvoiceButton(false);
   }
-  function pullDataFromInvoice(){
-
-    setCreateInvoiceView(false);
-    setInvoiceCreated(true);
-    setTimeout(()=>{
-      setInvoiceCreated(false);
-    },3000);
-    setShowCreateInvoiceButton(true);
-
-  }
-
-  function pullInvoiceListData(user){
-    setCurrentEmail(user);
-    setShowCreateInvoiceButton(false);
-    setInvoiceView(true);
-  }
-
-  function pullDataFromInvoiceView(){
-    setTimeout(()=>{
-      setInvoiceView(false);
-    },2000)
-    setShowCreateInvoiceButton(true);
-  }
 
 
   return (
@@ -123,61 +99,29 @@ const Admin = () => {
       </Head>
       <section className={utilStyles.headingMd}>
         <h3>Admin Dashboard</h3>
-        
-        {/* <div className="modal modal-backdrop" id="userModal" role="dialog" style={{overflow:"auto"}}>
-          <div className="modal-dialog">
-            <div className="modal-content" style={{  width: "fit-content" }} >
-              <div className="modal-header">
-                <h4 className="modal-title">
-                  <span >Users</span>
-                </h4>
-                {userCreated ? (
-              <Alert type="success">
-                <span>New user created.</span>
-              </Alert>
-            ) : null}
-              </div>
-              <div className="modal-body">
-
-                  <div className={loginStyles.container}>
-                    {createUserView ? <CreateUser  invokeParent={pullDataFromUser} />: userView ? <ViewUser invokeParent={pullDataFromUserView} email={currentEmail}/> :<UserList view = {"users"} invokeTopParent = {pullUSerListData} />}
-                  </div>
-
-              </div>
-              <div className="modal-footer">
-                <span>
-                  <button type="button" onClick={(value) => closeModal(value="users")}  className="w-49 bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded">Close</button>
-                  {showCreateUserButton ? <span><button type="button" onClick={createUser}  className="w-49 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">Create User</button></span> : null }
-             
-                </span>
-              </div>
-            </div>
-          </div>
-        </div> */}
-
 
         <div id="userModal"  aria-hidden="true" className=" flex items-center justify-center h-screen modal modal-backdrop" style={{display:"none"}}  >
-          <div class="relative overflow-auto max-h-full">
+          <div className="relative overflow-auto max-h-full">
               {/* <!-- Modal content --> */}
-              <div class="relative bg-white rounded-lg shadow dark:bg-gray-700" style={{  width: "fit-content" }}>
+              <div className="relative bg-white rounded-lg shadow dark:bg-gray-700" style={{  width: "fit-content" }}>
                   {/* <!-- Modal header --> */}
-                  <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                      <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                  <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                      <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
                           Users
                       </h3>
-                      <button className="hover:bg-red-300"  onClick={(value) => closeModal(value="users")}  type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="default-modal">
-                          <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                      <button  onClick={(value) => closeModal(value="users")}  type="button" className=" hover:bg-red-300 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="default-modal">
+                          <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                              <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                           </svg>
-                          <span class="sr-only">Close modal</span>
+                          <span className="sr-only">Close modal</span>
                       </button>
                   </div>
                   {/* <!-- Modal body --> */}
-                  <div class="p-4 md:p-5 space-y-4" >
+                  <div className="p-4 md:p-5 space-y-4" >
                     {createUserView ? <CreateUser  invokeParent={pullDataFromUser} />: userView ? <ViewUser invokeParent={pullDataFromUserView} email={currentEmail}/> :<UserList view = {"users"} invokeTopParent = {pullUSerListData} />}  
                   </div>
                   {/* <!-- Modal footer --> */}
-                  <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+                  <div className="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
                       {showCreateUserButton ? <span><button type="button" onClick={createUser}  className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Create User</button></span> : null }
                   </div>
               </div>
@@ -223,13 +167,13 @@ const Admin = () => {
               
           </div> */}
 
-          <div class="items-center justify-center p-10 sm:ml-64 top-10 ">
-            <div class="p-4">  
-                <div class="grid grid-cols-2 gap-4">
+          <div className="items-center justify-center p-10 sm:ml-64 top-10 ">
+            <div className="p-4">  
+                <div className="grid grid-cols-2 gap-4">
                   <button onClick={(value) => showUsersModal(value="users")} className="bg-indigo-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">
-                    <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
+                    <div className="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
                     <img src={"/images/user.png"}  width={50} height={50} /> 
-                     <p class="text-2xl text-gray-400 dark:text-gray-500"> Users</p>
+                     <p className="text-2xl text-gray-400 dark:text-gray-500"> Users</p>
                     </div>
                   </button>
                 </div>

@@ -1,9 +1,9 @@
+import FileSaver from 'file-saver';
 import {constants} from "../constants";
 import {  getCookie } from 'cookies-next';
 
 export const OrderService = () => {
    
-
 
     const createClient = async (item) => {
         const token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token') : null;
@@ -94,6 +94,11 @@ export const OrderService = () => {
         let data = JSON.parse(localStorage.getItem('clients-list')).data.find(o => o.email == email);
         return data;
     }
+    const getCurrentOrder =  (id) =>{
+        
+        let data = JSON.parse(localStorage.getItem('orders-list')).data.find(o => o._id == id);
+        return data;
+    }
     const editClient = async (item) => {
         
         item.action = "edit client"
@@ -107,6 +112,20 @@ export const OrderService = () => {
             },
         });
     }
+    const editOrder = async (order) => {
+        
+        order.action = "edit order"
+        const token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token'): null;
+        return await fetch(constants.ORDER, {
+            method: 'PUT',
+            body: JSON.stringify(order),
+            headers: {
+                'Content-Type': constants.CONTENT_TYPE,
+                Authorization: constants.BEARER+token
+            },
+        });
+    }
+
     const DeleteClient = async (item) => {
         item.action = "delete client"
         const token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token'): null;
@@ -119,6 +138,71 @@ export const OrderService = () => {
             },
         });
     }
+    const DeleteOrder = async (order) => {
+        order.action = "delete order"
+        const token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token'): null;
+        return await fetch(constants.ORDER, {
+            method: 'Put',
+            body: JSON.stringify(order),
+            headers: {
+                'Content-Type': constants.CONTENT_TYPE,
+                Authorization: constants.BEARER+token
+            },
+        });
+    }
+    const FetchInvoices = async (email) => {
+        const token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token'): null;
+        return await fetch(constants.ORDER_INVOICES, {
+            method: 'Post',
+            body: JSON.stringify(email),
+            headers: {
+                'Content-Type': constants.CONTENT_TYPE,
+                Authorization: constants.BEARER+token
+            },
+        });
+    }
+    const DeleteInvoice = async (obj) => {
+        
+        const token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token'): null;
+        return await fetch(constants.DELETE_INVOICE, {
+            method: 'Post',
+            body:  JSON.stringify(obj),
+            headers: {
+                'Content-Type': constants.CONTENT_TYPE,
+                Authorization: constants.BEARER+token
+            },
+        });
+    }
+    const GenerateInvoice = async (obj) => {
+        
+        const token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token'): null;
+        return await fetch(constants.GENERATE_INVOICE, {
+            method: 'Post',
+            body:  JSON.stringify(obj.tempOder),
+            headers: {
+                'Content-Type': constants.CONTENT_TYPE,
+                Authorization: constants.BEARER+token
+            },
+        });
+    }
+    const DownloadInvoice = async (obj) => {
+        const token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token'): null;
+        return await fetch("http://localhost:3001/orders/invoice/download/file/?file="+obj.file+"&email="+obj.email, {
+            method: 'Post',
+            body:  JSON.stringify(obj),
+            headers: {
+                'Content-Type': 'application/octet-stream',
+                Authorization: constants.BEARER+token,
+        
+            },
+        }).then(function(response) {
+            return response.blob();
+          }).then(function(blob) {
+            
+            FileSaver.saveAs(blob, obj.file);
+          });
+    }
+    
     
     return {
         getClientList,
@@ -129,7 +213,14 @@ export const OrderService = () => {
         DeleteClient,
         getOrderList,
         createOrder,
-        getLocalOrderList
+        getLocalOrderList,
+        getCurrentOrder,
+        editOrder,
+        DeleteOrder,
+        FetchInvoices,
+        DeleteInvoice,
+        DownloadInvoice,
+        GenerateInvoice
     }
 }
 

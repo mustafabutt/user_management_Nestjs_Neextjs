@@ -59,6 +59,7 @@ const Rates = () => {
   const router = useRouter();
 
   useEffect(()=>{
+    
     authMiddleware(router)
   },[])
 
@@ -194,7 +195,6 @@ const Rates = () => {
   }
 
   function pullDataFromPrinting(){
-    debugger
     setCreatePrintingView(false);
     setPrintingCreated(true);
     setTimeout(()=>{
@@ -234,7 +234,6 @@ const Rates = () => {
     setTimeout(()=>{
       setPrintingView(false);
     },2000)
-    debugger
     setShowCreatePrintingButton(true);
   }
 
@@ -289,12 +288,12 @@ const Rates = () => {
         <h3>Rates</h3>
 
         <div id="fabricModal"  aria-hidden="true" className="flex items-center justify-center h-screen modal-backdrop" style={{display:"none"}}   >
-          <div class="relative p-6 min-h-full max-h-full overflow-auto" >
+          <div className="relative p-6 min-h-full max-h-full overflow-auto" >
               {/* <!-- Modal content --> */}
-              <div class="relative bg-white rounded-lg shadow dark:bg-gray-700 " style={{  width: "fit-content"}} >
+              <div className="relative bg-white rounded-lg shadow dark:bg-gray-700 " style={{  width: "fit-content"}} >
                   {/* <!-- Modal header --> */}
-                  <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 overflow-inherit">
-                      <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                  <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 overflow-inherit">
+                      <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
                       Fabric
                       </h3>
                       {fabricCreated ? (
@@ -302,11 +301,11 @@ const Rates = () => {
                           <span>New fabric created.</span>
                         </Alert>
                       ) : null}
-                      <button onClick={(value) => closeModal(value="fabric")}  type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="default-modal">
-                          <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                      <button onClick={(value) => closeModal(value="fabric")}  type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="default-modal">
+                          <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                              <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                           </svg>
-                          <span class="sr-only">Close modal</span>
+                          <span className="sr-only">Close modal</span>
                       </button>
                   </div>
                   {/* <!-- Modal body --> */}
@@ -314,7 +313,7 @@ const Rates = () => {
                   {createFabricView ? <CreateFabric  invokeParent={pullDataFromFabric} />: fabricView ? <ViewFabric invokeParent={pullDataFromFabricView} material={currentMaterial}/> :<FabricList invokeTopParent = {pullFabricListData} />}
                   </div>
                   {/* <!-- Modal footer --> */}
-                  <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600 ">
+                  <div className="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600 ">
                   {showCreateFabricButton ? <span><button type="button" onClick={createFabric}   className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add New Fabric</button></span> : null }
                   </div>
               </div>
@@ -324,12 +323,12 @@ const Rates = () => {
 
 
         <div id="itemModal"  aria-hidden="true" className="flex items-center justify-center h-screen modal-backdrop" style={{display:"none"}}   >
-          <div class="relative p-6 min-h-full max-h-full overflow-auto" >
+          <div className="relative p-6 min-h-full max-h-full overflow-auto" >
               {/* <!-- Modal content --> */}
-              <div class="relative bg-white rounded-lg shadow dark:bg-gray-700 " style={{  width: "fit-content"}} >
+              <div className="relative bg-white rounded-lg shadow dark:bg-gray-700 " style={{  width: "fit-content"}} >
                   {/* <!-- Modal header --> */}
-                  <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 overflow-inherit">
-                      <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                  <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 overflow-inherit">
+                      <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
                           Items
                       </h3>
                       {itemCreated ? (
@@ -337,11 +336,11 @@ const Rates = () => {
                           <span>New item created.</span>
                         </Alert>
                       ) : null}
-                      <button onClick={(value) => closeModal(value="item")}  type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="default-modal">
-                          <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                      <button onClick={(value) => closeModal(value="item")}  type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="default-modal">
+                          <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                              <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                           </svg>
-                          <span class="sr-only">Close modal</span>
+                          <span className="sr-only">Close modal</span>
                       </button>
                   </div>
                   {/* <!-- Modal body --> */}
@@ -349,7 +348,7 @@ const Rates = () => {
                     {createItemView ? <CreateItem invokeParent={pullDataFromItem} />: itemView ? <ViewItem invokeParent={pullDataFromItemView} item={currentItem}/> :<ItemList  invokeTopParent = {pullItemListData} />}
                   </div>
                   {/* <!-- Modal footer --> */}
-                  <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600 ">
+                  <div className="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600 ">
                   {showCreateItemButton ? <span><button type="button" onClick={createItem}  className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Create Item</button></span> : null }
                   </div>
               </div>
@@ -357,12 +356,12 @@ const Rates = () => {
         </div>
 
         <div id="printingModal"  aria-hidden="true" className="flex items-center justify-center h-screen modal-backdrop" style={{display:"none"}}   >
-          <div class="relative p-6 min-h-full max-h-full overflow-auto" >
+          <div className="relative p-6 min-h-full max-h-full overflow-auto" >
               {/* <!-- Modal content --> */}
-              <div class="relative bg-white rounded-lg shadow dark:bg-gray-700 " style={{  width: "fit-content"}} >
+              <div className="relative bg-white rounded-lg shadow dark:bg-gray-700 " style={{  width: "fit-content"}} >
                   {/* <!-- Modal header --> */}
-                  <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 overflow-inherit">
-                      <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                  <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 overflow-inherit">
+                      <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
                           Printing
                       </h3>
                       {printingCreated ? (
@@ -370,11 +369,11 @@ const Rates = () => {
                           <span>New printing created.</span>
                         </Alert>
                       ) : null}
-                      <button onClick={(value) => closeModal(value="printing")}  type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="default-modal">
-                          <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                      <button onClick={(value) => closeModal(value="printing")}  type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="default-modal">
+                          <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                              <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                           </svg>
-                          <span class="sr-only">Close modal</span>
+                          <span className="sr-only">Close modal</span>
                       </button>
                   </div>
                   {/* <!-- Modal body --> */}
@@ -382,7 +381,7 @@ const Rates = () => {
                     {createPrintingView ? <CreatePrinting invokeParent={pullDataFromPrinting} />: printingView ? <ViewPrinting invokeParent={pullDataFromPrintingView} item={currentPrinting}/> :<PrintingList  invokeTopParent = {pullPrintingListData} />}
                   </div>
                   {/* <!-- Modal footer --> */}
-                  <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600 ">
+                  <div className="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600 ">
                   {showCreatePrintingButton ? <span><button type="button" onClick={createPrinting}  className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Create Printing</button></span> : null }
                   </div>
               </div>
@@ -390,12 +389,12 @@ const Rates = () => {
         </div>
 
         <div id="embroideryModal"  aria-hidden="true" className="flex items-center justify-center h-screen modal-backdrop" style={{display:"none"}}   >
-          <div class="relative p-6 min-h-full max-h-full overflow-auto" >
+          <div className="relative p-6 min-h-full max-h-full overflow-auto" >
               {/* <!-- Modal content --> */}
-              <div class="relative bg-white rounded-lg shadow dark:bg-gray-700 " style={{  width: "fit-content"}} >
+              <div className="relative bg-white rounded-lg shadow dark:bg-gray-700 " style={{  width: "fit-content"}} >
                   {/* <!-- Modal header --> */}
-                  <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 overflow-inherit">
-                      <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                  <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 overflow-inherit">
+                      <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
                           Embroidery
                       </h3>
                       {embroideryCreated ? (
@@ -403,11 +402,11 @@ const Rates = () => {
                           <span>New embroidery created.</span>
                         </Alert>
                       ) : null}
-                      <button onClick={(value) => closeModal(value="embroidery")}  type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="default-modal">
-                          <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                      <button onClick={(value) => closeModal(value="embroidery")}  type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="default-modal">
+                          <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                              <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                           </svg>
-                          <span class="sr-only">Close modal</span>
+                          <span className="sr-only">Close modal</span>
                       </button>
                   </div>
                   {/* <!-- Modal body --> */}
@@ -415,7 +414,7 @@ const Rates = () => {
                     {createEmbroideryView ? <CreateEmbroidery invokeParent={pullDataFromEmbroidery} />: embroideryView ? <ViewEmbroidery invokeParent={pullDataFromEmbroideryView} item={currentEmbroidery}/> :<EmbroideryList  invokeTopParent = {pullEmbroideryListData} />}
                   </div>
                   {/* <!-- Modal footer --> */}
-                  <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600 ">
+                  <div className="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600 ">
                   {showCreateEmbroideryButton ? <span><button type="button" onClick={createEmbroidery}  className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Create Embroidery</button></span> : null }
                   </div>
               </div>
@@ -424,12 +423,12 @@ const Rates = () => {
 
 
         <div id="shippingModal"  aria-hidden="true" className="flex items-center justify-center h-screen modal-backdrop" style={{display:"none"}}   >
-          <div class="relative p-6 min-h-full max-h-full overflow-auto" >
+          <div className="relative p-6 min-h-full max-h-full overflow-auto" >
               {/* <!-- Modal content --> */}
-              <div class="relative bg-white rounded-lg shadow dark:bg-gray-700 " style={{  width: "fit-content"}} >
+              <div className="relative bg-white rounded-lg shadow dark:bg-gray-700 " style={{  width: "fit-content"}} >
                   {/* <!-- Modal header --> */}
-                  <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 overflow-inherit">
-                      <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                  <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 overflow-inherit">
+                      <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
                       Shipping
                       </h3>
                       {shippingCreated ? (
@@ -437,11 +436,11 @@ const Rates = () => {
                           <span>New shipping created.</span>
                         </Alert>
                       ) : null}
-                      <button onClick={(value) => closeModal(value="shipping")}  type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="default-modal">
-                          <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                      <button onClick={(value) => closeModal(value="shipping")}  type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="default-modal">
+                          <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                              <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                           </svg>
-                          <span class="sr-only">Close modal</span>
+                          <span className="sr-only">Close modal</span>
                       </button>
                   </div>
                   {/* <!-- Modal body --> */}
@@ -449,7 +448,7 @@ const Rates = () => {
                   {createShippingView ? <CreateShipping invokeParent={pullDataFromShipping} />: shippingView ? <ViewShipping invokeParent={pullDataFromShippingView} item={currentShipping}/> :<ShippingList  invokeTopParent = {pullShippingListData} />}
                   </div>
                   {/* <!-- Modal footer --> */}
-                  <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600 ">
+                  <div className="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600 ">
                   {showCreateShippingButton ? <span><button type="button" onClick={createShipping}  className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Create Shipping</button></span> : null }
                   </div>
               </div>
@@ -457,32 +456,32 @@ const Rates = () => {
         </div>
 
 
-        <div class="items-center justify-center p-10 sm:ml-64 top-10 ">
-          <div class="p-4">  
-              <div class="grid grid-cols-2 gap-4">
+        <div className="items-center justify-center p-10 sm:ml-64 top-10 ">
+          <div className="p-4">  
+              <div className="grid grid-cols-2 gap-4">
                 <button onClick={(value) => showModal(value="fabric")} className="bg-indigo-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">
-                  <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-                      <p class="text-2xl text-gray-400 dark:text-gray-500">Fabric</p>
+                  <div className="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
+                      <p className="text-2xl text-gray-400 dark:text-gray-500">Fabric</p>
                   </div>
                 </button>
                 <button onClick={(value) => showModal(value="item")}  className=" bg-blue-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">
-                  <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-                      <p class="text-2xl text-gray-400 dark:text-gray-500">Items</p>
+                  <div className="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
+                      <p className="text-2xl text-gray-400 dark:text-gray-500">Items</p>
                   </div>
                 </button>
                 <button onClick={(value) => showModal(value="printing")}  className="bg-pink-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">
-                  <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-                      <p class="text-2xl text-gray-400 dark:text-gray-500">Printing</p>
+                  <div className="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
+                      <p className="text-2xl text-gray-400 dark:text-gray-500">Printing</p>
                   </div>
                 </button>
                 <button onClick={(value) => showModal(value="embroidery")}  className="bg-yellow-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">
-                  <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-                      <p class="text-2xl text-gray-400 dark:text-gray-500">Embroidery</p>
+                  <div className="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
+                      <p className="text-2xl text-gray-400 dark:text-gray-500">Embroidery</p>
                   </div>
                 </button>
                 <button onClick={(value) => showModal(value="shipping")}  className="bg-purple-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">
-                  <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-                      <p class="text-2xl text-gray-400 dark:text-gray-500">Shipping</p>
+                  <div className="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
+                      <p className="text-2xl text-gray-400 dark:text-gray-500">Shipping</p>
                   </div>
                 </button>
               </div>

@@ -7,12 +7,14 @@ export const UserList = (props) => {
     const [users, setUsers] = useState(null);
 
     useEffect(()=>{
-        props.view
         
         UserService().getUsers().then((data)=>{
             
-            data.users = data.data.filter(function(el) { return el.email != UserService().getCurrentUser().email }); 
-            setUsers(data)
+            if(!data && data.status != 409){
+                data.users = data.data.filter(function(el) { return el.email != UserService().getCurrentUser().email }); 
+                setUsers(data)
+            }
+          
         });
     },[])
 

@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
-import loginStyles from '../../../styles/login.module.css';
-import {OrderService} from "../../../services/ordersManagement.service";
-import Alert from '../../../components/alert';
+import loginStyles from "@/styles/login.module.css"
+import {OrderService} from "@/services/ordersManagement.service"
+import Alert from '@/components/alert';
 import $ from 'jquery';
 
 export const ViewClient = (props) => {

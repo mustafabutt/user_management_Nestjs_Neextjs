@@ -29,7 +29,6 @@ export const RatesService = () => {
     }
     const createPrinting = async (printing) => {
         const token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token') : null;
-        debugger
         return await fetch(constants.PRINTING, {
             method: 'POST',
             body: JSON.stringify(printing),
@@ -102,7 +101,7 @@ export const RatesService = () => {
     }
     
     const getShippingList = async (access_token) => {
-        
+    
         let token;
         if(!access_token)
             token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token') : null;
@@ -166,7 +165,6 @@ export const RatesService = () => {
     }
 
     const getEmbroideryList = async (access_token) => {
-        
         let token;
         if(!access_token)
             token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token') : null;
@@ -198,7 +196,9 @@ export const RatesService = () => {
     }
 
     const getItemList = async () => {
-        debugger
+        
+        console.log(getCookie('access_token'))
+        console.log(JSON.parse(localStorage.getItem('user')) )
         const token = await JSON.parse(localStorage.getItem('user')) ? getCookie('access_token'): null;
         const res = await fetch(constants.ITEM, {
             method: 'GET',
@@ -278,7 +278,6 @@ export const RatesService = () => {
     }
     const editPrinting = async (printing) => {
         printing.action = "edit printing"
-        debugger
         const token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token') : null;
         return await fetch(constants.PRINTING+"/"+printing.name, {
             method: 'PUT',
@@ -291,7 +290,6 @@ export const RatesService = () => {
     }
     const editEmbroidery = async (embroidery) => {
         embroidery.action = "edit embroidery"
-        debugger
         const token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token') : null;
         return await fetch(constants.EMBROIDERY+"/"+embroidery.name, {
             method: 'PUT',
