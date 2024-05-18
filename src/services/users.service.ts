@@ -1,10 +1,9 @@
-
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User, UserDocument } from '../schemas/users.schema';
 import { Token, TokenDocument } from '../schemas/token.schema';
-
+const fs = require('node:fs');
 
 @Injectable()
 export class UsersService {
@@ -39,5 +38,12 @@ export class UsersService {
   async logout(token: Token): Promise<any> {
     const newToken = new this.tokenModel({"token": token});
     return await newToken.save();
+  }
+  async saveAvatar(file,email): Promise<any> {
+    try {
+      return await fs.writeFileSync('./metaData/'+email+".jpg", file.buffer);
+    } catch (err) {
+      return err;
+    }
   }
 }

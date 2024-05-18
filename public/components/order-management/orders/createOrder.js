@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {OrderService} from "../../../services/ordersManagement.service";
+import {OrderService} from "@/services/ordersManagement.service";
 import { PriceGenerator } from '@/components/PriceGenerator';
 import { OrderList } from "./orderList";
 
@@ -19,11 +19,9 @@ export const CreateOrder = (props) => {
   },[])
 
   function getOrderData(obj, metaData){
-    debugger
     setMetaData(metaData);
     ordersArray.push({details:obj});
     if(props.parent == "orders"){ 
-      debugger
       orders.data[0].details.push(obj[0])
       orders=orders;
       setKey({ key: Math.random() });

@@ -187,7 +187,7 @@ export const OrderService = () => {
     }
     const DownloadInvoice = async (obj) => {
         const token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token'): null;
-        return await fetch("http://localhost:3001/orders/invoice/download/file/?file="+obj.file+"&email="+obj.email, {
+        return await fetch(constants.DOWNLOAD_INVOICE+obj.file+"&email="+obj.email, {
             method: 'Post',
             body:  JSON.stringify(obj),
             headers: {
@@ -198,7 +198,6 @@ export const OrderService = () => {
         }).then(function(response) {
             return response.blob();
           }).then(function(blob) {
-            
             FileSaver.saveAs(blob, obj.file);
           });
     }

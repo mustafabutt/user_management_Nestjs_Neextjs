@@ -27,7 +27,7 @@ export declare class RatesService {
     deleteEmbroidery(id: any): Promise<any>;
     createItem(Item: Item): Promise<Item>;
     updateItem(id: any, item: Item): Promise<Item>;
-    readAllShipping(): Promise<Shipping[]>;
+    readAllShipping(skip: any, limit: any): Promise<any>;
     readAllPrinting(): Promise<Print[]>;
     readAllEmbroidery(): Promise<Embroidery[]>;
     createShipping(Shipping: Shipping): Promise<Shipping>;

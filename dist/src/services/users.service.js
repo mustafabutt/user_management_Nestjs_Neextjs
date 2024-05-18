@@ -18,6 +18,7 @@ const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
 const users_schema_1 = require("../schemas/users.schema");
 const token_schema_1 = require("../schemas/token.schema");
+const fs = require('node:fs');
 let UsersService = class UsersService {
     constructor(userModel, tokenModel) {
         this.userModel = userModel;
@@ -45,6 +46,14 @@ let UsersService = class UsersService {
     async logout(token) {
         const newToken = new this.tokenModel({ "token": token });
         return await newToken.save();
+    }
+    async saveAvatar(file, email) {
+        try {
+            return await fs.writeFileSync('./metaData/' + email + ".jpg", file.buffer);
+        }
+        catch (err) {
+            return err;
+        }
     }
 };
 UsersService = __decorate([

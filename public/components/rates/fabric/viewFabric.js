@@ -1,10 +1,10 @@
 import {useEffect, useRef, useState} from "react";
-import loginStyles from '../../../styles/login.module.css';
-import {RatesService} from "../../../services/rates.service";
-import Alert from '../../../components/alert';
-import $ from 'jquery';
+import loginStyles from '@/styles/login.module.css';
+import {RatesService} from "@/services/rates.service";
+import Alert from '@/components/alert';
 
 export const ViewFabric = (props) => {
+    const [deleteModel, setDeleteModel] = useState(false);
     const [currentFabric, setCurrentFabric] = useState(null);
     const [fabricUpdated, setFabricUpdated] = useState(null);
     const [fabricDeleted, setFabricDeleted] = useState(null);
@@ -39,10 +39,10 @@ export const ViewFabric = (props) => {
       setFabricRate(e.target.value);
     };
     const showModel=()=>{
-      $("#deleteModal").show();
+      setDeleteModel(true);
     }
     const hideModel=()=>{
-      $("#deleteModal").hide();
+      setDeleteModel(false);
     }
     async function updateFabric(e) {
       e.preventDefault();
@@ -71,9 +71,9 @@ export const ViewFabric = (props) => {
   return (
   
     <div >
-
-      <div id="deleteModal" tabindex="-1" class=" flex items-center justify-center h-screen modal-backdrop" style={{display:"none"}}>
-            
+      {deleteModel?
+        <div tabindex="-1" class=" flex items-center justify-center h-screen modal-backdrop" >
+                  
             <div class="relative max-w-md ">
               
                 <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
@@ -111,6 +111,8 @@ export const ViewFabric = (props) => {
                 </div>
             </div>
         </div>
+      :null}
+      
 
 
         <img onClick={showModel} style={{cursor: 'grab'}}  title="Delete this user" src="/images/delete.png" className={loginStyles.deleteClass} />

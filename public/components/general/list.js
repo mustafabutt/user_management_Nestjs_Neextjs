@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import globalStyle from '../../styles/utils.module.css';
+import globalStyle from '@/styles/utils.module.css';
 
 export const List = (props) => {
     const [userData, setUserData] = useState(null);

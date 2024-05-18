@@ -6,7 +6,6 @@ const Alert = dynamic(()=> import('@/components/alert'));
 const Layout = dynamic(()=> import("@/components/layout"));
 import utilStyles from '@/styles/utils.module.css';
 import authMiddleware from './middleware';
-import $ from 'jquery';
 import {FabricList} from "@/components/rates/fabric/fabricList";
 import { CreateFabric } from '@/components/rates/fabric/createFabric';
 import { ViewFabric } from '@/components/rates/fabric/viewFabric';
@@ -25,6 +24,12 @@ import {ViewEmbroidery} from "@/components/rates/embroidery/viewEmbroidery"
 import {CreateEmbroidery} from "@/components/rates/embroidery/createEmbroidery"
 
 const Rates = () => {
+
+  const [shippingModel, setShippingModel] = useState(false);
+  const [fabricModel, setFabricModel] = useState(false);
+  const [itemModel, setItemModel] = useState(false);
+  const [printiModel, setPrintiModel] = useState(false);
+  const [embroideryModel, setEmbroideryModel] = useState(false);
 
   const [createFabricView, setCreateFabricView] = useState(null);
   const [fabricCreated, setFabricCreated] = useState(null);
@@ -67,7 +72,7 @@ const Rates = () => {
     
     if(value == "fabric"){
       if(!createFabricView && !fabricView)
-        $('#fabricModal').hide();
+        setFabricModel(false);
       else {
         setShowCreateFabricButton(true);
         setCreateFabricView(false);
@@ -77,7 +82,7 @@ const Rates = () => {
     if(value == "item"){
       
       if(!createItemView && !itemView)
-        $('#itemModal').hide();
+        setItemModel(false);
       else {
         setShowCreateItemButton(true);
         setCreateItemView(false);
@@ -87,7 +92,7 @@ const Rates = () => {
     if(value == "shipping"){
       
       if(!createShippingView && !shippingView)
-        $('#shippingModal').hide();
+        setShippingModel(false);
       else {
         setShowCreateShippingButton(true);
         setCreateShippingView(false);
@@ -97,7 +102,7 @@ const Rates = () => {
     if(value == "printing"){
       
       if(!createPrintingView && !printingView)
-        $('#printingModal').hide();
+        setPrintiModel(false);
       else {
         setShowCreatePrintingButton(true);
         setCreatePrintingView(false);
@@ -107,7 +112,7 @@ const Rates = () => {
     if(value == "embroidery"){
       
       if(!createEmbroideryView && !embroideryView)
-        $('#embroideryModal').hide();
+        setEmbroideryModel(false);
       else {
         setShowCreateEmbroideryButton(true);
         setCreateEmbroideryView(false);
@@ -117,15 +122,16 @@ const Rates = () => {
   };
   const showModal = (value) => {
     if(value == "fabric")
-      $('#fabricModal').show();
+      setFabricModel(true)
     if(value == "item")
-      $('#itemModal').show();
-    if(value == "shipping")
-      $('#shippingModal').show();
+      setItemModel(true);
+    if(value == "shipping"){
+      setShippingModel(true);
+    }
     if(value == "printing")
-      $('#printingModal').show();
+      setPrintiModel(true);
     if(value == "embroidery")
-      $('#embroideryModal').show();
+      setEmbroideryModel(true);
   }
 
   function createFabric(e) {
@@ -287,7 +293,8 @@ const Rates = () => {
       <section className={utilStyles.headingMd}>
         <h3>Rates</h3>
 
-        <div id="fabricModal"  aria-hidden="true" className="flex items-center justify-center h-screen modal-backdrop" style={{display:"none"}}   >
+        {fabricModel?
+          <div  aria-hidden="true" className="flex items-center justify-center h-screen modal-backdrop"  >
           <div className="relative p-6 min-h-full max-h-full overflow-auto" >
               {/* <!-- Modal content --> */}
               <div className="relative bg-white rounded-lg shadow dark:bg-gray-700 " style={{  width: "fit-content"}} >
@@ -319,10 +326,12 @@ const Rates = () => {
               </div>
           </div>
         </div>
+        :null}
 
 
 
-        <div id="itemModal"  aria-hidden="true" className="flex items-center justify-center h-screen modal-backdrop" style={{display:"none"}}   >
+        {itemModel? 
+          <div  aria-hidden="true" className="flex items-center justify-center h-screen modal-backdrop" >
           <div className="relative p-6 min-h-full max-h-full overflow-auto" >
               {/* <!-- Modal content --> */}
               <div className="relative bg-white rounded-lg shadow dark:bg-gray-700 " style={{  width: "fit-content"}} >
@@ -354,8 +363,10 @@ const Rates = () => {
               </div>
           </div>
         </div>
+        : null}
 
-        <div id="printingModal"  aria-hidden="true" className="flex items-center justify-center h-screen modal-backdrop" style={{display:"none"}}   >
+        {printiModel?
+          <div  aria-hidden="true" className="flex items-center justify-center h-screen modal-backdrop"  >
           <div className="relative p-6 min-h-full max-h-full overflow-auto" >
               {/* <!-- Modal content --> */}
               <div className="relative bg-white rounded-lg shadow dark:bg-gray-700 " style={{  width: "fit-content"}} >
@@ -387,8 +398,10 @@ const Rates = () => {
               </div>
           </div>
         </div>
+        :null}
 
-        <div id="embroideryModal"  aria-hidden="true" className="flex items-center justify-center h-screen modal-backdrop" style={{display:"none"}}   >
+        {embroideryModel?
+          <div  aria-hidden="true" className="flex items-center justify-center h-screen modal-backdrop"  >
           <div className="relative p-6 min-h-full max-h-full overflow-auto" >
               {/* <!-- Modal content --> */}
               <div className="relative bg-white rounded-lg shadow dark:bg-gray-700 " style={{  width: "fit-content"}} >
@@ -420,9 +433,10 @@ const Rates = () => {
               </div>
           </div>
         </div>
+        :null}
 
 
-        <div id="shippingModal"  aria-hidden="true" className="flex items-center justify-center h-screen modal-backdrop" style={{display:"none"}}   >
+        {shippingModel ? <div id="shippingModal"  aria-hidden="true" className="flex items-center justify-center h-screen modal-backdrop"  >
           <div className="relative p-6 min-h-full max-h-full overflow-auto" >
               {/* <!-- Modal content --> */}
               <div className="relative bg-white rounded-lg shadow dark:bg-gray-700 " style={{  width: "fit-content"}} >
@@ -453,7 +467,7 @@ const Rates = () => {
                   </div>
               </div>
           </div>
-        </div>
+        </div>:null}
 
 
         <div className="items-center justify-center p-10 sm:ml-64 top-10 ">
@@ -479,7 +493,7 @@ const Rates = () => {
                       <p className="text-2xl text-gray-400 dark:text-gray-500">Embroidery</p>
                   </div>
                 </button>
-                <button onClick={(value) => showModal(value="shipping")}  className="bg-purple-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">
+                <button onClick={(value) => showModal(value="shipping")} className="bg-purple-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">
                   <div className="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
                       <p className="text-2xl text-gray-400 dark:text-gray-500">Shipping</p>
                   </div>

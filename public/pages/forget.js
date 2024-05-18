@@ -5,7 +5,6 @@ import Head from 'next/head';
 import dynamic from 'next/dynamic'
 const Alert = dynamic(()=> import('@/components/alert'));
 const Layout = dynamic(()=> import("@/components/account/Layout"));
-import $ from 'jquery';
 
 const Forget = () => {
 
@@ -24,7 +23,6 @@ const Forget = () => {
     var res = await UserService().SendEmail(
       email.current.value,
     );
-    res.status == 201 ? $('#myModal').show() : null;
     res.status == 409 ? setUserExists(true) : null;
     res.status == 401 ? setTokenExpired(true) : null;
   }

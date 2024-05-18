@@ -4,10 +4,11 @@ import { UserService } from "@/services/user.service";
 import { OrderService } from "@/services/ordersManagement.service";
 import loginStyles from '@/styles/login.module.css';
 import Alert from '@/components/alert';
-import $ from 'jquery';
 
 export const OrderList = (props) => {
-
+  
+    const [invoiceModel, setInvoiceModel] = useState(null);
+    const [deleteModel, setDeleteModel] = useState(false);
     const [orders, setOrders] = useState(null);
     const [orderDelete, setOrderDelete] = useState(null);
     const [error, setError] = useState(null);
@@ -121,18 +122,18 @@ export const OrderList = (props) => {
       setCurrentEmail(email);
       setInvoiceList(await res.json());
       
-      $("#invoiceModal").show();
+      setInvoiceModel(true);
     }
     const showModel=(id,model)=>{
-      
-      if(model == "#deleteInvoice")
-        currentFile = id
-      else 
-        setOrderId(id)
-      $("deleteInvoice").show();
+      setOrderId(id)
+      setDeleteModel(true)
     }
     const closeModal=(id)=>{
-      $(id).hide();
+      if(id == "#deleteModal")
+        setDeleteModel(false)
+      if(id == "#invoiceModal")
+        setInvoiceModel(false)
+        
     }
     async function deleteOrder(e) {
       e.preventDefault();
@@ -140,13 +141,21 @@ export const OrderList = (props) => {
         _id: orderId
       });
       res.status == 200 ? setOrderDelete(true) : setError(true);
-      setTimeout(()=>{setOrderDelete(false), $("#deleteModal").hide();},2000)
+      setTimeout(()=>{setOrderDelete(false), setDeleteModel(false);},2000)
       if( res.status == 200)
         setOrders(await OrderListData(UserService().getAccessToken()));
     }
 
   if(props.parent == "orders" && !orders)
-    return null 
+      return (<div class="text-center">
+            <div role="status">
+                <svg aria-hidden="true" class="inline w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
+                    <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+                </svg>
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>)
   if(props.parent == "createOrders" ){
       if(!props.list)
         return <p className="p-40">Bucket Empty</p>
@@ -157,120 +166,132 @@ export const OrderList = (props) => {
 
 
   if(props.parent == "orders" && (orders && orders.status != 409) && orders.data.length === 0)
-    return <p>No orders found.</p> 
+    return (<div class="text-center">
+              <div role="status">
+                  <svg aria-hidden="true" class="inline w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
+                      <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+                  </svg>
+                  <span class="sr-only">Loading...</span>
+              </div>
+          </div>)
 
     return (
   
         <div>
           
-
-          <div id="deleteModal" tabIndex="-1" className=" flex items-center justify-center h-screen modal-backdrop" style={{display:"none"}} >
-          
-            <div className="relative max-w-md ">
+          {deleteModel?
+              <div tabIndex="-1" className=" flex items-center justify-center h-screen modal-backdrop" >
               
-                <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                    <button onClick={(value) => closeModal(value="#deleteModal")}  type="button" className="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="popup-modal">
-                        <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                        </svg>
-                        <span className="sr-only">Close modal</span>
-                    </button>
-                    <div className="p-4 md:p-5 text-center">
-                    {orderDelete ? (
-                          <Alert type="success">
-                            <span>Order deleted successfully.</span>
-                          </Alert>
-                    ) : null}
-                    {error ? (
-                          <Alert type="error">
-                            <span>Error occurred! </span>
-                          </Alert>
-                        ) : null}
-                    
-                        <svg className="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-                        </svg>
-                        <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Are you sure you want to delete this order?</h3>
-                        <button onClick={deleteOrder} data-modal-hide="popup-modal" type="button" className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center me-2">
-                            Yes, I'm sure
-                        </button>
-                        <button onClick={(value) => closeModal(value="#deleteModal")}  data-modal-hide="popup-modal" type="button" className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">No, cancel</button>
-                    </div>
-                </div>
-            </div>
-          </div>
-
-        
-
-          <div id="invoiceModal"  aria-hidden="true" className="flex items-center justify-center h-screen modal-backdrop" style={{display:"none"}}   >
-            <div className="relative p-6 min-h-full max-h-full overflow-auto" >
-                {/* <!-- Modal content --> */}
-                <div className="relative bg-white rounded-lg shadow dark:bg-gray-700 " style={{  width: "fit-content"}} >
-                    {/* <!-- Modal header --> */}
-                    <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 overflow-inherit">
-                        <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                            Invoices
-                        </h3>
-                        {invoiceDeleted ? (
-                          <Alert type="success">
-                            <span>Invoice deleted successfully.</span>
-                          </Alert>
-                        ) : null}
-                        <button onClick={(value) => closeModal(value="#invoiceModal")}  type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="default-modal">
+                <div className="relative max-w-md ">
+                  
+                    <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                        <button onClick={(value) => closeModal(value="#deleteModal")}  type="button" className="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="popup-modal">
                             <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                                 <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                             </svg>
                             <span className="sr-only">Close modal</span>
                         </button>
-                    </div>
-                    {/* <!-- Modal body --> */}
-                    <div className={loginStyles.container} >
-
-                    {invoiceList && invoiceList.data.length == 0 ? <button type="button" onClick= {() => generateInvoice()}  className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Generate invoice</button>: 
-                    <table className="table-auto overflow-scroll w-full">
-                      <tbody>
-                    {invoiceList && invoiceList.data.map((invoice, ind) => (
-                      <>
-                        <tr>
-                          <th className="border-solid border-2">Invoices</th>
-                          <th className="border-solid border-2">Actions</th>
-                        </tr>
-                        <tr>
-                            <td className="border-solid border-2 hover:bg-sky-100">{invoice}</td>
-                            <td className="border-solid border-2">
-                            <div className="grid grid-cols-2 gap-2 overflow-auto">
-                            <div onClick= {() => deleteInvoice({invoice})} className="cursor-pointer hover:animate-spin col-span-1 p-0" data-toggle="tooltip" title="Delete this invoice" >
-                              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-trash" viewBox="0 0 16 16">
-                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
-                                <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
-                              </svg>
-                            </div>
-                            
-                            <div className="cursor-pointer hover:animate-spin col-span-1 p-0" data-toggle="tooltip" onClick= {() => saveFile(invoice)}  title="Download this invoices"  >
-                              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="20" fill="currentColor" className="bi bi-download" viewBox="0 0 16 16">
-                                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
-                                <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z"/>
-                              </svg>
-                           
-                            </div>
-                          </div>  
-                            </td>
-                        </tr>
-                      </>
-                       
-                    ))
-                    }
-                </tbody>
-                </table>}
-
-                    </div>
-                    {/* <!-- Modal footer --> */}
-                    <div className="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600 ">
-                    {/* {showCreateEmbroideryButton ? <span><button type="button" onClick={createEmbroidery}  className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Create Embroidery</button></span> : null } */}
+                        <div className="p-4 md:p-5 text-center">
+                        {orderDelete ? (
+                              <Alert type="success">
+                                <span>Order deleted successfully.</span>
+                              </Alert>
+                        ) : null}
+                        {error ? (
+                              <Alert type="error">
+                                <span>Error occurred! </span>
+                              </Alert>
+                            ) : null}
+                        
+                            <svg className="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                            </svg>
+                            <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Are you sure you want to delete this order?</h3>
+                            <button onClick={deleteOrder} data-modal-hide="popup-modal" type="button" className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center me-2">
+                                Yes, I'm sure
+                            </button>
+                            <button onClick={(value) => closeModal(value="#deleteModal")}  data-modal-hide="popup-modal" type="button" className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">No, cancel</button>
+                        </div>
                     </div>
                 </div>
             </div>
-          </div>
+          :null}
+         
+
+        
+          {invoiceModel?
+            <div  aria-hidden="true" className="flex items-center justify-center h-screen modal-backdrop"  >
+              <div className="relative p-6 min-h-full max-h-full overflow-auto" >
+                  {/* <!-- Modal content --> */}
+                  <div className="relative bg-white rounded-lg shadow dark:bg-gray-700 " style={{  width: "fit-content"}} >
+                      {/* <!-- Modal header --> */}
+                      <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 overflow-inherit">
+                          <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+                              Invoices
+                          </h3>
+                          {invoiceDeleted ? (
+                            <Alert type="success">
+                              <span>Invoice deleted successfully.</span>
+                            </Alert>
+                          ) : null}
+                          <button onClick={(value) => closeModal(value="#invoiceModal")}  type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="default-modal">
+                              <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                              </svg>
+                              <span className="sr-only">Close modal</span>
+                          </button>
+                      </div>
+                      {/* <!-- Modal body --> */}
+                      <div className={loginStyles.container} >
+
+                      {invoiceList && invoiceList.data.length == 0 ? <button type="button" onClick= {() => generateInvoice()}  className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Generate invoice</button>: 
+                      <table className="table-auto overflow-scroll w-full">
+                        <tbody>
+                      {invoiceList && invoiceList.data.map((invoice, ind) => (
+                        <>
+                          <tr>
+                            <th className="border-solid border-2">Invoices</th>
+                            <th className="border-solid border-2">Actions</th>
+                          </tr>
+                          <tr>
+                              <td className="border-solid border-2 hover:bg-sky-100">{invoice}</td>
+                              <td className="border-solid border-2">
+                              <div className="grid grid-cols-2 gap-2 overflow-auto">
+                              <div onClick= {() => deleteInvoice({invoice})} className="cursor-pointer hover:animate-spin col-span-1 p-0" data-toggle="tooltip" title="Delete this invoice" >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-trash" viewBox="0 0 16 16">
+                                  <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                                  <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                                </svg>
+                              </div>
+                              
+                              <div className="cursor-pointer hover:animate-spin col-span-1 p-0" data-toggle="tooltip" onClick= {() => saveFile(invoice)}  title="Download this invoices"  >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="20" fill="currentColor" className="bi bi-download" viewBox="0 0 16 16">
+                                  <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
+                                  <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z"/>
+                                </svg>
+                            
+                              </div>
+                            </div>  
+                              </td>
+                          </tr>
+                        </>
+                        
+                      ))
+                      }
+                  </tbody>
+                  </table>}
+
+                      </div>
+                      {/* <!-- Modal footer --> */}
+                      <div className="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600 ">
+                      {/* {showCreateEmbroideryButton ? <span><button type="button" onClick={createEmbroidery}  className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Create Embroidery</button></span> : null } */}
+                      </div>
+                  </div>
+              </div>
+            </div>
+          :null}
+          
 
             {
               orders.status==200 ?

@@ -1,7 +1,6 @@
 'use client'
 import {useEffect, useState, useRef} from "react";
 import Dropdown from "./dropdown";
-import DropdownMultiOptions from "./DropdownMultiOptions";
 import { ShippingListData } from "@/utils/shippingUtils";
 import { UserService } from "@/services/user.service";
 import { ItemsListData } from "@/utils/itemsUtils";
@@ -20,6 +19,7 @@ export const PriceGenerator = (props) => {
   const router = useRouter();
   const [deliveryDate, setDeliveryDate] = useState(new Date()); 
   const [view, setView] = useState();
+  const [priceModel, setPriceModel] = useState(false);
   const [shippinglist, setShippinglist] = useState(null);
   const [printinglist, setPrintinglist] = useState(null);
   const [embroiderylist, setembroiderylist] = useState(null);
@@ -44,7 +44,7 @@ export const PriceGenerator = (props) => {
   const greenclassName = "w-100 h-15 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800 "
   const redclassName = " w-100 h-15 border border-red-300 rounded bg-red-50 focus:ring-3 focus:ring-primary-300 dark:bg-red-700 dark:border-red-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800 " 
   let orderArray =  useRef(new Array());
-  
+  let shippingListLocal = [];
   useEffect( ()=>{
 
     (async function(){
@@ -64,13 +64,13 @@ export const PriceGenerator = (props) => {
     
     let obj=[];
     
-    if(shippinglist.data.length < 4){
+    if(shippinglist.data.length < shippinglist.data.length +1){
       shippinglist.data.map((keyName) => {
         obj.push({"service":keyName.service+"(direct)", "direct":keyName.directRate})
         obj.push({"service":keyName.service+"(indirect)", "indirect":keyName.indirectRate})
         }
       )
-      shippinglist.data = obj;
+      shippingListLocal.data = obj;
     }
 
   } 
@@ -81,7 +81,7 @@ export const PriceGenerator = (props) => {
     })()
   }
   const closeModal = () => {
-    $("#priceModal").hide();
+    setPriceModel(false);
   };
   function dropDownDataForEmb(value){
     
@@ -189,6 +189,7 @@ export const PriceGenerator = (props) => {
         item, fabric, qty, profit_margin, production_time, usdRate, "decoration":{value: decorationValue, type:embType, size:{"width":decWidth, "height":decHeight}} 
       }
     }
+    debugger
     if(view == "createOrder" ){
       
       let date = deliveryDate.toISOString();
@@ -201,49 +202,60 @@ export const PriceGenerator = (props) => {
       obj.shipping=shipping;
       const result = await RatesService().CalculateItemPrice(obj)
       let data = await result.json();
+      debugger
       if(result.status == 200)
       {
+        debugger
         setTotalPrice(data.dollarPrice);
         setCost(data.totalPrice);
-        $("#priceModal").show();
+        
+        setPriceModel(true);
       }
     }
 
   }
 
   if(!shippinglist || !itemlist || !fabriclist || !printinglist || !embroiderylist || !clientlist)
-    return null;
+    return (<div class="text-center">
+            <div role="status">
+                <svg aria-hidden="true" class="inline w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
+                    <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+                </svg>
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>)
 
   return (
     
     <>
-
-    <div id="priceModal" tabIndex="-1" className=" flex items-center justify-center h-screen modal-backdrop" style={{display:"none"}} >
-      
-      <div className="relative max-w-md ">
-        
-          <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
-              <button  onClick={(value) => closeModal(value="users")} type="button" className="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="popup-modal">
-                  <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                      <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                  </svg>
-                  <span className="sr-only">Close modal</span>
-              </button>
-              <div className="p-4 md:p-5 text-center">
-              
-                  <svg className="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                      <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-                  </svg>
-                  <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Cost per {item} is {cost}. </h3>
-                  <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Export Price per {item} is {totalPrice}. </h3>
-                  <button onClick={(value) => closeModal(value="users")} data-modal-hide="popup-modal" type="button" className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center me-2">
-                      Generate another price
-                  </button>
-              </div>
-          </div>
+    {priceModel?
+      <div tabIndex="-1" className="flex items-center justify-center h-screen modal-backdrop" >
+          
+        <div className="relative max-w-md ">
+          
+            <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                <button  onClick={closeModal} type="button" className="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="popup-modal">
+                    <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                    <span className="sr-only">Close modal</span>
+                </button>
+                <div className="p-4 md:p-5 text-center">
+                
+                    <svg className="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                    </svg>
+                    <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Cost per {item} is {cost}. </h3>
+                    <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Export Price per {item} is {totalPrice}. </h3>
+                    <button onClick={closeModal} data-modal-hide="popup-modal" type="button" className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center me-2">
+                        Generate another price
+                    </button>
+                </div>
+            </div>
+        </div>
       </div>
-    </div>
-
+    :null}
 
       <form className="w-full max-w-lg" onSubmit={generateInvoice}>
 
@@ -272,7 +284,7 @@ export const PriceGenerator = (props) => {
             </label>
             <div className="relative">
               
-               <Dropdown required data = {"shipping"} getData = {dropDownData} list = {shippinglist.data} />
+               <Dropdown required data = {"shipping"} getData = {dropDownData} list = {shippingListLocal.data} />
             </div>
           </div>
 
@@ -370,5 +382,4 @@ export const PriceGenerator = (props) => {
 };
 
 
-{/* <DatePicker selected={startDate} onChange= {(date) => setStartDate(date)} />  */}
 

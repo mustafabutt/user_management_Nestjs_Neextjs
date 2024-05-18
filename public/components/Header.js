@@ -8,9 +8,9 @@ import SideBar from "./SideBar";
 const Header = () => {
 
   const [nav, setNav] = useState(false);
-
   let [showLogout, setLogout] = useState(false);
   const [breadcrumbs, setBreadcrumbs] = useState();
+  const [avatar, setAvatar] = useState(null);
   const router = useRouter();
 
   const userProfile  = async () => {
@@ -25,15 +25,20 @@ const Header = () => {
   }
   const logout  = async () => {
     await UserService().callLogout(UserService().getAccessToken());
+    setAvatar(null);
     setLogout(false);
     router.push("/login");
   }
 
-  useEffect(()=>{
+  useEffect(async ()=>{
     if (UserService().isUserLoggedIn())
     {
+      setAvatar(await UserService().getAvatar()); 
       setLogout(true);
-    }else  setLogout(false);
+    }else  {
+      setAvatar(null);
+      setLogout(false);
+    }
     const pathWithoutQuery = router.asPath.split("?")[0];
     let pathArray = pathWithoutQuery.split("/");
     pathArray.shift();
@@ -41,7 +46,6 @@ const Header = () => {
     pathArray = pathArray.filter((path) => path !== "");
 
   },[router.asPath]);
-
 
 
   return (
@@ -54,12 +58,12 @@ const Header = () => {
         target="_blank"
         rel="noreferrer"
       >
-        <Image
-          src={"/images/logo.svg"}
-          alt="Avatar"
+        {avatar?<Image
+          src={`data:image/jpeg;base64, ${avatar}`}
+          alt=""
           width={80}
           height={80}
-        />
+        />:null}
         
       </a>
     </h1>

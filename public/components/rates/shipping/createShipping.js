@@ -1,8 +1,7 @@
 import {useEffect, useRef, useState} from "react";
-import loginStyles from '../../../styles/login.module.css';
-import {RatesService} from "../../../services/rates.service";
-import Alert from '../../../components/alert';
-import { constants } from "../../../constants";
+import loginStyles from '@/styles/login.module.css';
+import {RatesService} from "@/services/rates.service";
+import Alert from '@/components/alert';
 
 export const CreateShipping = (props) => {
     const [shippingExists, setShippingExists] = useState(null);

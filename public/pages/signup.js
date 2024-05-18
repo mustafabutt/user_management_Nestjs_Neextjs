@@ -6,7 +6,6 @@ import {UserService} from "@/services/user.service";
 import Head from 'next/head';
 const Layout = dynamic(()=> import("@/components/account/Layout"));
 import utilStyles from '@/styles/utils.module.css';
-import $ from 'jquery';
 import Link from 'next/link';
 
 const Signup = () => {
@@ -16,6 +15,7 @@ const Signup = () => {
   const password = useRef(null);
   let userGender = '';
   const [userExists, setUserExists] = useState(null);
+  const [signupSuccessModel, setSignupSuccessModel] = useState(false);
 
   const focusHandler = () => {
     setUserExists(false);
@@ -29,7 +29,7 @@ const Signup = () => {
       gender: userGender,
     });
 
-    res.status == 201 ? $('#myModal').show() : null;
+    res.status == 201 ? setSignupSuccessModel(true) : null;
     
     res.status == 303 ? setUserExists(true) : null;
   }
@@ -44,25 +44,27 @@ const Signup = () => {
       <Head>
         <title>Candlik - Signup</title>
       </Head>
-      <div className="modal modal-backdrop" id="myModal" role="dialog">
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h4 className="modal-title">
-                  <span className={utilStyles.modalHadingColor}>Success</span>
-                </h4>
-              </div>
-              <div className="modal-body">Signed up successfully</div>
-              <div className="modal-footer">
-                <Link href="/login">
-                  <button type="button" className="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">
-                    <span>Sign in</span>
-                  </button>
-                </Link>
-              </div>
+      {signupSuccessModel?
+      
+      <div className="flex items-center justify-center h-screen modal-backdrop" id="myModal" role="dialog">
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h4 className="modal-title">
+                <span className={utilStyles.modalHadingColor}>Success</span>
+              </h4>
+            </div>
+            <div className="modal-body">Signed up successfully</div>
+            <div className="modal-footer">
+              <Link href="/login">
+                <button type="button" className="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">
+                  <span>Sign in</span>
+                </button>
+              </Link>
             </div>
           </div>
         </div>
+      </div>:null}
       <section className="bg-gray-50 dark:bg-gray-900">
           <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
               

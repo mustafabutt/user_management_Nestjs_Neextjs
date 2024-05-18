@@ -1,9 +1,9 @@
 
 import {RatesService} from "@/services/rates.service";
 
-export async function ShippingListData(token) {
+export async function ShippingListData(token,skip,limit) {
 
-  var result = await RatesService().getShippingList(token);
+  var result = await RatesService().getShippingList(token,skip,limit);
   let obj = {"service":""};
   
   if(result.status == 409 || !result.data || result.data.length == 0)
@@ -27,6 +27,8 @@ export async function ShippingListData(token) {
           obj = tempObj        
       })
     result.data=finalArray
+    result.documents = result.count;
+    result.pageCount = result.page_total
     return result;
 }
 

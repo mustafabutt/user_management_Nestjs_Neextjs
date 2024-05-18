@@ -100,29 +100,30 @@ export const RatesService = () => {
         }
     }
     
-    const getShippingList = async (access_token) => {
-    
+    const getShippingList = async (access_token,skip,limit) => {
+        
+        if(!skip && !limit){
+            skip=0; limit=0;
+        }
+      
         let token;
         if(!access_token)
             token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token') : null;
         else token = access_token
-        const res = await fetch(constants.SHIPPING, {
+        const res = await fetch(constants.SHIPPING+"?skip="+skip+"&limit="+limit, {
             method: 'GET',
             headers: {
                 'Content-Type': constants.CONTENT_TYPE,
                 Authorization: constants.BEARER+token
             },
         });
-        
         if( res.status == 200 ) {
-            
             let response = await res.json();
             let shippingbject = {
                 status:200,
                 ...res,
                 ...response
             }
-        
             localStorage.setItem('shipping-list', JSON.stringify(shippingbject))
             return shippingbject;
         } else {

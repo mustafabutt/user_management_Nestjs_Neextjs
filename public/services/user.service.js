@@ -1,5 +1,9 @@
+
 import {BehaviorSubject} from "rxjs";
 import {constants} from "../constants";
+import { NextResponse } from "next/server";
+
+
 import { setCookie, getCookie, deleteCookie } from 'cookies-next';
 
 export const UserService = () => {
@@ -113,18 +117,19 @@ export const UserService = () => {
         });
     }
 
-    const postImage = async (image) => {
-
+    const postImage = async (image,email) => {
         let formData = new FormData();
-        formData.set("testFile", image.file)
-        try{
-            return await fetch("https://azwxvlbjk7.execute-api.us-east-1.amazonaws.com/dev/file/upload", {
-            method: 'POST',
-            body: formData
+        formData.append('file', image.file);
+        formData.append('email', email);
+        const token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token'): null;
+        return await fetch(constants.AVATAR, {
+            method: 'Put',
+            body:formData,
+            headers: {
+                 Authorization: constants.BEARER+token
+            },
         });
-        }catch(e){
-           
-        }
+        
         
     }
 
@@ -201,7 +206,24 @@ export const UserService = () => {
             },
         });
     }
-    
+    const getAvatar = async () => {
+        
+        const token = JSON.parse(localStorage.getItem('user')) ? getCookie('access_token') : null;
+        let img = await fetch(constants.AVATAR, {
+            method: 'Get',
+            responseType: 'stream',
+            headers: {
+                Authorization: constants.BEARER+token,
+                'email':JSON.parse(localStorage.getItem('user')).email
+            },
+        });
+
+        const blob = await img.blob();
+        const text = await blob.arrayBuffer();
+        const encoded = Buffer.from(text).toString("base64");
+        return encoded;
+        
+    }
 
     return {
         isUserLoggedIn,
@@ -218,7 +240,8 @@ export const UserService = () => {
         editUser,
         DeleteUser,
         postImage,
-        getAccessToken
+        getAccessToken,
+        getAvatar
     }
 }
 

@@ -73,8 +73,18 @@ export class RatesService {
     return await this.itemModel.findByIdAndUpdate(id,item);
 
   }
-  async readAllShipping(): Promise<Shipping[]> {
-    return await this.shippingModel.find({}, { _id: 0, service: 1, rate: 1  }).exec();
+  async readAllShipping(skip, limit): Promise<any> {
+    const count = await this.shippingModel.countDocuments({}).exec();
+    
+    const page_total = Math.floor((count - 1)/ limit) + 1;
+    const data =  await this.shippingModel.find({}, { _id: 0, service: 1, rate: 1  }).limit(limit).skip(skip).exec();
+    return {
+      data: data,
+      page_total: page_total,
+      count:count,
+      status: 200,
+    }
+    // return await this.shippingModel.find({}, { _id: 0, service: 1, rate: 1  }).exec();
   }
 
   async readAllPrinting(): Promise<Print[]> {
@@ -105,8 +115,9 @@ export class RatesService {
     return await newEmbroidery.save();
   }
   async calculatePrice(item: any): Promise<any> {
-
+    console.log(item);
     let shippingMode = item.shipping.split("(")[1].split(")")[0]+"Rate";
+
     let shippingCompany = item.shipping.split("(")[0];
     let profitMargin = item.profit_margin.split("%")[0]
 

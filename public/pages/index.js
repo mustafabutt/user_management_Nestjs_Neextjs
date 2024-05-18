@@ -16,7 +16,7 @@ const Home = ({}) => {
   const router = useRouter();
 
   if (typeof window !== 'undefined' && !UserService().isUserLoggedIn())
-  router.push('/login');
+    router.push('/login');
 
   return (
     <Layout home>

@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   Res,
   UseGuards,
 } from '@nestjs/common';
@@ -169,12 +170,12 @@ export class RatesController {
 
 
   @Get("/shipping")
-  async fetchAllShipping(@Res() response) {
+  async fetchAllShipping(@Query('skip') skip,@Query('limit') limit, @Res() response) {
     try {
-      const data = await this.ratesService.readAllShipping();
-      return response.status(HttpStatus.OK).json({
+      const data = await this.ratesService.readAllShipping(skip,limit);
+      return response.status(HttpStatus.OK).json(
         data,
-      });
+      );
     } catch (err) {
       this.exceptions.generateGeneralException(err);
     }

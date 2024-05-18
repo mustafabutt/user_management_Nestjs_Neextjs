@@ -15,18 +15,20 @@ const Profile = () => {
   const re_password = useRef(null);
   const [notMatch, setNotMatch] = useState(null);
   const [passwordUpdate, setPasswordUpdate] = useState(null);
+  const [passwordModel, setPasswordModel] = useState(false);
+  const [picturedModel, setPicturedModel] = useState(false);
 
-  const closeModal = () => {
-    $('#myModal').hide();
+  function closeModal () {
+    setPasswordModel(false);
   };
-  const showPassChange = () => {
-    $('#myModal').show()
+  function showPassChange () {
+    setPasswordModel(true);
   }
   const closeProfileModal = () => {
-    $('#profilePicModal').hide();
+    setPicturedModel(false);
   };
   const showProfilePicture = () => {
-    $('#profilePicModal').show()
+    setPicturedModel(true);
   }
   const focusHandler = () => {
     setNotMatch(false);
@@ -46,12 +48,6 @@ const Profile = () => {
     res.status == 200 ? setPasswordUpdate(true) : null;
     
   }
-  
-  useEffect(()=>{
-    // if (typeof window !== 'undefined' && localStorage.getItem('accessToken')) {
-    //   router.push('/');
-    // }
-  })
 
   return (
     <Layout profile>
@@ -59,7 +55,8 @@ const Profile = () => {
         <title>Candlik - User Profile</title>
       </Head>
       <section className="bg-gray-50 dark:bg-gray-900">
-        <div className="modal modal-backdrop" id="myModal" role="dialog">
+        {passwordModel?
+          <div className="flex items-center justify-center h-screen modal-backdrop" aria-hidden="true" role="dialog">
           <div className="modal-dialog">
             <div className="modal-content">
               <div className="modal-header">
@@ -77,19 +74,19 @@ const Profile = () => {
 
                     <input type="password" ref={re_password}  onFocus={focusHandler} name="re-psw" id="password" placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
 
-                     {notMatch ? (
+                    {notMatch ? (
                         <Alert type="error">
                           <span>Password did not match.</span>
                         </Alert>
                       ) : null}
-                   
+                  
                       {passwordUpdate ? (
                         <Alert type="success">
                           <span>Password is updated.</span>
                         </Alert>
                       ) : null}
-                       <span> </span><button type="submit"  className="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 ">Save</button>
-                       </form>
+                      <span> </span><button type="submit"  className="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 ">Save</button>
+                      </form>
 
                   </div>
 
@@ -97,39 +94,44 @@ const Profile = () => {
               <div className="modal-footer">
                 <span>
                   <button type="button" onClick={closeModal} className="bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 ">Close</button>
-                 
+                
                 </span>
               </div>
             </div>
           </div>
         </div>
+        :null}
+        
 {/* profile Picture dialog */}
-        <div className="modal modal-backdrop" id="profilePicModal" role="dialog">
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h4 className="modal-title">
-                  <span >Update Profile Picture</span>
-                </h4>
-              </div>
-              <div className="modal-body">
-
-                  <div className={loginStyles.container}>
-                  
-                  <FileUploader   />
-
+        {picturedModel?
+                <div className="flex items-center justify-center h-screen modal-backdrop" role="dialog">
+                <div className="modal-dialog">
+                  <div className="modal-content">
+                    <div className="modal-header">
+                      <h4 className="modal-title">
+                        <span >Update Profile Picture</span>
+                      </h4>
+                    </div>
+                    <div className="modal-body">
+      
+                        <div className={loginStyles.container}>
+                        
+                        <FileUploader   />
+      
+                        </div>
+      
+                    </div>
+                    <div className="modal-footer">
+                      <span>
+                        <button type="button" onClick={closeProfileModal} className="bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded">Close</button>
+                       
+                      </span>
+                    </div>
                   </div>
+                </div>
+              </div>
+        :null}
 
-              </div>
-              <div className="modal-footer">
-                <span>
-                  <button type="button" onClick={closeProfileModal} className="bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded">Close</button>
-                 
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
  
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
     

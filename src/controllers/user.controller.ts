@@ -8,7 +8,11 @@ import {
   Post,
   Put,
   Res,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
+  StreamableFile,
+  Headers
 } from '@nestjs/common';
 import { User } from '../schemas/users.schema';
 import { UsersService } from '../services/users.service';
@@ -16,6 +20,9 @@ import { Exceptions } from '../exceptions/exceptions';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { globalConstants } from '../constant';
 import * as bcrypt from 'bcrypt';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { createReadStream } from 'fs';
+import type { Response } from 'express';
 
 @UseGuards(JwtAuthGuard)
 @Controller(globalConstants.USERS)
@@ -24,6 +31,7 @@ export class UserController {
     private readonly userService: UsersService,
     private exceptions: Exceptions,
   ) {}
+
 
   @Post()
   async createUser(@Res() response, @Body() user: User) {
@@ -39,6 +47,7 @@ export class UserController {
     }
   }
 
+
   @Get()
   async fetchAll(@Res() response) {
     try {
@@ -51,13 +60,33 @@ export class UserController {
       this.exceptions.generateGeneralException(err);
     }
   }
-
+  @Get('/avatar')
+  async getFile(@Headers() Header, @Res({ passthrough: true }) res: Response) {
+    const file = createReadStream('./metaData/'+Header.email+'.jpg');
+    return new StreamableFile(file);
+  }
+  
   @Get('/:' + globalConstants.ID)
   async findById(@Res() response, @Param(globalConstants.ID) id) {
     try {
       const user = await this.userService.readById(id);
       return response.status(HttpStatus.OK).json({
         user,
+      });
+    } catch (err) {
+      this.exceptions.generateGeneralException(err);
+    }
+  }
+
+
+
+  @Put('/avatar/')
+  @UseInterceptors(FileInterceptor('file'))
+  async updateAvatar(@Res() response, @UploadedFile() file, @Body() body) {
+    try {   
+      await this.userService.saveAvatar(file,body.email);
+      return response.status(HttpStatus.CREATED).json({
+        msg:"created"
       });
     } catch (err) {
       this.exceptions.generateGeneralException(err);

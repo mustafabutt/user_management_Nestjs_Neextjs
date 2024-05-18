@@ -12,4 +12,5 @@ export declare class UsersService {
     update(id: any, User: User): Promise<User>;
     delete(id: any): Promise<any>;
     logout(token: Token): Promise<any>;
+    saveAvatar(file: any, email: any): Promise<any>;
 }

@@ -87,7 +87,6 @@ let OrdersController = class OrdersController {
     }
     async downloadInvoices(file, email, request, response, obj) {
         try {
-            console.log(file);
             response.download("./invoices/" + email + "/" + file, (err) => {
                 if (err) {
                     response.send({

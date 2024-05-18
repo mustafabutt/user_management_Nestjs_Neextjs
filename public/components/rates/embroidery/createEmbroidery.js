@@ -1,7 +1,7 @@
 import {useEffect, useRef, useState} from "react";
-import loginStyles from '../../../styles/login.module.css';
-import {RatesService} from "../../../services/rates.service";
-import Alert from '../../../components/alert';
+import loginStyles from '@/styles/login.module.css';
+import {RatesService} from "@/services/rates.service";
+import Alert from '@/components/alert';
 
 export const CreateEmbroidery = (props) => {
     const [embroideryExists, setEmbroideryExists] = useState(null);

@@ -1,7 +1,7 @@
 import {useEffect, useRef, useState} from "react";
-import loginStyles from '../../../styles/login.module.css';
-import {OrderService} from "../../../services/ordersManagement.service";
-import Alert from '../../../components/alert';
+import loginStyles from '@/styles/login.module.css';
+import {OrderService} from "@/services/ordersManagement.service";
+import Alert from '@/components/alert';
 
 export const CreateClient = (props) => {
     const [clientExists, setClientExists] = useState(null);

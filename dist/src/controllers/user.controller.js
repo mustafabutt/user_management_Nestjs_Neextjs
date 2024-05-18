@@ -20,6 +20,8 @@ const exceptions_1 = require("../exceptions/exceptions");
 const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
 const constant_1 = require("../constant");
 const bcrypt = require("bcrypt");
+const platform_express_1 = require("@nestjs/platform-express");
+const fs_1 = require("fs");
 let UserController = class UserController {
     constructor(userService, exceptions) {
         this.userService = userService;
@@ -50,11 +52,26 @@ let UserController = class UserController {
             this.exceptions.generateGeneralException(err);
         }
     }
+    async getFile(Header, res) {
+        const file = (0, fs_1.createReadStream)('./metaData/' + Header.email + '.jpg');
+        return new common_1.StreamableFile(file);
+    }
     async findById(response, id) {
         try {
             const user = await this.userService.readById(id);
             return response.status(common_1.HttpStatus.OK).json({
                 user,
+            });
+        }
+        catch (err) {
+            this.exceptions.generateGeneralException(err);
+        }
+    }
+    async updateAvatar(response, file, body) {
+        try {
+            await this.userService.saveAvatar(file, body.email);
+            return response.status(common_1.HttpStatus.CREATED).json({
+                msg: "created"
             });
         }
         catch (err) {
@@ -126,6 +143,14 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "fetchAll", null);
 __decorate([
+    (0, common_1.Get)('/avatar'),
+    __param(0, (0, common_1.Headers)()),
+    __param(1, (0, common_1.Res)({ passthrough: true })),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "getFile", null);
+__decorate([
     (0, common_1.Get)('/:' + constant_1.globalConstants.ID),
     __param(0, (0, common_1.Res)()),
     __param(1, (0, common_1.Param)(constant_1.globalConstants.ID)),
@@ -133,6 +158,16 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "findById", null);
+__decorate([
+    (0, common_1.Put)('/avatar/'),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file')),
+    __param(0, (0, common_1.Res)()),
+    __param(1, (0, common_1.UploadedFile)()),
+    __param(2, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Object]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "updateAvatar", null);
 __decorate([
     (0, common_1.Put)('/:email'),
     __param(0, (0, common_1.Res)()),

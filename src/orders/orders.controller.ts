@@ -100,7 +100,6 @@ export class OrdersController {
       @Post("/invoice/download/:file")
       async downloadInvoices(@Query('file') file: string, @Query('email') email: string, @Req() request: Request, @Res() response, @Body() obj: any) {
         try {
-          console.log(file)
           response.download(
             "./invoices/"+email+"/"+file, 
             (err) => {
