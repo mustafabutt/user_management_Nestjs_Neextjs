@@ -17,20 +17,27 @@ const orders_service_1 = require("./orders.service");
 const exceptions_1 = require("../exceptions/exceptions");
 const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
 const orders_1 = require("../schemas/orders");
+const client_service_1 = require("../client/client.service");
 const common_1 = require("@nestjs/common");
 let OrdersController = class OrdersController {
-    constructor(ordersService, exceptions) {
+    constructor(ordersService, clientService, exceptions) {
         this.ordersService = ordersService;
+        this.clientService = clientService;
         this.exceptions = exceptions;
     }
     async createOrder(response, order) {
         try {
+            let email = order.client;
             let orderDetailsValid = await this.ordersService.checkOrderItems(order.details);
-            let customerValid = await this.ordersService.checkOrderCustomerID(order.customer_email);
+            let customerValid = await this.clientService.findSingleClient(order.client);
+            order.client = customerValid['_id'];
             if (orderDetailsValid.includes(false) || customerValid == null)
                 return response.status(common_1.HttpStatus.BAD_GATEWAY).JSON({ msg: "bad request" });
             const newOrder = await this.ordersService.createOrder(order);
-            let a = await this.ordersService.generateInvoice(order);
+            customerValid.orders.push(newOrder["_id"]);
+            await this.clientService.updateClient(order.client, customerValid);
+            order.client = email;
+            await this.ordersService.generateInvoice(order);
             return response.status(common_1.HttpStatus.CREATED).json({
                 newOrder,
             });
@@ -103,10 +110,10 @@ let OrdersController = class OrdersController {
     async updateOrder(response, order) {
         try {
             if (order["action"] == "edit order") {
-                if (!order.shipping || !order.customer_email || !order.delivery_date) {
+                if (!order.shipping || !order.client.email || !order.delivery_date) {
                     const singleOrder = await this.ordersService.findSingleOrder(order["_id"]);
                     order.shipping = singleOrder.shipping;
-                    order.customer_email = singleOrder.customer_email;
+                    order.client.email = singleOrder.client.email;
                     order.delivery_date = singleOrder.delivery_date;
                 }
                 const updatedOrder = await this.ordersService.updateOrder(order["_id"], order);
@@ -115,6 +122,7 @@ let OrdersController = class OrdersController {
                 });
             }
             else if (order["action"] == "delete order") {
+                let a = await this.clientService.removeOrderFromClient(order["_id"]);
                 const deletedOrder = await this.ordersService.deleteOrder(order["_id"]);
                 return response.status(common_1.HttpStatus.OK).json({
                     deletedOrder,
@@ -188,6 +196,7 @@ OrdersController = __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Controller)('orders'),
     __metadata("design:paramtypes", [orders_service_1.OrdersService,
+        client_service_1.ClientService,
         exceptions_1.Exceptions])
 ], OrdersController);
 exports.OrdersController = OrdersController;

@@ -2,10 +2,12 @@ import { OrdersService } from './orders.service';
 import { Exceptions } from 'src/exceptions/exceptions';
 import { Order } from '../schemas/orders';
 import { Request } from 'express';
+import { ClientService } from '../client/client.service';
 export declare class OrdersController {
     private readonly ordersService;
+    private readonly clientService;
     private exceptions;
-    constructor(ordersService: OrdersService, exceptions: Exceptions);
+    constructor(ordersService: OrdersService, clientService: ClientService, exceptions: Exceptions);
     createOrder(response: any, order: Order): Promise<any>;
     createInvoice(response: any, order: Order): Promise<any>;
     fetchAllOrder(response: any): Promise<any>;

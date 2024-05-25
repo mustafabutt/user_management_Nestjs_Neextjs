@@ -35,7 +35,7 @@ let OrdersService = class OrdersService {
         this.clientModel = clientModel;
     }
     async readAllOrders() {
-        return await this.orderModel.find({}, { '_id': 1, '__v': 0 }).exec();
+        return await this.orderModel.find({}).populate("client", { email: 1, _id: 1 }).exec();
     }
     async findSingleOrder(id) {
         return await this.orderModel.findOne({ "_id": id });
@@ -58,9 +58,6 @@ let OrdersService = class OrdersService {
                 return false;
         }));
     }
-    async checkOrderCustomerID(id) {
-        return await this.clientModel.findOne({ id: id });
-    }
     async readAllInvoices(email) {
         let files = await fs.readdirSync("./invoices/" + email);
         return files.filter(el => path.extname(el) === '.pdf');
@@ -69,7 +66,7 @@ let OrdersService = class OrdersService {
         return await fs.unlinkSync("./invoices/" + obj.email + "/" + obj.file);
     }
     async generateInvoice(order) {
-        let singleClient = await this.clientService.findSingleClient(order.customer_email);
+        let singleClient = await this.clientService.findSingleClient(order.client);
         var tempArray = [], pricesArray = [], total = 0;
         order.details.forEach((element) => {
             let obj = {};
@@ -99,7 +96,7 @@ let OrdersService = class OrdersService {
             border: "10mm",
             header: {
                 height: "65mm",
-                contents: '<div style="text-align: center;"><h2>Candlik Clothing<h2></div>'
+                contents: '<div style="text-align: center;"><h2>Candlik<h2></div>'
             },
             footer: {
                 height: "28mm",

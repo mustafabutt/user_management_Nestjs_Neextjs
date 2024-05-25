@@ -26,7 +26,7 @@ export const List = (props) => {
     <div >
         {
             userData.status==200 ?
-            <table className="table">
+            <table className="table" >
                 <thead>
                 <tr>
                     {

@@ -1,7 +1,6 @@
 
 import {BehaviorSubject} from "rxjs";
 import {constants} from "../constants";
-import { NextResponse } from "next/server";
 
 
 import { setCookie, getCookie, deleteCookie } from 'cookies-next';

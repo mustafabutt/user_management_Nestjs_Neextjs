@@ -73,18 +73,19 @@ export class RatesService {
     return await this.itemModel.findByIdAndUpdate(id,item);
 
   }
-  async readAllShipping(skip, limit): Promise<any> {
+  async readAllShipping(query): Promise<any> {
+    const {skip, limit} = query;
+    delete query['skip'];
+    delete query['limit'];
     const count = await this.shippingModel.countDocuments({}).exec();
-    
     const page_total = Math.floor((count - 1)/ limit) + 1;
-    const data =  await this.shippingModel.find({}, { _id: 0, service: 1, rate: 1  }).limit(limit).skip(skip).exec();
+    const data =  await this.shippingModel.find(query, { _id: 0}).limit(limit).skip(skip).exec();
     return {
       data: data,
       page_total: page_total,
       count:count,
       status: 200,
     }
-    // return await this.shippingModel.find({}, { _id: 0, service: 1, rate: 1  }).exec();
   }
 
   async readAllPrinting(): Promise<Print[]> {

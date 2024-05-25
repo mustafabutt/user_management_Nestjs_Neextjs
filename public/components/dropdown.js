@@ -11,6 +11,7 @@ import {useEffect, useState} from "react";
     props.getData(e.target.value, props.data)
   }
 
+
   return (
     <div>
       <select onChange={changeValue} className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-4 px-6 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">

@@ -1,9 +1,9 @@
-
 import { OrdersService } from './orders.service';
 import { Exceptions } from 'src/exceptions/exceptions';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Order } from '../schemas/orders';
 import { Request } from 'express';
+import { ClientService } from '../client/client.service';
 import {
     Body,
     Controller,
@@ -22,20 +22,24 @@ import {
 export class OrdersController {
     constructor(
         private readonly ordersService: OrdersService,
+        private readonly clientService: ClientService,
         private exceptions: Exceptions,
       ) {}
 
       @Post("/")
       async createOrder(@Res() response, @Body() order: Order) {
         try {
-              
+            let email = order.client;
             let orderDetailsValid = await this.ordersService.checkOrderItems(order.details);
-            let customerValid= await this.ordersService.checkOrderCustomerID(order.customer_email);
-
+            let customerValid = await this.clientService.findSingleClient(order.client);
+            order.client=customerValid['_id'];
             if(orderDetailsValid.includes(false) || customerValid == null)
                 return response.status(HttpStatus.BAD_GATEWAY).JSON({msg:"bad request"});
             const newOrder = await this.ordersService.createOrder(order);
-            let a = await this.ordersService.generateInvoice(order);
+            customerValid.orders.push(newOrder["_id"]);
+            await this.clientService.updateClient( order.client, customerValid);
+            order.client = email;
+            await this.ordersService.generateInvoice(order);
             return response.status(HttpStatus.CREATED).json({
               newOrder,
           });
@@ -119,10 +123,10 @@ export class OrdersController {
       async updateOrder(@Res() response, @Body() order: Order) {
         try {
           if(order["action"] == "edit order"){
-            if(!order.shipping || !order.customer_email || !order.delivery_date){
+            if(!order.shipping || !order.client.email || !order.delivery_date){
               const singleOrder = await this.ordersService.findSingleOrder(order["_id"]);
               order.shipping = singleOrder.shipping;
-              order.customer_email = singleOrder.customer_email;
+              order.client.email = singleOrder.client.email;
               order.delivery_date = singleOrder.delivery_date
             }
             const updatedOrder = await this.ordersService.updateOrder(order["_id"],order);
@@ -131,7 +135,8 @@ export class OrdersController {
             });
             
           } else if(order["action"] == "delete order"){
-            
+            let a = await this.clientService.removeOrderFromClient(order["_id"] );
+          
             const deletedOrder = await this.ordersService.deleteOrder(order["_id"]);
             return response.status(HttpStatus.OK).json({
                 deletedOrder,

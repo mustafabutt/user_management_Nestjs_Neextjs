@@ -18,7 +18,7 @@ export declare class RatesController {
     createItem(response: any, item: Item): Promise<any>;
     calculateItemPrice(response: any, item: PriceCalculation): Promise<any>;
     updateItem(response: any, entity: any, item: Item): Promise<any>;
-    fetchAllShipping(skip: any, limit: any, response: any): Promise<any>;
+    fetchAllShipping(query: any, response: any): Promise<any>;
     createShipping(response: any, shipping: Shipping): Promise<any>;
     updateShipping(response: any, entity: any, shipping: Shipping): Promise<any>;
     fetchAllPrinting(response: any): Promise<any>;

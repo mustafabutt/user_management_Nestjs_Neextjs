@@ -150,9 +150,10 @@ let RatesController = class RatesController {
             this.exceptions.generateGeneralException(err);
         }
     }
-    async fetchAllShipping(skip, limit, response) {
+    async fetchAllShipping(query, response) {
         try {
-            const data = await this.ratesService.readAllShipping(skip, limit);
+            console.log(query);
+            const data = await this.ratesService.readAllShipping(query);
             return response.status(common_1.HttpStatus.OK).json(data);
         }
         catch (err) {
@@ -382,11 +383,10 @@ __decorate([
 ], RatesController.prototype, "updateItem", null);
 __decorate([
     (0, common_1.Get)("/shipping"),
-    __param(0, (0, common_1.Query)('skip')),
-    __param(1, (0, common_1.Query)('limit')),
-    __param(2, (0, common_1.Res)()),
+    __param(0, (0, common_1.Query)()),
+    __param(1, (0, common_1.Res)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object, Object]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], RatesController.prototype, "fetchAllShipping", null);
 __decorate([

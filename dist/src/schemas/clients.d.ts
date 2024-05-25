@@ -22,7 +22,8 @@
 /// <reference types="mongoose/types/validation" />
 /// <reference types="mongoose/types/virtuals" />
 /// <reference types="mongoose/types/inferschematype" />
-import { Document } from 'mongoose';
+import { Document, Schema as MongooseSchema } from 'mongoose';
+import { Order } from './orders';
 export type ClientDocument = Client & Document;
 export declare class Client {
     email: string;
@@ -32,8 +33,9 @@ export declare class Client {
     city: string;
     state: string;
     adress: string;
-    orders_in_progress: [];
+    orders: Order[];
     orders_completed: [];
     orders_cancelled: [];
+    orders_in_progress: [];
 }
-export declare const ClientSchema: import("mongoose").Schema<Client, import("mongoose").Model<Client, any, any, any, any>, {}, {}, {}, {}, import("mongoose").DefaultSchemaOptions, Client>;
+export declare const ClientSchema: MongooseSchema<Client, import("mongoose").Model<Client, any, any, any, any>, {}, {}, {}, {}, import("mongoose").DefaultSchemaOptions, Client>;

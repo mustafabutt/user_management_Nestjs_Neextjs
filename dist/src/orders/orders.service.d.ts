@@ -19,7 +19,6 @@ export declare class OrdersService {
     updateOrder(id: any, order: Order): Promise<Order>;
     deleteOrder(id: any): Promise<any>;
     checkOrderItems(detsils: any): Promise<any>;
-    checkOrderCustomerID(id: any): Promise<any>;
     readAllInvoices(email: any): Promise<any>;
     removeInvoice(obj: any): Promise<any>;
     generateInvoice(order: any): Promise<any>;

@@ -5,6 +5,8 @@ import Image from 'next/image'
 
 import { FaBars, FaTimes } from "react-icons/fa";
 import SideBar from "./SideBar";
+import eventBus from "./eventBus";
+
 const Header = () => {
 
   const [nav, setNav] = useState(false);
@@ -39,6 +41,13 @@ const Header = () => {
       setAvatar(null);
       setLogout(false);
     }
+    eventBus.subscribe(async (event) => {
+      if (event.data == 'Profile picture is changed') {
+        setAvatar(await UserService().getAvatar()); 
+      }
+    });
+
+
     const pathWithoutQuery = router.asPath.split("?")[0];
     let pathArray = pathWithoutQuery.split("/");
     pathArray.shift();

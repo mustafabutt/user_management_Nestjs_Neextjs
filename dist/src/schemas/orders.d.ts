@@ -22,14 +22,15 @@
 /// <reference types="mongoose/types/validation" />
 /// <reference types="mongoose/types/virtuals" />
 /// <reference types="mongoose/types/inferschematype" />
-import { Document } from 'mongoose';
+import { Document, Schema as MongooseSchema } from 'mongoose';
+import { Client } from './clients';
 export type OrderDocument = Order & Document;
 export declare class Order {
     id: string;
     delivery_date: string;
     shipping: string;
     status: string;
-    customer_email: string;
     details: Array<object>;
+    client: Client;
 }
-export declare const OrderSchema: import("mongoose").Schema<Order, import("mongoose").Model<Order, any, any, any, any>, {}, {}, {}, {}, import("mongoose").DefaultSchemaOptions, Order>;
+export declare const OrderSchema: MongooseSchema<Order, import("mongoose").Model<Order, any, any, any, any>, {}, {}, {}, {}, import("mongoose").DefaultSchemaOptions, Order>;

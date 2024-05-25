@@ -4,8 +4,9 @@ export declare class ClientService {
     private clientModel;
     constructor(clientModel: Model<ClientDocument>);
     readAllClients(): Promise<Client[]>;
-    findSingleClient(name: any): Promise<Client>;
+    findSingleClient(email: any): Promise<Client>;
     createClient(Client: Client): Promise<Client>;
     updateClient(id: any, client: Client): Promise<Client>;
+    removeOrderFromClient(id: any): Promise<any>;
     deleteCleint(id: any): Promise<any>;
 }

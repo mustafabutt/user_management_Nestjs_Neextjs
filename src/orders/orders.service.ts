@@ -23,7 +23,7 @@ export class OrdersService {
     ) {}
 
     async readAllOrders(): Promise<Order[]> {
-        return await this.orderModel.find({},{'_id': 1,'__v': 0}).exec();
+        return await this.orderModel.find({}).populate("client", {email:1,_id:1}).exec();
     }
     async findSingleOrder(id): Promise<Order> {
         return await this.orderModel.findOne({"_id":id});
@@ -46,9 +46,6 @@ export class OrdersService {
                 return false;
         }));
     }
-    async checkOrderCustomerID(id): Promise<any> {
-        return await this.clientModel.findOne({id:id});
-    }
     async readAllInvoices(email): Promise<any> {
         let files = await fs.readdirSync("./invoices/"+email);
         
@@ -58,7 +55,8 @@ export class OrdersService {
         return await fs.unlinkSync("./invoices/"+obj.email+"/"+obj.file);
     }
     async generateInvoice(order): Promise<any> {
-        let singleClient = await this.clientService.findSingleClient(order.customer_email);
+   
+        let singleClient = await this.clientService.findSingleClient(order.client);
         var tempArray = [], pricesArray=[], total =0;
         order.details.forEach((element:any) => {
           let obj:any = {};
@@ -89,7 +87,7 @@ export class OrdersService {
             border: "10mm",
             header: {
                 height: "65mm",
-                contents: '<div style="text-align: center;"><h2>Candlik Clothing<h2></div>'
+                contents: '<div style="text-align: center;"><h2>Candlik<h2></div>'
             },
             footer: {
                 height: "28mm",

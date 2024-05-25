@@ -22,10 +22,10 @@ let ClientService = class ClientService {
         this.clientModel = clientModel;
     }
     async readAllClients() {
-        return await this.clientModel.find({}, { '_id': 0, '__v': 0 }).exec();
+        return await this.clientModel.find({}, { '_id': 0, '__v': 0 }).populate('orders').exec();
     }
-    async findSingleClient(name) {
-        return await this.clientModel.findOne({ email: name });
+    async findSingleClient(email) {
+        return await this.clientModel.findOne({ email: email });
     }
     async createClient(Client) {
         const newClient = new this.clientModel(Client);
@@ -33,6 +33,9 @@ let ClientService = class ClientService {
     }
     async updateClient(id, client) {
         return await this.clientModel.findByIdAndUpdate(id, client, { new: true });
+    }
+    async removeOrderFromClient(id) {
+        return this.clientModel.updateMany({}, { $pull: { "orders": { "$in": [id] } } }, { multi: true });
     }
     async deleteCleint(id) {
         return await this.clientModel.findByIdAndRemove(id);

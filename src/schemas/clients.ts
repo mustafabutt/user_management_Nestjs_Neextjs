@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
-
+import { Document, Types, Schema as MongooseSchema } from 'mongoose';
+import { Order } from './orders'
 export type ClientDocument = Client & Document;
 
 @Schema()
@@ -19,12 +19,14 @@ export class Client {
   state: string;
   @Prop({ required: true})
   adress: string;
-  @Prop()
-  orders_in_progress: [];
+  @Prop({ type: [Types.ObjectId],ref: 'Order' })
+  orders: Order[]
   @Prop()
   orders_completed: [];
   @Prop()
   orders_cancelled: [];
+  @Prop()
+  orders_in_progress : []
 
 }
 

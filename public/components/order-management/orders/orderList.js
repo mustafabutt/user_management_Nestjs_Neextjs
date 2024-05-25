@@ -314,7 +314,7 @@ export const OrderList = (props) => {
                             <td className="border-solid border-2">{order.delivery_date}</td>
                             <td className="border-solid border-2">{order.shipping}</td>
                             <td className="border-solid border-2">{order.status.toString()}</td>
-                            <td className="border-solid border-2">{order.customer_email}</td>
+                            <td className="border-solid border-2">{order.client.email}</td>
                             <td className="border-solid border-2"> 
                             <div className="grid grid-cols-3 gap-3 overflow-auto">
                               <div onClick= {() => showModel(order._id,'#deleteModal')} className="cursor-pointer hover:animate-pulse col-span-1 p-0" data-toggle="tooltip" title="Delete this order" >

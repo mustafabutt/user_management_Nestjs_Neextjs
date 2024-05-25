@@ -1,8 +1,9 @@
 'use client'
 import dynamic from 'next/dynamic'
 import {UserService} from "../services/user.service";
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useRef, useState} from 'react';
 const Alert = dynamic(()=> import('@/components/alert'));
+import eventBus from './eventBus';
 export const FileUploader = (props) => {
     
   const [dragActive, setDragActive] = useState(false);
@@ -28,10 +29,14 @@ export const FileUploader = (props) => {
       file: files[0],
     },user.email);
     setFiles([]);
-    res.status == 201 ? setShowMsg(true):null;
-    setTimeout(()=>{
-      setShowMsg(false);
-    },3000);
+    if(res.status == 201){
+      eventBus.next({data: 'Profile picture is changed' });
+      setShowMsg(true);
+      setTimeout(()=>{
+        setShowMsg(false);
+      },2000);
+    }
+
     }
   }
 

@@ -8,6 +8,7 @@ import {
   Put,
   Query,
   Res,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { Fabric } from '../schemas/fabric';
@@ -170,9 +171,11 @@ export class RatesController {
 
 
   @Get("/shipping")
-  async fetchAllShipping(@Query('skip') skip,@Query('limit') limit, @Res() response) {
+  async fetchAllShipping(@Query() query, @Res() response) {
     try {
-      const data = await this.ratesService.readAllShipping(skip,limit);
+      console.log(query)
+      const data = await this.ratesService.readAllShipping(query);
+      
       return response.status(HttpStatus.OK).json(
         data,
       );

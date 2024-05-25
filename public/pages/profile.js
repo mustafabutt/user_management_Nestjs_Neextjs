@@ -5,7 +5,6 @@ import React, {useEffect, useRef, useState} from 'react';
 import {UserService} from "@/services/user.service";
 import Head from 'next/head';
 const Layout = dynamic(()=> import("@/components/layout"));
-import $ from 'jquery';
 import Image from 'next/image'
 import {FileUploader} from "@/components/FileUploader"
 
@@ -35,7 +34,6 @@ const Profile = () => {
   };
   async function changePassword(e) {
     e.preventDefault();
-    
     if(password.current.value !==  re_password.current.value){
       setNotMatch(true);
       return;

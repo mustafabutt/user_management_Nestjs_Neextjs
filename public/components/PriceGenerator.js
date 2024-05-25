@@ -109,6 +109,7 @@ export const PriceGenerator = (props) => {
       setDecorationValue(value);
     }
     if(data == "cleints"){
+      debugger
       setClient(value);
     }
     
