@@ -1,5 +1,5 @@
 <img src="https://github.com/mustafabutt/export_intelligence/blob/main/screens/rates.png" width="600px" height="300" />
-<p>I developed an export business automation web app based on NextJS and Tailwind CSS as a self-challenge using Nestjs as the backend.</p>
+<p>I developed an export business automation web app based on NextJS, Tailwind CSS, and Nestjs on the backend as a self-challenge.</p>
 
 ### Built With
 - Nextjs
