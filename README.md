@@ -88,11 +88,13 @@ This module enable users enter their the data of the clients along with their or
 5. Open another terminal and run the following commands:
 - _npm install_
 - _npm run dev_
-Now, open the application in the web browser by navigating to http://localhost:3000/.
+<p>Now, open the application in the web browser by navigating to http://localhost:3000/.</p>
 
-You can use the default credentials to log in as an admin.
-email: test@gmail.com
-password: qwerty
+<p>You can use the default credentials to log in as an admin.</p>
+
+**email**: test@gmail.com
+
+**password**: qwerty
 
 
 
