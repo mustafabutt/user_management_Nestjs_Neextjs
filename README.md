@@ -10,7 +10,7 @@
   
 
 ### Project Overview
-I developed this software to facilitate the people who belong to the export business. This solution will eradicate the hectic activity of calculating the prices in different currencies and they put their time and effort into performing this calculation on daily basis. This is version 1.0 which is more like an MVP, and looking forward to extending it in the future.
+I developed this software to facilitate the people who belong to the export business. This solution will eradicate the hectic activity of calculating the prices in different currencies and they put their time and effort into performing this calculation on daily basis. This is **version 1.0** which is more like an MVP, and looking forward to extending it in the future.
 
 ### Screens 
 **Users & Authentication**
