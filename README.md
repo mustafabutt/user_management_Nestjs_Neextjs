@@ -15,17 +15,35 @@ I developed this software to facilitate the people who belong to the export busi
 **Users & Authentication**
 
 <table>
-  
   <tr>
-    <td><img src="https://github.com/mustafabutt/export_intelligence/blob/main/screens/signin.png" width="400px" height="250" /></td>
-        <td><img src="https://github.com/mustafabutt/export_intelligence/blob/main/screens/signup.png" width="400px" height="250" /></td>
-        <td><img src="https://github.com/mustafabutt/export_intelligence/blob/main/screens/forget.png" width="400px" height="250" /></td>
+    <td><img src="https://github.com/mustafabutt/export_intelligence/blob/main/screens/signin.png" width="400px" height="200" /></td>
+        <td><img src="https://github.com/mustafabutt/export_intelligence/blob/main/screens/signup.png" width="400px" height="200" /></td>
+        <td><img src="https://github.com/mustafabutt/export_intelligence/blob/main/screens/forget.png" width="400px" height="200" /></td>
   </tr>
-  <td><img src="https://github.com/mustafabutt/export_intelligence/blob/main/screens/users.png" width="400px" height="250" /></td>
-        <td><img src="https://github.com/mustafabutt/export_intelligence/blob/main/screens/profile.png" width="400px" height="250" /></td>
-        <td><img src="https://github.com/mustafabutt/export_intelligence/blob/main/screens/upload.png" width="400px" height="250" /></td>
+  <td><img src="https://github.com/mustafabutt/export_intelligence/blob/main/screens/users.png" width="400px" height="200" /></td>
+        <td><img src="https://github.com/mustafabutt/export_intelligence/blob/main/screens/profile.png" width="400px" height="200" /></td>
+        <td><img src="https://github.com/mustafabutt/export_intelligence/blob/main/screens/upload.png" width="400px" height="200" /></td>
   </tr>
 </table>
+<p>User authentication & authorization is implemented using the following:</p>
+
+**Rates Management**
+
+<table>
+  <tr>
+    <td><img src="https://github.com/mustafabutt/export_intelligence/blob/main/screens/rates.png" width="400px" height="200" /></td>
+        <td><img src="https://github.com/mustafabutt/export_intelligence/blob/main/screens/items.png" width="400px" height="200" /></td>
+        <td><img src="https://github.com/mustafabutt/export_intelligence/blob/main/screens/CM.png" width="400px" height="200" /></td>
+  </tr>
+  <td><img src="https://github.com/mustafabutt/export_intelligence/blob/main/screens/users.png" width="400px" height="200" /></td>
+        <td><img src="https://github.com/mustafabutt/export_intelligence/blob/main/screens/profile.png" width="400px" height="200" /></td>
+        <td><img src="https://github.com/mustafabutt/export_intelligence/blob/main/screens/upload.png" width="400px" height="200" /></td>
+  </tr>
+</table>
+
+- <a href="https://next-auth.js.org/getting-started/example">next-auth</a>
+- Google OAuth
+- <a href="https://sendgrid.com/en-us">SendGrid</a> for sending code via email for password reset.
 
                         Instructions
 
