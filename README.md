@@ -1,6 +1,35 @@
+<img src="https://github.com/mustafabutt/export_intelligence/blob/main/screens/rates.png" width="600px" height="300" />
+<p>I developed an export business automation web app based on NextJS and Tailwind CSS as a self-challenge using Nestjs as the backend.</p>
+
+### Built With
+- Nextjs
+- Tailwind
+- Nestjs
+- MongoDB
+- Redis
+
+### Project Overview
+I developed this software to facilitate the people who belong to the export business. This solution will eradicate the hectic activity of calculating the prices in different currencies and they put their time and effort into performing this calculation on daily basis. This is version 1.0 which is more like an MVP, and looking forward to extend it in future.
+
+### Screens 
+**Users & Authentication**
+
+<table>
+  
+  <tr>
+    <td><img src="https://github.com/mustafabutt/export_intelligence/blob/main/screens/signin.png" width="400px" height="250" /></td>
+        <td><img src="https://github.com/mustafabutt/export_intelligence/blob/main/screens/signup.png" width="400px" height="250" /></td>
+        <td><img src="https://github.com/mustafabutt/export_intelligence/blob/main/screens/forget.png" width="400px" height="250" /></td>
+  </tr>
+  <td><img src="https://github.com/mustafabutt/export_intelligence/blob/main/screens/users.png" width="400px" height="250" /></td>
+        <td><img src="https://github.com/mustafabutt/export_intelligence/blob/main/screens/profile.png" width="400px" height="250" /></td>
+        <td><img src="https://github.com/mustafabutt/export_intelligence/blob/main/screens/upload.png" width="400px" height="250" /></td>
+  </tr>
+</table>
+
                         Instructions
 
-This is a working sign in/sign up module built using the following stack:
+ This is a working sign in/sign up module built using the following stack:
  <br />
 Nestjs <br />
 MongoDB <br />
