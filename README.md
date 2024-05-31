@@ -9,7 +9,7 @@
 - Redis
 
 ### Project Overview
-I developed this software to facilitate the people who belong to the export business. This solution will eradicate the hectic activity of calculating the prices in different currencies and they put their time and effort into performing this calculation on daily basis. This is version 1.0 which is more like an MVP, and looking forward to extend it in future.
+I developed this software to facilitate the people who belong to the export business. This solution will eradicate the hectic activity of calculating the prices in different currencies and they put their time and effort into performing this calculation on daily basis. This is version 1.0 which is more like an MVP, and looking forward to extending it in the future.
 
 ### Screens 
 **Users & Authentication**
@@ -27,6 +27,11 @@ I developed this software to facilitate the people who belong to the export busi
 </table>
 <p>User authentication & authorization is implemented using the following:</p>
 
+- <a href="https://next-auth.js.org/getting-started/example">next-auth</a>
+- Google OAuth
+- <a href="https://sendgrid.com/en-us">SendGrid</a> for sending code via email for password reset.
+
+
 **Rates Management**
 
 <table>
@@ -34,17 +39,18 @@ I developed this software to facilitate the people who belong to the export busi
     <td><img src="https://github.com/mustafabutt/export_intelligence/blob/main/screens/rates.png" width="400px" height="200" /></td>
         <td><img src="https://github.com/mustafabutt/export_intelligence/blob/main/screens/items.png" width="400px" height="200" /></td>
         <td><img src="https://github.com/mustafabutt/export_intelligence/blob/main/screens/CM.png" width="400px" height="200" /></td>
-  </tr>
-  <td><img src="https://github.com/mustafabutt/export_intelligence/blob/main/screens/users.png" width="400px" height="200" /></td>
-        <td><img src="https://github.com/mustafabutt/export_intelligence/blob/main/screens/profile.png" width="400px" height="200" /></td>
-        <td><img src="https://github.com/mustafabutt/export_intelligence/blob/main/screens/upload.png" width="400px" height="200" /></td>
-  </tr>
+        <td><img src="https://github.com/mustafabutt/export_intelligence/blob/main/screens/shipping.png" width="400px" height="200" /></td>
 </table>
 
-- <a href="https://next-auth.js.org/getting-started/example">next-auth</a>
-- Google OAuth
-- <a href="https://sendgrid.com/en-us">SendGrid</a> for sending code via email for password reset.
+This module lets users enter the pricing of raw materials and shipping companies. In addition, users can set the profit margins attached to every item they manufacture.
 
+**Price Generator**
+This tool is an integral part of this application where users can enter their order details along with foreign currency rate and with a single click they will be presented with the in-house production cost along with the price in foreign currency. 
+<table>
+  <tr>
+    <td><img src="https://github.com/mustafabutt/export_intelligence/blob/main/screens/price.png" width="600px" height="300" /></td>
+
+</table>
                         Instructions
 
  This is a working sign in/sign up module built using the following stack:
