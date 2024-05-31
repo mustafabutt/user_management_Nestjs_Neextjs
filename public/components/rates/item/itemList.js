@@ -48,7 +48,7 @@ export const ItemList = (props) => {
         <div>
         {
             item.status==200 ?
-            <table className="table-auto overflow-scroll w-full" >
+            <table className="" >
                 <tbody>
                     {item && item.data.map((user) => (
                     <>

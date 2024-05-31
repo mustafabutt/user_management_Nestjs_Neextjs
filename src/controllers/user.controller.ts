@@ -21,7 +21,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { globalConstants } from '../constant';
 import * as bcrypt from 'bcrypt';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { createReadStream } from 'fs';
+import { createReadStream,existsSync } from 'fs';
 import type { Response } from 'express';
 
 @UseGuards(JwtAuthGuard)
@@ -62,8 +62,20 @@ export class UserController {
   }
   @Get('/avatar')
   async getFile(@Headers() Header, @Res({ passthrough: true }) res: Response) {
-    const file = createReadStream('./metaData/'+Header.email+'.jpg');
-    return new StreamableFile(file);
+    try{
+      let path =null;
+      if(existsSync('./metaData/'+Header.email+'.jpg'))
+        path = './metaData/'+Header.email+'.jpg';
+      else path = './metaData/default.jpg'
+      const file = await createReadStream(path,{
+        autoClose: true,
+        start: 0
+    });
+      return new StreamableFile(file);
+    }catch(err){
+      console.log(err)
+    }
+   
   }
   
   @Get('/:' + globalConstants.ID)

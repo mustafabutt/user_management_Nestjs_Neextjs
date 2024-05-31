@@ -111,7 +111,6 @@ export class RatesController {
   @Post("/item")
   async createItem(@Res() response, @Body() item: Item) {
     try {
-      console.log(item);
       const check = await this.ratesService.findSingleItem(item.name);
       if (check) this.exceptions.generateUserExistException();
   
@@ -127,7 +126,6 @@ export class RatesController {
   @Post('/item/calculate')
   async calculateItemPrice(@Res() response, @Body() item: PriceCalculation) {
     try {
-        console.log(item)
         let resp:any = await this.ratesService.calculatePrice(item);
         return response.status(HttpStatus.OK).json({
           "totalPrice":resp.totalPrice,
@@ -173,7 +171,6 @@ export class RatesController {
   @Get("/shipping")
   async fetchAllShipping(@Query() query, @Res() response) {
     try {
-      console.log(query)
       const data = await this.ratesService.readAllShipping(query);
       
       return response.status(HttpStatus.OK).json(
@@ -349,7 +346,6 @@ export class RatesController {
         });
         
       } else if(embroidery["action"] == "delete embroidery"){
-        console.log("hell ya")
         const singleEmbroidery= await this.ratesService.findSingleEmbroidery(embroidery.name);
         const id = singleEmbroidery["_id"];
         const deletedPEmbroidery = await this.ratesService.deleteEmbroidery(id);

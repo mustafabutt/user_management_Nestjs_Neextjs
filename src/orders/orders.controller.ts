@@ -52,8 +52,6 @@ export class OrdersController {
       async createInvoice(@Res() response, @Body() order: Order) {
         try {
             let data = await this.ordersService.generateInvoice(order);
-            console.log("all done");
-            console.log(data)
             return response.status(HttpStatus.CREATED).json({
               data,
           });

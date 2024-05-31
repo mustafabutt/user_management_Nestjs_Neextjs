@@ -109,7 +109,6 @@ export const PriceGenerator = (props) => {
       setDecorationValue(value);
     }
     if(data == "cleints"){
-      debugger
       setClient(value);
     }
     
@@ -190,7 +189,7 @@ export const PriceGenerator = (props) => {
         item, fabric, qty, profit_margin, production_time, usdRate, "decoration":{value: decorationValue, type:embType, size:{"width":decWidth, "height":decHeight}} 
       }
     }
-    debugger
+    
     if(view == "createOrder" ){
       
       let date = deliveryDate.toISOString();
@@ -203,10 +202,10 @@ export const PriceGenerator = (props) => {
       obj.shipping=shipping;
       const result = await RatesService().CalculateItemPrice(obj)
       let data = await result.json();
-      debugger
+      
       if(result.status == 200)
       {
-        debugger
+        
         setTotalPrice(data.dollarPrice);
         setCost(data.totalPrice);
         

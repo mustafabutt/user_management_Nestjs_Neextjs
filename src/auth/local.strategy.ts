@@ -8,7 +8,7 @@ import { UsersService } from '../services/users.service';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
-  constructor(private authService: AuthService,   private readonly userService: UsersService) {
+  constructor(private authService: AuthService, private readonly userService: UsersService) {
     super({
        passReqToCallback: true,
        usernameField: globalConstants.EMAIL,

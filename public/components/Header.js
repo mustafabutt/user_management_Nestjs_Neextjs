@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { FaBars, FaTimes } from "react-icons/fa";
 import SideBar from "./SideBar";
 import eventBus from "./eventBus";
+import { signOut,getSession } from "next-auth/react"
 
 const Header = () => {
 
@@ -26,10 +27,19 @@ const Header = () => {
     router.push("/");
   }
   const logout  = async () => {
-    await UserService().callLogout(UserService().getAccessToken());
-    setAvatar(null);
-    setLogout(false);
-    router.push("/login");
+    
+    UserService().callLogout(UserService().getAccessToken())
+    .then(async ()=>{
+      if(await getSession())
+        signOut();
+        else {
+        router.push("/login");
+        setAvatar(null);
+        setLogout(false);
+        }
+      
+    });
+
   }
 
   useEffect(async ()=>{
@@ -84,7 +94,7 @@ const Header = () => {
         <li onClick={logout} className="nav-links px-4 cursor-pointer capitalize font-medium text-gray-500 hover:scale-105 hover:text-white duration-200 ">
           Logout
         </li>
-        <li onClick={userProfile} className="nav-links px-4 cursor-pointer capitalize font-medium text-gray-500 hover:scale-105 hover:text-white duration-200 ">
+        <li  onClick={userProfile} className="nav-links px-4 cursor-pointer capitalize font-medium text-gray-500 hover:scale-105 hover:text-white duration-200 ">
           Profile
         </li>
         <li onClick={goHome}  className=" nav-links px-4 cursor-pointer capitalize font-medium text-gray-500 hover:scale-105 hover:text-white duration-200 ">

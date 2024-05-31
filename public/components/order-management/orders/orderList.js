@@ -116,11 +116,13 @@ export const OrderList = (props) => {
     async function showInvoiceModel(orderId,email){
       const res = await OrderService().FetchInvoices({
         "email": email
-      })
+      });
       
       setOrderIdForInvoice(orderId);
       setCurrentEmail(email);
-      setInvoiceList(await res.json());
+      let a = await res.json()
+      
+      setInvoiceList(a);
       
       setInvoiceModel(true);
     }
@@ -181,7 +183,7 @@ export const OrderList = (props) => {
         <div>
           
           {deleteModel?
-              <div tabIndex="-1" className=" flex items-center justify-center h-screen modal-backdrop" >
+              <div tabIndex="-1" className="flex items-center justify-center h-screen modal-backdrop" >
               
                 <div className="relative max-w-md ">
                   
@@ -311,7 +313,7 @@ export const OrderList = (props) => {
                             
                         </tr>
                           <tr>
-                            <td className="border-solid border-2">{order.delivery_date}</td>
+                            <td className="border-solid border-2">{order.delivery_date.split("T")[0]}</td>
                             <td className="border-solid border-2">{order.shipping}</td>
                             <td className="border-solid border-2">{order.status.toString()}</td>
                             <td className="border-solid border-2">{order.client.email}</td>
@@ -328,7 +330,7 @@ export const OrderList = (props) => {
                                   <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708z"/>
                                 </svg>
                               </div>
-                              <div className="cursor-pointer hover:animate-pulse col-span-1 p-0" onClick= {() => showInvoiceModel(order._id, order.customer_email)} data-toggle="tooltip" title="View invoices"  >
+                              <div className="cursor-pointer hover:animate-pulse col-span-1 p-0" onClick= {() => showInvoiceModel(order._id, order.client.email)} data-toggle="tooltip" title="View invoices"  >
                                 {/* <svg xmlns="http://www.w3.org/2000/svg" width="18" height="20" fill="currentColor" className="bi bi-download" viewBox="0 0 16 16">
                                   <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
                                   <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z"/>

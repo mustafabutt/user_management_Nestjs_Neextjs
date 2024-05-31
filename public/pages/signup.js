@@ -7,6 +7,7 @@ import Head from 'next/head';
 const Layout = dynamic(()=> import("@/components/account/Layout"));
 import utilStyles from '@/styles/utils.module.css';
 import Link from 'next/link';
+import { useForm } from "react-hook-form"
 
 const Signup = () => {
 
@@ -16,22 +17,22 @@ const Signup = () => {
   let userGender = '';
   const [userExists, setUserExists] = useState(null);
   const [signupSuccessModel, setSignupSuccessModel] = useState(false);
-
+  const {
+    register,
+    handleSubmit,
+  } = useForm()
+  
   const focusHandler = () => {
     setUserExists(false);
   };
-  async function hitSignup(e) {
-    e.preventDefault();
+  function hitSignup(obj) { 
+    (async ()=>{
+      const res = await UserService().signUp(obj);
   
-    const res = await UserService().signUp({
-      email: email.current.value,
-      password: password.current.value,
-      gender: userGender,
-    });
-
-    res.status == 201 ? setSignupSuccessModel(true) : null;
-    
-    res.status == 303 ? setUserExists(true) : null;
+      res.status == 201 ? setSignupSuccessModel(true) : null;
+      
+      res.status == 303 ? setUserExists(true) : null;
+    })()
   }
 
   const handleChange = (e) => {
@@ -73,10 +74,10 @@ const Signup = () => {
                       <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                           Sign up
                       </h1>
-                      <form className="space-y-4 md:space-y-6" onSubmit={hitSignup}>
+                      <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit(hitSignup)}>
                           <div>
                               <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
-                              <input type="email" onFocus={focusHandler} ref={email} name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="name@company.com" required />
+                              <input type="email" {...register("email")} onFocus={focusHandler} name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="name@company.com" required />
                               {userExists ? (
                                 <Alert type="error">
                                   <span>user already exists</span>
@@ -84,8 +85,8 @@ const Signup = () => {
                               ) : null}
                           </div>
                           <div>
-                              <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
-                              <input type="password"  onFocus={focusHandler}  ref={password} name="password" id="password" placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
+                              <label htmlFor="password"  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
+                              <input type="password" {...register("password")}  onFocus={focusHandler} name="password" id="password" placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
                           </div>
                           <div className="radio-buttons">
                             <b>Male</b>{' '}
@@ -97,6 +98,7 @@ const Signup = () => {
                               name="gender"
                               type="radio"
                               onChange={handleChange}
+                              {...register("gender")}
                             />{' '}
                             <b>Female</b>{' '}
                             <input
@@ -107,6 +109,7 @@ const Signup = () => {
                               name="gender"
                               type="radio"
                               onChange={handleChange}
+                              {...register("gender")}
                             />
                           </div>
                           <button type="submit" className="w-full bg-black rounded-lg p-2 mt-3 text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Sign up</button>

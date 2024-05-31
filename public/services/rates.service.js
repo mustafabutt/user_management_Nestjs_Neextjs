@@ -198,8 +198,6 @@ export const RatesService = () => {
 
     const getItemList = async () => {
         
-        console.log(getCookie('access_token'))
-        console.log(JSON.parse(localStorage.getItem('user')) )
         const token = await JSON.parse(localStorage.getItem('user')) ? getCookie('access_token'): null;
         const res = await fetch(constants.ITEM, {
             method: 'GET',

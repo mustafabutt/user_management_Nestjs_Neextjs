@@ -21,7 +21,7 @@ export const CreatePrinting = (props) => {
           name: name.current.value,
           base_rate: rate.current.value,
         });
-        debugger
+        
         if(res.status == 201){
           RatesService().getPrintingList().then(()=>{
             res.status == 201 ? props.invokeParent() : null;

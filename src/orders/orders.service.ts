@@ -33,7 +33,6 @@ export class OrdersService {
         return await newClient.save();
     }
     async updateOrder(id,order: Order): Promise<Order> {
-        console.log(id)
         return await this.orderModel.findByIdAndUpdate(id,order, { new: true });
     }
     async deleteOrder(id): Promise<any> {

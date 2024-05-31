@@ -24,7 +24,7 @@ export const UserService = () => {
     }
 
     const login = async (user) => {
-
+        
         const res = await fetch(constants.LOGIN, {
             method: 'POST',
             body: JSON.stringify(user),
@@ -45,7 +45,7 @@ export const UserService = () => {
      
             setCookie('access_token', userObject.access_token,{ maxAge: 60 * 60 * 24 });
             delete userObject.access_token
-            localStorage.setItem('user', JSON.stringify(userObject))
+            localStorage.setItem('user', JSON.stringify(userObject));
             userSubject.next(userObject);
             return userObject;
             
@@ -77,7 +77,6 @@ export const UserService = () => {
         } 
         localStorage.clear();
         deleteCookie('access_token');
-
     }
 
     const signUp = async (user) => { 
@@ -142,7 +141,7 @@ export const UserService = () => {
         });
         return data;
     }
-
+  
     const getCurrentUser = () =>{
         return JSON.parse(localStorage.getItem('user'));
     }
@@ -240,7 +239,7 @@ export const UserService = () => {
         DeleteUser,
         postImage,
         getAccessToken,
-        getAvatar
+        getAvatar        
     }
 }
 
