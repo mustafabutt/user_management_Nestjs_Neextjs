@@ -80,6 +80,8 @@ This module enable users enter their the data of the clients along with their or
 
 **Installation**
 
+<p>You can update the environment variables by going into the <b>config</b> folder in the root.</p>
+
 1. Clone this repo.
 3. Start the Redis server.
 4. Go into the root directory and run the following commands to run the backend server:
